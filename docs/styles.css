@@ -46,12 +46,19 @@ nav .brand {
 nav .brand-mark {
   width: 22px; height: 22px; border-radius: 4px;
   background: linear-gradient(135deg, var(--accent), var(--accent-dim));
-  position: relative;
+  position: relative; flex: none;
 }
 nav .brand-mark::after {
   content: ''; position: absolute; inset: 4px;
   border: 1.5px solid rgba(13,14,18,0.5); border-radius: 2px;
 }
+nav .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+nav .brand-name { font-size: 16px; font-weight: 700; }
+nav .brand-byline {
+  font-size: 10px; font-weight: 500; color: var(--text-faint);
+  letter-spacing: 0.04em; text-decoration: none; margin-top: 1px;
+}
+nav .brand-byline:hover { color: var(--accent); }
 nav .links { display: flex; gap: 28px; align-items: center; }
 nav .links a { color: var(--text-dim); font-size: 14px; font-weight: 500; }
 nav .links a:hover { color: var(--text); }
