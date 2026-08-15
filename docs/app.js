@@ -188,11 +188,12 @@
   var block = document.querySelector('.code-typing');
   if (!block) return;
   var lines = [
-    { html: '<span class="c-com">// lazy-frames — spec in, video out</span>' },
-    { html: '<span class="c-key">lazy</span> <span class="c-fn">capture</span> https://<span class="c-str">example.com</span> projects/acme' },
-    { html: '<span class="c-key">lazy</span> <span class="c-fn">gen</span> image -p projects/cine --seed <span class="c-num">21</span> --style ridge' },
-    { html: '<span class="c-key">lazy</span> <span class="c-fn">check</span> projects/acme <span class="c-com"># gates: snapshots + determinism</span>' },
-    { html: '<span class="c-key">lazy</span> <span class="c-fn">render</span> projects/acme <span class="c-com"># byte-stable MP4</span>' },
+    { html: '<span class="c-com"># install</span>' },
+    { html: '<span class="c-key">npm</span> install <span class="c-str">lazy-frames</span>' },
+    { html: '<span class="c-com"># capture a website → starter spec + assets</span>' },
+    { html: '<span class="c-key">npx</span> <span class="c-fn">lazy</span> capture https://<span class="c-str">example.com</span> projects/acme' },
+    { html: '<span class="c-key">npx</span> <span class="c-fn">lazy</span> check projects/acme <span class="c-com"># gates pass</span>' },
+    { html: '<span class="c-key">npx</span> <span class="c-fn">lazy</span> render projects/acme <span class="c-com"># byte-stable MP4</span>' },
   ];
   var li = 0;
   function nextLine() {
@@ -238,7 +239,7 @@
   var btn = document.querySelector('.nav-install');
   if (!btn) return;
   btn.addEventListener('click', function () {
-    navigator.clipboard.writeText('npm install && npm run build');
+    navigator.clipboard.writeText('npm install lazy-frames');
     var orig = btn.textContent;
     btn.textContent = 'copied';
     setTimeout(function () { btn.textContent = orig; }, 1500);

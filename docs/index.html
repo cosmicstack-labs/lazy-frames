@@ -23,7 +23,7 @@
     <a href="#skill">Agentic skill</a>
     <a href="docs.html">Docs</a>
     <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
-    <span class="nav-install">npm install && npm run build</span>
+    <span class="nav-install">npm install lazy-frames</span>
   </div>
 </nav>
 
@@ -155,9 +155,10 @@
       <span class="code-title">install the skill on any agent</span>
     </div>
     <div class="code-body" style="color:var(--text);">
-      <div><span class="c-com"># The skill lives in skill/SKILL.md</span></div>
-      <div><span class="c-com"># Feed it to your agent — it knows what to do.</span></div>
-      <div style="margin-top:8px;"><span class="c-key">git</span> clone https://github.com/cosmicstack-labs/lazy-frames.git</div>
+      <div><span class="c-com"># Option 1: install from npm</span></div>
+      <div><span class="c-key">npm</span> install <span class="c-str">lazy-frames</span></div>
+      <div style="margin-top:8px;"><span class="c-com"># Option 2: clone for the full skill + source</span></div>
+      <div><span class="c-key">git</span> clone https://github.com/cosmicstack-labs/lazy-frames.git</div>
       <div><span class="c-key">cd</span> lazy-frames && npm install && npm run build</div>
       <div style="margin-top:8px;"><span class="c-com"># Point your agent at the skill:</span></div>
       <div><span class="c-com">#   skill/SKILL.md          ← entry point + routing</span></div>
@@ -216,8 +217,9 @@
   </div>
   <div class="footer-links">
     <a href="docs.html">Docs</a>
+    <a href="https://www.npmjs.com/package/lazy-frames">npm</a>
     <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
-    <a href="https://cosmicstack.ai">CosicStack.ai</a>
+    <a href="https://cosmicstack.ai">CosmicStack.ai</a>
     <a href="https://github.com/cosmicstack-labs/lazy-frames/issues">Issues</a>
   </div>
   <p>Lazy Frames — fully local, byte-stable video generation.<br>

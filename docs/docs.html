@@ -62,10 +62,14 @@
   <div class="docs-content">
 
     <h2 id="install">Install</h2>
-    <p>Clone and build from source (npm package coming soon):</p>
+    <p><strong>From npm:</strong></p>
+    <pre><code>npm install lazy-frames
+npx lazy doctor</code></pre>
+    <p><strong>From source (for the agentic skill or development):</strong></p>
     <pre><code>git clone https://github.com/cosmicstack-labs/lazy-frames.git
 cd lazy-frames
-npm install && npm run build</code></pre>
+npm install && npm run build
+npx lazy doctor</code></pre>
 
     <h3 id="prerequisites">Prerequisites</h3>
     <table>
@@ -76,20 +80,20 @@ npm install && npm run build</code></pre>
       <tr><td>Python 3</td><td>audio sidecar</td><td><code>python3 --version</code></td></tr>
       <tr><td>macOS <code>say</code></td><td>TTS narration</td><td><code>say -v '?'</code></td></tr>
     </table>
-    <p>Run <code>node packages/cli/dist/index.js doctor</code> to verify all providers.</p>
+    <p>Run <code>npx lazy doctor</code> to verify all providers.</p>
 
     <h2 id="first-video">First video</h2>
     <p><strong>Website promo:</strong></p>
-    <pre><code>node packages/cli/dist/index.js capture https://example.com projects/acme
-node packages/cli/dist/index.js snapshot projects/acme --update
-node packages/cli/dist/index.js check projects/acme
-node packages/cli/dist/index.js preview projects/acme   # review in browser
-node packages/cli/dist/index.js render projects/acme     # after approval</code></pre>
+    <pre><code>npx lazy capture https://example.com projects/acme
+npx lazy snapshot projects/acme --update
+npx lazy check projects/acme
+npx lazy preview projects/acme   # review in browser
+npx lazy render projects/acme     # after approval</code></pre>
 
     <p><strong>Cinematic clip:</strong></p>
-    <pre><code>node packages/cli/dist/index.js gen image -p projects/cine --seed 21 --style ridge --name r01
+    <pre><code>npx lazy gen image -p projects/cine --seed 21 --style ridge --name r01
 # write spec.json referencing assets/gen/r01.png + r01.depth.png
-node packages/cli/dist/index.js render projects/cine</code></pre>
+npx lazy render projects/cine</code></pre>
 
     <h2 id="capture">capture</h2>
     <p>Captures a website: screenshots @2x, palette, copy, fonts, logo. Writes a starter spec.</p>
@@ -203,8 +207,9 @@ lazy gen tts -p &lt;project&gt; --text "Hello world" --voice Samantha --rate 165
   </div>
   <div class="footer-links">
     <a href="index.html">Home</a>
+    <a href="https://www.npmjs.com/package/lazy-frames">npm</a>
     <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
-    <a href="https://cosmicstack.ai">CosicStack.ai</a>
+    <a href="https://cosmicstack.ai">CosmicStack.ai</a>
   </div>
   <p>&copy; 2025 <a href="https://cosmicstack.ai">CosicStack Labs</a>. Part of the CosicStack.AI ecosystem.</p>
 </footer>
