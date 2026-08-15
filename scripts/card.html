@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 1200px; height: 630px; overflow: hidden; }
+.card {
+  width: 1200px; height: 630px; position: relative;
+  background: #0D0E12;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 0 100px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+.card-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 70% 30%, rgba(196,154,92,0.10), transparent 70%),
+    radial-gradient(ellipse 35% 50% at 20% 80%, rgba(122,150,200,0.04), transparent 60%);
+}
+.card-grain {
+  position: absolute; inset: 0; opacity: 0.035; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' /%3E%3C/svg%3E");
+}
+.card-brand {
+  position: absolute; top: 56px; left: 100px;
+  display: flex; align-items: center; gap: 10px;
+}
+.card-brand-mark {
+  width: 20px; height: 20px; border-radius: 4px;
+  background: linear-gradient(135deg, #C49A5C, #8A6E3E);
+  position: relative;
+}
+.card-brand-mark::after {
+  content: ''; position: absolute; inset: 3px;
+  border: 1.5px solid rgba(13,14,18,0.5); border-radius: 2px;
+}
+.card-brand-name { font-size: 13px; font-weight: 500; color: #8A887F; letter-spacing: 0.02em; }
+.card-title {
+  font-size: 64px; font-weight: 700; color: #E2E0DC;
+  letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 18px;
+  position: relative; z-index: 1;
+}
+.card-title .accent { color: #C49A5C; }
+.card-tagline {
+  font-size: 24px; color: #8A887F; line-height: 1.45; max-width: 640px;
+  position: relative; z-index: 1;
+}
+.card-strip {
+  position: absolute; bottom: 56px; left: 100px; right: 100px;
+  display: flex; gap: 5px; z-index: 1;
+}
+.card-strip-frame {
+  flex: 1; height: 30px; border-radius: 3px;
+  background: #1A1B22; border: 1px solid #26272F;
+  position: relative; overflow: hidden;
+}
+.card-strip-frame:nth-child(1) { background: linear-gradient(135deg, #1A1B22, #26272F); }
+.card-strip-frame:nth-child(2) { background: linear-gradient(180deg, #1A1B22 0%, #2A2418 100%); }
+.card-strip-frame:nth-child(3) { background: linear-gradient(135deg, #1A1B22, #1E2028); }
+.card-strip-frame:nth-child(4) { background: #1A1B22; }
+.card-strip-frame:nth-child(5) { background: linear-gradient(180deg, #1A1B22, #2A2418); }
+.card-strip-frame:nth-child(6) { background: linear-gradient(135deg, #1A1B22, #1E2028); }
+.card-strip-frame:nth-child(7) { background: #1A1B22; }
+.card-strip-frame:nth-child(8) { background: linear-gradient(135deg, #1A1B22, #1E2028); }
+.card-badge {
+  position: absolute; bottom: 56px; right: 100px;
+  font-family: 'SF Mono', monospace; font-size: 12px;
+  color: #C49A5C; letter-spacing: 0.05em; z-index: 1;
+}
+.card-url {
+  position: absolute; top: 56px; right: 100px;
+  font-family: 'SF Mono', monospace; font-size: 12px;
+  color: #5A5951; letter-spacing: 0.02em; z-index: 1;
+}
+</style></head>
+<body>
+<div class="card">
+  <div class="card-bg"></div>
+  <div class="card-grain"></div>
+  <div class="card-brand">
+    <div class="card-brand-mark"></div>
+    <div class="card-brand-name">Lazy Frames</div>
+  </div>
+  <div class="card-url">cosmicstack-labs.github.io/lazy-frames</div>
+  <div class="card-title">Video generation,<br><span class="accent">byte-stable</span> and fully local.</div>
+  <div class="card-tagline">Turn any input into a pixel-perfect MP4. No cloud, no keys, no nondeterminism.</div>
+  <div class="card-strip">
+    <div class="card-strip-frame"></div>
+    <div class="card-strip-frame"></div>
+    <div class="card-strip-frame"></div>
+    <div class="card-strip-frame"></div>
+    <div class="card-strip-frame"></div>
+    <div class="card-strip-frame"></div>
+    <div class="card-strip-frame"></div>
+    <div class="card-strip-frame"></div>
+  </div>
+  <div class="card-badge">by CosmicStack</div>
+</div>
+</body>
+</html>
