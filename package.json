@@ -1,19 +1,66 @@
 {
-  "name": "lazy-video-skill",
-  "private": true,
-  "type": "module",
-  "workspaces": [
-    "packages/*"
+  "name": "lazy-frames",
+  "version": "0.4.1",
+  "description": "Fully local, byte-stable video generation from a typed JSON spec. No cloud, no keys, no nondeterminism. Same spec + same machine = byte-identical MP4, every time.",
+  "license": "MIT",
+  "author": "CosmicStack Labs",
+  "homepage": "https://cosmicstack-labs.github.io/lazy-frames/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cosmicstack-labs/lazy-frames.git"
+  },
+  "keywords": [
+    "video",
+    "generation",
+    "deterministic",
+    "local",
+    "ffmpeg",
+    "chrome",
+    "spec",
+    "agentic",
+    "motion-graphics",
+    "cinematic"
   ],
+  "type": "module",
+  "bin": {
+    "lazy": "packages/cli/dist/index.js"
+  },
+  "main": "packages/cli/dist/index.js",
   "engines": {
     "node": ">=20"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "build": "npm run build --workspace @lazy/engine && npm run build --workspace @lazy/capture && npm run build --workspace @lazy/renderer && npm run build --workspace @lazy/cli",
+    "postinstall": "node scripts/link-workspaces.mjs",
     "verify:demo": "node scripts/verify-demo.mjs",
     "verify:cinematic": "node scripts/verify-cinematic.mjs"
   },
+  "dependencies": {
+    "commander": "^13.0.0",
+    "puppeteer-core": "^24.0.0",
+    "zod": "^3.25.0"
+  },
   "devDependencies": {
     "typescript": "^5.9.3"
-  }
+  },
+  "files": [
+    "packages/engine/dist/",
+    "packages/engine/assets/",
+    "packages/renderer/dist/",
+    "packages/capture/dist/",
+    "packages/cli/dist/",
+    "packages/gen-sidecar/gen_sidecar/__init__.py",
+    "packages/gen-sidecar/gen_sidecar/__main__.py",
+    "packages/gen-sidecar/gen_sidecar/music.py",
+    "packages/gen-sidecar/gen_sidecar/tts.py",
+    "packages/gen-sidecar/gen_sidecar/sfx.py",
+    "packages/gen-sidecar/gen_sidecar/doctor.py",
+    "skill/",
+    "scripts/link-workspaces.mjs",
+    "PLAN.md",
+    "README.md"
+  ]
 }

@@ -1,0 +1,9 @@
+**/__pycache__/
+*.pyc
+node_modules/
+.git/
+examples/
+projects/
+out/
+.lazy/
+*.log
