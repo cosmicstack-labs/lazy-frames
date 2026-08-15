@@ -1,11 +1,12 @@
 ---
-name: lazy-video
+name: lazy-frames
 description: >
   Turn any input (a website URL, a text brief, existing footage, a music track) into a finished,
   pixel-perfect MP4 — fully local, byte-stable across renders. The agent researches the input and
   dumps a typed SPEC; the Lazy Frames CLI turns that spec into video. Use for website promos,
   cinematic clips, motion graphics, explainer videos, social ads, and any programmatic video
   generation that must be deterministic and work offline.
+  Install: npm install lazy-frames | Skill URL: https://lazy-frames.cosmicstack.ai/skill
 ---
 
 # Lazy Frames
