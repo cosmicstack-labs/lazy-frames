@@ -17,6 +17,7 @@
   <div class="links">
     <a href="#features">Features</a>
     <a href="#how">How it works</a>
+    <a href="#skill">Agentic skill</a>
     <a href="docs.html">Docs</a>
     <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
     <span class="nav-install">npm install && npm run build</span>
@@ -116,6 +117,55 @@
   </div>
 </section>
 
+<!-- Agentic skill -->
+<section id="skill">
+  <div class="section-label">For AI agents</div>
+  <h2 class="section-title">Ship it as a skill. Any agent can drive it.</h2>
+  <p class="section-body">
+    Lazy Frames ships with a complete agent skill — a <code>SKILL.md</code> entry point plus
+    reference docs that tell any coding agent exactly how to research an input, author a valid
+    spec, run the gates, and render. The agent doesn't read source code or figure out the CLI.
+    It reads the skill and follows the contract.
+  </p>
+  <div class="skill-flow">
+    <div class="skill-card">
+      <div class="skill-card-num">01</div>
+      <h3>Install the skill</h3>
+      <p>Point your agent at the <code>skill/</code> directory. It reads <code>SKILL.md</code> — the entry point with routing rules and the agent contract.</p>
+    </div>
+    <div class="skill-arrow">→</div>
+    <div class="skill-card">
+      <div class="skill-card-num">02</div>
+      <h3>Agent researches</h3>
+      <p>The user says "make a video of my site." The agent captures the URL, reads the ledger, drafts a spec — all guided by the skill's workflow instructions.</p>
+    </div>
+    <div class="skill-arrow">→</div>
+    <div class="skill-card">
+      <div class="skill-card-num">03</div>
+      <h3>Spec → video</h3>
+      <p>The agent runs <code>lazy check</code>, fixes errors, opens <code>lazy preview</code>, and renders only after the user approves. Byte-stable MP4 out.</p>
+    </div>
+  </div>
+  <div class="code-block" style="margin-top:36px;">
+    <div class="code-header">
+      <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+      <span class="code-title">install the skill on any agent</span>
+    </div>
+    <div class="code-body" style="color:var(--text);">
+      <div><span class="c-com"># The skill lives in skill/SKILL.md</span></div>
+      <div><span class="c-com"># Feed it to your agent — it knows what to do.</span></div>
+      <div style="margin-top:8px;"><span class="c-key">git</span> clone https://github.com/cosmicstack-labs/lazy-frames.git</div>
+      <div><span class="c-key">cd</span> lazy-frames && npm install && npm run build</div>
+      <div style="margin-top:8px;"><span class="c-com"># Point your agent at the skill:</span></div>
+      <div><span class="c-com">#   skill/SKILL.md          ← entry point + routing</span></div>
+      <div><span class="c-com">#   skill/references/        ← spec, scenes, CLI, gates</span></div>
+      <div style="margin-top:8px;"><span class="c-com"># Then just ask:</span></div>
+      <div><span class="c-str">"Make a promo video of https://my-site.com"</span></div>
+      <div><span class="c-com"># The agent captures, authors, checks, previews, and renders.</span></div>
+    </div>
+  </div>
+</section>
+
 <!-- Quick start -->
 <section id="quickstart">
   <div class="section-label">Quick start</div>
@@ -157,12 +207,18 @@
 
 <!-- Footer -->
 <footer>
+  <div class="footer-brand">
+    <div class="footer-brand-mark"></div>
+    <a href="https://cosmicstack.ai" class="footer-brand-name">CosicStack<span>.ai</span></a>
+  </div>
   <div class="footer-links">
     <a href="docs.html">Docs</a>
     <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
+    <a href="https://cosmicstack.ai">CosicStack.ai</a>
     <a href="https://github.com/cosmicstack-labs/lazy-frames/issues">Issues</a>
   </div>
-  <p>Lazy Frames — fully local, byte-stable video generation.</p>
+  <p>Lazy Frames — fully local, byte-stable video generation.<br>
+  &copy; 2025 <a href="https://cosmicstack.ai">CosicStack Labs</a>. Part of the CosicStack.AI ecosystem.</p>
 </footer>
 
 <script src="app.js"></script>

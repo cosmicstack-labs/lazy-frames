@@ -1,74 +1,183 @@
-// Film strip: generate animated frames
+// Realistic film strip frames — each looks like an actual scene preview
 (function () {
   var strip = document.querySelector('.filmstrip-inner');
   if (!strip) return;
-  var types = [
-    { label: 'typography', shape: 'text' },
-    { label: 'parallax', shape: 'ridge' },
-    { label: 'browser-frame', shape: 'browser' },
-    { label: 'stat-hit', shape: 'stat' },
-    { label: 'atmosphere', shape: 'blobs' },
-    { label: 'ui-callout', shape: 'callout' },
-    { label: 'three-scene', shape: 'cube' },
-    { label: 'video-layer', shape: 'video' },
+
+  var bg = '#0D0E12';
+  var card = '#1A1B22';
+  var border = '#26272F';
+  var accent = '#C49A5C';
+  var text = '#E2E0DC';
+  var dim = '#8A887F';
+
+  function el(html) { var d = document.createElement('div'); d.innerHTML = html; return d.firstChild; }
+
+  var frames = [
+    // typography — big title with letter-stagger feel
+    function () { return '' +
+      '<div style="position:absolute;inset:0;background:' + bg + ';display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;">' +
+        '<div style="font-size:13px;font-weight:700;color:' + text + ';letter-spacing:-0.04em;">Lazy Frames</div>' +
+        '<div style="font-size:8px;color:' + accent + ';letter-spacing:0.08em;">FULLY LOCAL</div>' +
+      '</div>'; },
+
+    // parallax — layered mountain ridge with depth gradient
+    function () { return '' +
+      '<div style="position:absolute;inset:0;background:linear-gradient(180deg,' + bg + ' 0%,#1E1610 100%);">' +
+        '<div style="position:absolute;bottom:0;left:0;right:0;height:60%;background:' + accent + '15;clip-path:polygon(0 100%,15% 45%,30% 65%,45% 35%,60% 60%,75% 40%,90% 55%,100% 45%,100% 100%);"></div>' +
+        '<div style="position:absolute;bottom:0;left:0;right:0;height:35%;background:' + accent + '30;clip-path:polygon(0 100%,20% 55%,40% 70%,55% 50%,70% 65%,85% 45%,100% 60%,100% 100%);"></div>' +
+        '<div style="position:absolute;top:20%;left:60%;width:14px;height:14px;border-radius:50%;background:' + accent + '60;filter:blur(3px);"></div>' +
+      '</div>'; },
+
+    // browser-frame — mac chrome with URL bar + screenshot mock
+    function () { return '' +
+      '<div style="position:absolute;inset:0;background:' + bg + ';display:flex;flex-direction:column;">' +
+        '<div style="display:flex;align-items:center;gap:3px;padding:4px 6px;background:' + card + ';border-bottom:1px solid ' + border + ';">' +
+          '<div style="width:5px;height:5px;border-radius:50%;background:#FF5F57;"></div>' +
+          '<div style="width:5px;height:5px;border-radius:50%;background:#FEBC2E;"></div>' +
+          '<div style="width:5px;height:5px;border-radius:50%;background:#28C840;"></div>' +
+          '<div style="margin-left:6px;flex:1;height:8px;background:' + bg + ';border-radius:4px;font-size:6px;color:' + dim + ';line-height:8px;padding-left:4px;">example.com</div>' +
+        '</div>' +
+        '<div style="flex:1;background:linear-gradient(135deg,#2A2D38,#3A3D48);position:relative;">' +
+          '<div style="position:absolute;top:25%;left:50%;transform:translate(-50%,0);width:40%;height:6px;background:' + text + '40;border-radius:2px;"></div>' +
+          '<div style="position:absolute;top:45%;left:50%;transform:translate(-50%,0);width:60%;height:3px;background:' + text + '20;border-radius:1px;"></div>' +
+          '<div style="position:absolute;top:55%;left:50%;transform:translate(-50%,0);width:50%;height:3px;background:' + text + '15;border-radius:1px;"></div>' +
+          '<div style="position:absolute;top:70%;left:50%;transform:translate(-50%,0);width:20%;height:8px;background:' + accent + '80;border-radius:3px;"></div>' +
+          '<div style="position:absolute;top:60%;left:65%;width:6px;height:9px;background:' + text + ';clip-path:polygon(0 0,100% 30%,0 60%);filter:drop-shadow(0 0 2px ' + accent + ');"></div>' +
+        '</div>' +
+      '</div>'; },
+
+    // stat-hit — count-up infographic with bars
+    function () { return '' +
+      '<div style="position:absolute;inset:0;background:' + bg + ';display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;">' +
+        '<div style="font-size:7px;color:' + accent + ';letter-spacing:0.12em;text-transform:uppercase;">Deterministic</div>' +
+        '<div style="font-size:22px;font-weight:700;color:' + text + ';font-family:monospace;line-height:1;">100<span style="color:' + accent + ';font-size:14px;">%</span></div>' +
+        '<div style="font-size:7px;color:' + dim + ';margin-top:1px;">byte-stable renders</div>' +
+        '<div style="display:flex;gap:3px;margin-top:5px;align-items:flex-end;height:14px;">' +
+          '<div style="width:6px;height:10px;background:' + accent + '60;border-radius:1px;"></div>' +
+          '<div style="width:6px;height:14px;background:' + accent + '90;border-radius:1px;"></div>' +
+          '<div style="width:6px;height:7px;background:' + accent + '40;border-radius:1px;"></div>' +
+          '<div style="width:6px;height:11px;background:' + accent + '70;border-radius:1px;"></div>' +
+        '</div>' +
+      '</div>'; },
+
+    // atmosphere — drifting gradient blobs
+    function () { return '' +
+      '<div style="position:absolute;inset:0;background:' + bg + ';overflow:hidden;">' +
+        '<div style="position:absolute;width:50px;height:50px;border-radius:50%;background:radial-gradient(circle,' + accent + '40,transparent 65%);top:15%;left:20%;filter:blur(6px);"></div>' +
+        '<div style="position:absolute;width:35px;height:35px;border-radius:50%;background:radial-gradient(circle,' + text + '15,transparent 65%);top:50%;left:55%;filter:blur(5px);"></div>' +
+        '<div style="position:absolute;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle,' + accent + '25,transparent 65%);top:60%;left:25%;filter:blur(4px);"></div>' +
+      '</div>'; },
+
+    // ui-callout — dimmed screenshot with hotspot
+    function () { return '' +
+      '<div style="position:absolute;inset:0;background:linear-gradient(135deg,#2A2D38,#1E2028);">' +
+        '<div style="position:absolute;inset:0;background:rgba(5,8,15,0.55);"></div>' +
+        '<div style="position:absolute;top:35%;left:25%;width:50%;height:30%;border:1.5px solid ' + accent + ';border-radius:3px;box-shadow:0 0 0 100px rgba(5,8,15,0.35);"></div>' +
+        '<div style="position:absolute;top:38%;left:78%;background:rgba(8,12,20,0.9);border:1px solid ' + accent + '60;border-radius:3px;padding:2px 5px;font-size:6px;color:' + text + ';white-space:nowrap;">CTA</div>' +
+      '</div>'; },
+
+    // three-scene — wireframe cube
+    function () { return '' +
+      '<div style="position:absolute;inset:0;background:' + bg + ';display:flex;align-items:center;justify-content:center;">' +
+        '<svg width="42" height="42" viewBox="0 0 42 42" fill="none" stroke="' + accent + '" stroke-width="1.2" stroke-linejoin="round">' +
+          '<path d="M11 15 L21 11 L31 15 L21 19 Z"/>' +
+          '<path d="M11 15 L11 28 L21 32 L21 19"/>' +
+          '<path d="M31 15 L31 28 L21 32 L21 19"/>' +
+          '<path d="M11 15 L21 19 L31 15" stroke="' + accent + '40"/>' +
+          '<path d="M21 19 L21 32" stroke="' + accent + '40"/>' +
+        '</svg>' +
+      '</div>'; },
+
+    // video-layer — film footage with play icon + timecode
+    function () { return '' +
+      '<div style="position:absolute;inset:0;background:linear-gradient(135deg,#1A1B22,#2A2418);">' +
+        '<div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,0.4) 100%);"></div>' +
+        '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:0;height:0;border-left:8px solid ' + text + '80;border-top:5px solid transparent;border-bottom:5px solid transparent;"></div>' +
+        '<div style="position:absolute;bottom:4px;right:5px;font-family:monospace;font-size:7px;color:' + accent + ';">00:14</div>' +
+        '<div style="position:absolute;bottom:4px;left:5px;font-family:monospace;font-size:7px;color:' + dim + ';">REC ●</div>' +
+      '</div>'; },
   ];
-  var palette = ['#1A1B22', '#C49A5C', '#E2E0DC'];
-  function makeFrame(t, i) {
+
+  var labels = ['typography','parallax','browser-frame','stat-hit','atmosphere','ui-callout','three-scene','video-layer'];
+
+  function makeFrame(renderFn, label, index) {
     var f = document.createElement('div');
     f.className = 'filmstrip-frame';
-    var label = document.createElement('span');
-    label.className = 'frame-label';
-    label.textContent = t.label;
-    f.appendChild(label);
-    var shape = document.createElement('div');
-    shape.className = 'frame-shape';
-    shape.style.cssText = 'position:absolute;inset:0;';
-    if (t.shape === 'text') {
-      shape.innerHTML = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;font-weight:700;color:' + palette[2] + ';letter-spacing:-0.02em;">Aa</div>';
-    } else if (t.shape === 'ridge') {
-      shape.innerHTML = '<div style="position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(180deg,transparent,' + palette[1] + '40);clip-path:polygon(0 100%,20% 60%,40% 80%,60% 40%,80% 70%,100% 50%,100% 100%);"></div>';
-    } else if (t.shape === 'browser') {
-      shape.innerHTML = '<div style="position:absolute;top:8px;left:8px;right:8px;height:6px;background:' + palette[0] + ';border-radius:2px;"><div style="width:4px;height:4px;border-radius:50%;background:#FF5F57;display:inline-block;margin:1px 2px;"></div><div style="width:4px;height:4px;border-radius:50%;background:#FEBC2E;display:inline-block;margin:1px 2px;"></div><div style="width:4px;height:4px;border-radius:50%;background:#28C840;display:inline-block;margin:1px 2px;"></div></div><div style="position:absolute;top:18px;left:8px;right:8px;bottom:8px;background:' + palette[0] + ';border-radius:2px;"></div>';
-    } else if (t.shape === 'stat') {
-      shape.innerHTML = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:20px;font-weight:700;color:' + palette[1] + ';font-family:monospace;">87</div>';
-    } else if (t.shape === 'blobs') {
-      shape.innerHTML = '<div style="position:absolute;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,' + palette[1] + '30,transparent 70%);top:20%;left:30%;filter:blur(8px);"></div><div style="position:absolute;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle,' + palette[2] + '20,transparent 70%);top:50%;left:60%;filter:blur(6px);"></div>';
-    } else if (t.shape === 'callout') {
-      shape.innerHTML = '<div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);"></div><div style="position:absolute;top:40%;left:30%;width:40%;height:25%;border:1.5px solid ' + palette[1] + ';border-radius:3px;box-shadow:0 0 0 100px rgba(0,0,0,0.3);"></div>';
-    } else if (t.shape === 'cube') {
-      shape.innerHTML = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="' + palette[1] + '" stroke-width="1.5"><path d="M10 14 L20 10 L30 14 L20 18 Z"/><path d="M10 14 L10 26 L20 30 L20 18"/><path d="M30 14 L30 26 L20 30"/></svg></div>';
-    } else if (t.shape === 'video') {
-      shape.innerHTML = '<div style="position:absolute;inset:0;background:linear-gradient(135deg,' + palette[0] + ',' + palette[1] + '20);"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:0;height:0;border-left:8px solid ' + palette[2] + ';border-top:5px solid transparent;border-bottom:5px solid transparent;"></div>';
-    }
-    f.appendChild(shape);
+    f.style.flex = '0 0 200px';
+    f.style.height = '112px';
+    f.innerHTML = renderFn() +
+      '<div class="frame-label" style="position:absolute;bottom:3px;left:5px;font-family:monospace;font-size:8px;color:' + dim + ';z-index:5;letter-spacing:0.02em;">' + label + '</div>' +
+      '<div style="position:absolute;top:3px;right:5px;font-family:monospace;font-size:7px;color:' + accent + '50;z-index:5;">' + String(index + 1).padStart(2, '0') + '</div>';
     return f;
   }
+
   for (var dup = 0; dup < 2; dup++) {
-    types.forEach(function (t, i) { strip.appendChild(makeFrame(t, i)); });
+    frames.forEach(function (fn, i) { strip.appendChild(makeFrame(fn, labels[i], i)); });
   }
 })();
 
-// Scene showcase tiles
+// Scene showcase tiles — also more realistic
 (function () {
   var grid = document.querySelector('.showcase');
   if (!grid) return;
+
+  var bg = '#0D0E12', card = '#1A1B22', accent = '#C49A5C', text = '#E2E0DC', dim = '#8A887F';
+
   var scenes = [
-    { name: 'typography', meta: '4 reveals', bg: 'linear-gradient(135deg,#1A1B22,#26272F)', icon: 'Aa' },
-    { name: 'stat-hit', meta: 'count-up', bg: 'linear-gradient(135deg,#1A1B22,#2A2418)', icon: '87' },
-    { name: 'browser-frame', meta: 'cursor', bg: 'linear-gradient(135deg,#1A1B22,#1E2028)', icon: '▤' },
-    { name: 'ui-callout', meta: 'spotlight', bg: 'linear-gradient(135deg,#1A1B22,#1E2028)', icon: '◐' },
-    { name: 'parallax', meta: '2.5D depth', bg: 'linear-gradient(135deg,#1A1B22,#2A2418)', icon: '⛰' },
-    { name: 'atmosphere', meta: 'blobs', bg: 'linear-gradient(135deg,#1A1B22,#1E2028)', icon: '◉' },
-    { name: 'video-layer', meta: 'footage', bg: 'linear-gradient(135deg,#1A1B22,#1E2028)', icon: '▶' },
-    { name: 'three-scene', meta: '3D wire', bg: 'linear-gradient(135deg,#1A1B22,#1E2028)', icon: '◇' },
+    { name: 'typography', meta: '4 reveals', render: function () { return '' +
+      '<div style="position:absolute;inset:0;background:' + bg + ';display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;">' +
+        '<div style="font-size:14px;font-weight:700;color:' + text + ';">Title</div>' +
+        '<div style="font-size:8px;color:' + accent + ';">subtitle</div></div>'; } },
+
+    { name: 'stat-hit', meta: 'count-up', render: function () { return '' +
+      '<div style="position:absolute;inset:0;background:' + bg + ';display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;">' +
+        '<div style="font-size:22px;font-weight:700;color:' + accent + ';font-family:monospace;">87%</div>' +
+        '<div style="display:flex;gap:3px;align-items:flex-end;height:10px;">' +
+          '<div style="width:5px;height:7px;background:' + accent + '60;border-radius:1px;"></div>' +
+          '<div style="width:5px;height:10px;background:' + accent + ';border-radius:1px;"></div>' +
+          '<div style="width:5px;height:5px;background:' + accent + '40;border-radius:1px;"></div></div></div>'; } },
+
+    { name: 'browser-frame', meta: 'cursor', render: function () { return '' +
+      '<div style="position:absolute;inset:0;background:' + bg + ';display:flex;flex-direction:column;">' +
+        '<div style="display:flex;gap:3px;padding:3px 5px;background:' + card + ';border-bottom:1px solid #26272F;">' +
+          '<div style="width:4px;height:4px;border-radius:50%;background:#FF5F57;"></div>' +
+          '<div style="width:4px;height:4px;border-radius:50%;background:#FEBC2E;"></div>' +
+          '<div style="width:4px;height:4px;border-radius:50%;background:#28C840;"></div></div>' +
+        '<div style="flex:1;background:#2A2D38;position:relative;">' +
+          '<div style="position:absolute;top:30%;left:50%;transform:translate(-50%,0);width:40%;height:5px;background:' + text + '40;border-radius:2px;"></div>' +
+          '<div style="position:absolute;top:55%;left:50%;transform:translate(-50%,0);width:25%;height:7px;background:' + accent + '80;border-radius:3px;"></div></div></div>'; } },
+
+    { name: 'ui-callout', meta: 'spotlight', render: function () { return '' +
+      '<div style="position:absolute;inset:0;background:linear-gradient(135deg,#2A2D38,#1E2028);">' +
+        '<div style="position:absolute;inset:0;background:rgba(5,8,15,0.5);"></div>' +
+        '<div style="position:absolute;top:35%;left:25%;width:50%;height:30%;border:1.5px solid ' + accent + ';border-radius:4px;box-shadow:0 0 0 100px rgba(5,8,15,0.3);"></div></div>'; } },
+
+    { name: 'parallax', meta: '2.5D depth', render: function () { return '' +
+      '<div style="position:absolute;inset:0;background:linear-gradient(180deg,' + bg + ',#1E1610);">' +
+        '<div style="position:absolute;bottom:0;left:0;right:0;height:55%;background:' + accent + '15;clip-path:polygon(0 100%,15% 40%,30% 60%,50% 30%,70% 55%,85% 35%,100% 50%,100% 100%);"></div>' +
+        '<div style="position:absolute;bottom:0;left:0;right:0;height:30%;background:' + accent + '30;clip-path:polygon(0 100%,25% 50%,50% 65%,75% 45%,100% 55%,100% 100%);"></div></div>'; } },
+
+    { name: 'atmosphere', meta: 'blobs', render: function () { return '' +
+      '<div style="position:absolute;inset:0;background:' + bg + ';overflow:hidden;">' +
+        '<div style="position:absolute;width:50px;height:50px;border-radius:50%;background:radial-gradient(circle,' + accent + '40,transparent 65%);top:20%;left:25%;filter:blur(8px);"></div>' +
+        '<div style="position:absolute;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,' + text + '12,transparent 65%);top:50%;left:55%;filter:blur(6px);"></div></div>'; } },
+
+    { name: 'video-layer', meta: 'footage', render: function () { return '' +
+      '<div style="position:absolute;inset:0;background:linear-gradient(135deg,#1A1B22,#2A2418);">' +
+        '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:0;height:0;border-left:8px solid ' + text + '80;border-top:5px solid transparent;border-bottom:5px solid transparent;"></div>' +
+        '<div style="position:absolute;bottom:5px;right:6px;font-family:monospace;font-size:8px;color:' + accent + ';">00:14</div></div>'; } },
+
+    { name: 'three-scene', meta: '3D wire', render: function () { return '' +
+      '<div style="position:absolute;inset:0;background:' + bg + ';display:flex;align-items:center;justify-content:center;">' +
+        '<svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="' + accent + '" stroke-width="1.2" stroke-linejoin="round">' +
+          '<path d="M9 13 L18 9 L27 13 L18 17 Z"/><path d="M9 13 L9 24 L18 28 L18 17"/><path d="M27 13 L27 24 L18 28 L18 17"/></svg></div>'; } },
   ];
+
   scenes.forEach(function (s) {
     var tile = document.createElement('div');
     tile.className = 'showcase-tile';
-    tile.innerHTML =
-      '<div class="st-bg" style="background:' + s.bg + ';"></div>' +
+    tile.innerHTML = s.render() +
       '<div class="st-meta">' + s.meta + '</div>' +
-      '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;color:rgba(196,154,92,0.4);">' + s.icon + '</div>' +
       '<div class="st-label">' + s.name + '</div>';
     grid.appendChild(tile);
   });
@@ -111,7 +220,7 @@
   var i = 0;
   function step() {
     if (i <= realHash.length) {
-      hash.textContent = realHash.slice(0, i) + '▋';
+      hash.textContent = realHash.slice(0, i) + '\u258b';
       i++;
       setTimeout(step, 40);
     } else {

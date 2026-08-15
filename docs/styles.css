@@ -284,8 +284,47 @@ footer {
   border-top: 1px solid var(--border); margin-top: 40px;
 }
 footer p { font-size: 14px; color: var(--text-faint); }
+footer p a { color: var(--text-dim); }
+footer p a:hover { color: var(--accent); }
 footer .footer-links { display: flex; gap: 20px; justify-content: center; margin-bottom: 16px; }
 footer .footer-links a { font-size: 14px; color: var(--text-dim); }
+footer .footer-brand { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px; }
+footer .footer-brand-mark {
+  width: 18px; height: 18px; border-radius: 4px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+  position: relative;
+}
+footer .footer-brand-mark::after {
+  content: ''; position: absolute; inset: 3px;
+  border: 1px solid rgba(13,14,18,0.4); border-radius: 2px;
+}
+footer .footer-brand-name {
+  font-weight: 700; font-size: 15px; color: var(--text);
+  letter-spacing: -0.02em; text-decoration: none;
+}
+footer .footer-brand-name span { color: var(--accent); }
+
+/* ---- Skill section ---- */
+.skill-flow {
+  margin-top: 48px; display: flex; align-items: stretch; gap: 0; flex-wrap: wrap;
+}
+.skill-card {
+  flex: 1; min-width: 200px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 24px; transition: border-color 0.2s;
+}
+.skill-card:hover { border-color: var(--accent-dim); }
+.skill-card-num {
+  font-family: var(--mono); font-size: 11px; color: var(--accent);
+  letter-spacing: 0.1em; margin-bottom: 12px;
+}
+.skill-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.skill-card p { font-size: 14px; color: var(--text-dim); line-height: 1.55; }
+.skill-card code { font-family: var(--mono); font-size: 12px; background: var(--bg-soft); padding: 1px 5px; border-radius: 3px; color: var(--accent); }
+.skill-arrow {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 8px; color: var(--text-faint); font-size: 20px; flex: 0 0 auto;
+}
 
 /* ---- Docs page ---- */
 .docs-layout { display: flex; max-width: 1100px; margin: 0 auto; padding-top: 80px; }
