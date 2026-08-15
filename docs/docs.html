@@ -43,7 +43,7 @@
     <a href="index.html#skill">Agentic skill</a>
     <a href="docs.html" style="color:var(--accent);">Docs</a>
     <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
-    <span class="nav-install">npm install && npm run build</span>
+    <span class="nav-install">npm install lazy-frames</span>
   </div>
 </nav>
 
@@ -52,6 +52,7 @@
     <h4>Getting started</h4>
     <ul>
       <li><a href="#install">Install</a></li>
+      <li><a href="#agent-install">Agent setup</a></li>
       <li><a href="#first-video">First video</a></li>
       <li><a href="#prerequisites">Prerequisites</a></li>
     </ul>
@@ -86,7 +87,21 @@
     <p><strong>From npm:</strong></p>
     <pre><code>npm install lazy-frames
 npx lazy doctor</code></pre>
-    <p><strong>From source (for the agentic skill or development):</strong></p>
+
+    <h3 id="agent-install">Install for an AI agent</h3>
+    <p>Agents need the Lazy Frames CLI on your machine and the raw skill instructions. Install the package first:</p>
+    <pre><code>npm install lazy-frames
+npx lazy doctor</code></pre>
+    <p>Then use your agent's skill-from-URL option, or ask it to read and follow this raw Markdown skill:</p>
+    <pre><code>https://lazy-frames.cosmicstack.ai/skill.md</code></pre>
+    <p><a href="https://lazy-frames.cosmicstack.ai/skill.md">Open the raw skill</a> · <a href="https://lazy-frames.cosmicstack.ai/skill">View the human-readable version</a></p>
+    <p><strong>Example agent request:</strong></p>
+    <pre><code>Read and follow the Lazy Frames skill at
+https://lazy-frames.cosmicstack.ai/skill.md
+
+Then make a promo video for https://example.com.</code></pre>
+
+    <p><strong>From source (for development):</strong></p>
     <pre><code>git clone https://github.com/cosmicstack-labs/lazy-frames.git
 cd lazy-frames
 npm install && npm run build
