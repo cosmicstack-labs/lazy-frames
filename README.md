@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://lazy-frames.cosmicstack.ai/">
+    <img src="docs/assets/lazy-frames-banner.png" alt="Lazy Frames — agentic video generation, byte-stable and fully local" width="100%">
+  </a>
+</p>
+
 # Lazy Frames
 
 [![npm version](https://img.shields.io/npm/v/lazy-frames.svg)](https://www.npmjs.com/package/lazy-frames)
