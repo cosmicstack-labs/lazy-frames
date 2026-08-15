@@ -11,10 +11,10 @@ Part of [CosmicStack.AI](https://cosmicstack.ai).
 
 ## Give it to your agent
 
-Paste this URL into your AI agent and ask it to use the Lazy Frames skill:
+Paste the raw Markdown skill URL into your AI agent:
 
 ```text
-https://lazy-frames.cosmicstack.ai/skill
+https://lazy-frames.cosmicstack.ai/skill.md
 ```
 
 For example: `Read this skill, then make a promo video for https://example.com.`
