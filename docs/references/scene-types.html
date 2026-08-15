@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../styles.css">
+<style>
+body { font-family: var(--sans); background: var(--bg); color: var(--text); }
+.docs-layout { display: flex; max-width: 1100px; margin: 0 auto; padding-top: 80px; }
+.docs-content { flex: 1; padding: 40px 48px; max-width: 820px; }
+.docs-content h1 { font-size: 28px; font-weight: 700; margin: 0 0 24px; letter-spacing: -0.01em; }
+.docs-content h2 { font-size: 22px; font-weight: 700; margin: 36px 0 12px; letter-spacing: -0.01em; }
+.docs-content h3 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
+.docs-content p { margin-bottom: 14px; color: var(--text-dim); line-height: 1.65; }
+.docs-content code { font-family: var(--mono); font-size: 13px; background: var(--bg-soft); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
+.docs-content pre { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; overflow-x: auto; margin: 16px 0; }
+.docs-content pre code { background: none; padding: 0; color: var(--text); font-size: 13px; }
+.docs-content table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.docs-content th, .docs-content td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+.docs-content th { color: var(--text); font-weight: 600; }
+.docs-content td { color: var(--text-dim); }
+.docs-content ul { color: var(--text-dim); padding-left: 20px; line-height: 1.8; }
+.docs-content a { color: var(--accent); }
+.docs-content strong { color: var(--text); }
+.docs-back { display: block; margin-bottom: 24px; font-size: 14px; color: var(--text-dim); }
+.docs-back:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div class="brand-text">
+      <div class="brand-name"><a href="../index.html" style="color:inherit;text-decoration:none;">Lazy Frames</a></div>
+      <a href="https://cosmicstack.ai" class="brand-byline">by Cosmic Stack</a>
+    </div>
+  </div>
+  <div class="links">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs.html">Docs</a>
+    <a href="../skill.html">Skill</a>
+    <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
+  </div>
+</nav>
+<div class="docs-layout">
+  <div class="docs-content">
+    <a href="../skill.html" class="docs-back">← Back to Skill</a>
+    <h1>Scene types reference</h1>
+
+<p>8 scene types. Each has a <code>type</code> and type-specific <code>params</code>. All share the scene envelope (see spec-format.md).</p>
+
+<h2>typography</h2>
+
+<p>Text reveals: titles, quotes, section stingers, lockups.</p>
+
+<p>``<code>jsonc</p>
+<p>{</p>
+<p>  "type": "typography",</p>
+<p>  "params": {</p>
+<p>    "lines": [</p>
+<p>      { "text": "Lazy Frames", "size": 132, "weight": 700, "font": "display", "color": "fg", "tracking": 0, "delayMs": 0 }</p>
+<p>    ],</p>
+<p>    "align": "center",            // center | left</p>
+<p>    "reveal": "letter-stagger",   // fade-up | letter-stagger | mask-wipe | scale-in</p>
+<p>    "staggerMs": 120,             // delay between lines</p>
+<p>    "revealMs": 600,              // reveal animation duration</p>
+<p>    "charStaggerMs": 26,          // (letter-stagger only) delay between chars</p>
+<p>    "bg": { "type": "solid", "color": "#0B0F19" }  // optional, transparent if absent</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code>
+
+<p><strong>Line fields:</strong> </code>text<code> (required), </code>size<code> (px, 8–800, default 72), </code>weight<code> (100–900, default 600), </code>font<code> (</code>"display"<code> | </code>"body"<code>, default display), </code>color<code> (</code>"fg"<code> | </code>"accent"<code>, default fg), </code>tracking<code> (px, -10–40, default 0), </code>delayMs<code> (override stagger for this line).</p>
+
+<p><strong>Reveals:</strong></p>
+<ul><li></code>fade-up<code>: opacity + Y translate, eased</li>
+<li></code>letter-stagger<code>: per-character opacity + Y, staggered</li>
+<li></code>mask-wipe<code>: overflow-hidden mask, inner slides up</li>
+<li></code>scale-in<code>: opacity + scale, eased</li>
+</ul>
+<p><strong>bg:</strong> </code>{ "type": "solid", "color": "#hex" }<code> or </code>{ "type": "gradient", "from": "#hex", "to": "#hex", "angle": 135 }<code>. If absent, scene is transparent (stage bg shows).</p>
+
+<h2>stat-hit</h2>
+
+<p>Count-up numbers, labels, bars — data-driven motion graphics.</p>
+
+</code>`<code>jsonc
+<p>{</p>
+<p>  "type": "stat-hit",</p>
+<p>  "params": {</p>
+<p>    "kicker": "DETERMINISTIC",</p>
+<p>    "value": 100,</p>
+<p>    "decimals": 0,</p>
+<p>    "prefix": "",</p>
+<p>    "suffix": "%",</p>
+<p>    "label": "byte-stable renders",</p>
+<p>    "bars": [{ "value": 72 }, { "value": 88 }, { "value": 64 }],</p>
+<p>    "valueSize": 200,</p>
+<p>    "bg": { ... }  // optional</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code>
+
+<p>All fields optional except </code>value<code>. Kicker fades up first, value counts up (1.6s, outQuint) with scale, label fades up delayed, bars grow (outExpo, staggered).</p>
+
+<h2>browser-frame</h2>
+
+<p>A screenshot inside a macOS browser chrome mockup with cursor choreography.</p>
+
+</code>`<code>jsonc
+<p>{</p>
+<p>  "type": "browser-frame",</p>
+<p>  "params": {</p>
+<p>    "src": "assets/sites/example.com/hero.png",</p>
+<p>    "url": "example.com",</p>
+<p>    "zoom": "slow-in",    // none | slow-in (subtle zoom on the screenshot)</p>
+<p>    "cursor": {</p>
+<p>      "moves": [</p>
+<p>        { "xPct": 34, "yPct": 40, "atMs": 900 },</p>
+<p>        { "xPct": 62, "yPct": 58, "atMs": 2100 }</p>
+<p>      ],</p>
+<p>      "clickAtMs": 2800   // optional, ripple at cursor's final position</p>
+<p>    },</p>
+<p>    "bg": { ... }</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code>
+
+</code>src<code> is a project-relative path to a PNG. </code>cursor.moves<code> = waypoints the cursor travels through (percent of frame). </code>xPct<code>/</code>yPct<code> are 0–100. </code>atMs<code> is scene-local time.
+
+<h2>ui-callout</h2>
+
+<p>A screenshot with a dimmed mask, highlighted hotspot, and label.</p>
+
+</code>`<code>jsonc
+<p>{</p>
+<p>  "type": "ui-callout",</p>
+<p>  "params": {</p>
+<p>    "src": "assets/sites/example.com/hero.png",</p>
+<p>    "hotspot": { "x": 33, "y": 52, "w": 34, "h": 16 },</p>
+<p>    "label": "Primary CTA",</p>
+<p>    "zoomStrength": 8,    // 0–10, how much the camera dollies toward the hotspot</p>
+<p>    "bg": { ... }</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code>
+
+</code>hotspot<code> is in percent of the screenshot (0–100). The screenshot dollies toward the hotspot center while a spotlight box scales in (outBack) and a label chip slides in.
+
+<h2>atmosphere</h2>
+
+<p>Drifting gradient blobs — ambient backdrops, scene glue, B-roll backgrounds.</p>
+
+</code>`<code>jsonc
+<p>{</p>
+<p>  "type": "atmosphere",</p>
+<p>  "params": {</p>
+<p>    "colors": ["#22D3EE", "#F8FAFC"],  // optional, defaults to palette accent + fg</p>
+<p>    "blobCount": 3,                     // 1–4</p>
+<p>    "drift": "slow",                    // slow | medium</p>
+<p>    "seed": 7,                          // deterministic layout</p>
+<p>    "bg": { ... }</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code>
+
+<p>Blobs are blurred radial-gradient divs that drift via deterministic seeded motion. Use behind typography or as a transition interstitial.</p>
+
+<h2>parallax</h2>
+
+<p>2.5D camera move over a still image. Two modes:</p>
+
+<h3>Flat mode (no depth map)</h3>
+
+</code>`<code>jsonc
+<p>{</p>
+<p>  "type": "parallax",</p>
+<p>  "params": {</p>
+<p>    "src": "assets/sites/example.com/full.png",</p>
+<p>    "move": "dolly-in",    // dolly-in | dolly-out | pan-left | pan-right</p>
+<p>    "grade": "none",       // none | warm | cool | noir (per-scene CSS filter)</p>
+<p>    "overlay": "vignette", // none | scrim | vignette</p>
+<p>    "bg": { ... }</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code>
+
+<p>Ken Burns-style scale + pan with easing. Good for screenshots.</p>
+
+<h3>Depth mode (with depth map)</h3>
+
+</code>`<code>jsonc
+<p>{</p>
+<p>  "type": "parallax",</p>
+<p>  "params": {</p>
+<p>    "src": "assets/gen/ridge-21.png",</p>
+<p>    "depth": "assets/gen/ridge-21.depth.png",</p>
+<p>    "depthStrength": 0.45,  // 0–1, parallax intensity</p>
+<p>    "move": "dolly-in",</p>
+<p>    "grade": "warm",</p>
+<p>    "overlay": "vignette",</p>
+<p>    "bg": { ... }</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code>
+
+<p>Per-pixel displacement using a depth map — true 2.5D parallax. The still and depth map can be generated together via </code>lazy gen image<code> (procedural art with matching depth). Displacement is computed in pure JS (canvas 2D </code>putImageData<code>) for cross-session byte-stability.</p>
+
+<h2>video-layer</h2>
+
+<p>Raw footage playback with trim, speed, grade.</p>
+
+</code>`<code>jsonc
+<p>{</p>
+<p>  "type": "video-layer",</p>
+<p>  "params": {</p>
+<p>    "src": "assets/footage/clip.mp4",</p>
+<p>    "trimStartMs": 0,</p>
+<p>    "speed": 1,         // 0.5 | 1 | 2</p>
+<p>    "grade": "noir",     // none | warm | cool | noir</p>
+<p>    "fit": "cover",      // cover | contain</p>
+<p>    "bg": { ... }</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code>
+
+<p>The engine owns video seeking — each frame is extracted at the exact timestamp via </code><video>.currentTime<code> (deterministic per machine). Muted (audio is mixed separately via the </code>audio<code> spec section).</p>
+
+<h2>three-scene</h2>
+
+<p>Deterministic 3D — canvas-2D projected wireframe/solid/particle scenes.</p>
+
+</code>`<code>jsonc
+<p>{</p>
+<p>  "type": "three-scene",</p>
+<p>  "params": {</p>
+<p>    "primitive": "cube",       // cube | ico | grid | particles</p>
+<p>    "mode": "wireframe",       // wireframe | fill (cube only)</p>
+<p>    "orbit": "slow-spin",      // slow-spin | tumble | static-tilt</p>
+<p>    "density": 12,             // 1–40 (grid resolution, particle count)</p>
+<p>    "color": "accent",         // fg | accent</p>
+<p>    "bg": { ... }</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code>
+
+<p>Pure-JS 3D math (rotation matrices, perspective projection) rendered to canvas 2D via </code>putImageData` for cross-session byte-stability. No WebGL (SwiftShader was nondeterministic across processes). Good for abstract motion, tech intros, data-viz backdrops.</p>
+  </div>
+</div>
+<footer style="padding:40px;text-align:center;border-top:1px solid var(--border);margin-top:40px;">
+  <p style="font-size:14px;color:var(--text-faint);">&copy; 2025 <a href="https://cosmicstack.ai" style="color:var(--text-dim);">Cosmic Stack Labs</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lazy Frames — Skill</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+<style>
+body { font-family: var(--sans); background: var(--bg); color: var(--text); padding: 0; }
+.skill-page { max-width: 820px; margin: 0 auto; padding: 100px 40px 60px; }
+.skill-page h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin: 40px 0 16px; }
+.skill-page h2 { font-size: 22px; font-weight: 700; margin: 36px 0 12px; letter-spacing: -0.01em; color: var(--text); }
+.skill-page h3 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; color: var(--text); }
+.skill-page p { color: var(--text-dim); line-height: 1.65; margin-bottom: 14px; }
+.skill-page code { font-family: var(--mono); font-size: 13px; background: var(--bg-soft); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
+.skill-page pre { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; overflow-x: auto; margin: 16px 0; }
+.skill-page pre code { background: none; padding: 0; color: var(--text); font-size: 13px; }
+.skill-page table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.skill-page th, .skill-page td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+.skill-page th { color: var(--text); font-weight: 600; }
+.skill-page td { color: var(--text-dim); }
+.skill-page ul { color: var(--text-dim); padding-left: 20px; line-height: 1.8; }
+.skill-page a { color: var(--accent); }
+.skill-page strong { color: var(--text); }
+.skill-page hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+.skill-page blockquote { border-left: 3px solid var(--accent-dim); padding-left: 16px; margin: 16px 0; color: var(--text-dim); }
+.skill-masthead { text-align: center; padding: 20px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+.skill-masthead h1 { margin: 0 0 8px; font-size: 36px; }
+.skill-masthead .skill-url { font-family: var(--mono); font-size: 14px; color: var(--accent); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div class="brand-text">
+      <div class="brand-name"><a href="index.html" style="color:inherit;text-decoration:none;">Lazy Frames</a></div>
+      <a href="https://cosmicstack.ai" class="brand-byline">by Cosmic Stack</a>
+    </div>
+  </div>
+  <div class="links">
+    <a href="index.html#features">Features</a>
+    <a href="index.html#how">How it works</a>
+    <a href="index.html#skill">Agentic skill</a>
+    <a href="docs.html">Docs</a>
+    <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
+    <span class="nav-install">npm install lazy-frames</span>
+  </div>
+</nav>
+
+<div class="skill-page">
+<div class="skill-masthead">
+  <h1>Lazy Frames — Agent Skill</h1>
+  <div class="skill-url">https://lazy-frames.cosmicstack.ai/skill.md</div>
+</div>
+<h1>Lazy Frames</h1>
+
+<p>Lazy Frames renders video from a <strong>typed JSON spec</strong> — a composition is a <code>spec.json</code> file whose</p>
+<p>scenes declare timing, content, and style; the CLI turns it into a deterministic, pixel-perfect MP4.</p>
+<p>No cloud, no keys, no nondeterminism. Same spec + same machine = byte-identical output, every time.</p>
+
+<h2>1. Start from project state</h2>
+
+<table><tr><th>State</th><th>Action</th></tr><tr><td>Existing project with <code>spec.json</code></td><td>Read the spec, make the edit or run the requested operation. Skip routing.</td></tr><tr><td>Fresh request with a website URL</td><td>Route to <strong>website-promo</strong> workflow (§ 3).</td></tr><tr><td>Fresh request with a text brief</td><td>Route to <strong>cinematic</strong> workflow (§ 3).</td></tr><tr><td>Fresh request with existing footage</td><td>Route to <strong>edit</strong> workflow (§ 3).</td></tr><tr><td>Unclear</td><td>Ask one question: "Is this about a specific website, a topic/brief, or existing video footage?"</td></tr></table>
+<h2>2. Prerequisites</h2>
+
+<p>``<code>bash</p>
+<p>node --version   # >= 20</p>
+<p>ffmpeg -version  # required</p>
+<p>python3 --version  # required for audio (music, TTS, SFX)</p>
+<p>ls "/Applications/Google Chrome.app"  # required (headless renderer)</p>
+</code>`<code>
+
+<p>Build the CLI from the repo root:</p>
+
+</code>`<code>bash
+<p>npm install && npm run build</p>
+</code>`<code>
+
+<p>Verify the environment:</p>
+
+</code>`<code>bash
+<p>node packages/cli/dist/index.js doctor</p>
+</code>`<code>
+
+<p>Doctor reports: Node platform/memory, Python version + tier, and provider availability</p>
+<p>(procedural imagery, depth, music, TTS). If </code>tts.say<code> is unavailable, narration won't work</p>
+<p>(macOS only). If </code>image.mlx-photoreal<code> is unavailable (expected on <16 GB machines), the</p>
+<p>procedural image generator is used instead — still produces cinematic stills, just not photoreal.</p>
+
+<h2>3. Workflows</h2>
+
+<h3>website-promo</h3>
+
+<p><strong>Input:</strong> a URL.</p>
+<p><strong>Output:</strong> a promo/showcase MP4 built from the site's own captured visuals.</p>
+
+</code>`<code>bash
+<h1>1. Capture the site (screenshots @2x, palette, copy, fonts, logo)</h1>
+<p>node packages/cli/dist/index.js capture https://example.com projects/acme</p>
+
+<h1>2. Review the generated starter spec + captured assets</h1>
+<p>cat projects/acme/spec.json</p>
+<p>ls projects/acme/assets/sites/example.com/</p>
+
+<h1>3. Edit the spec if needed (adjust scenes, copy, timing, transitions)</h1>
+
+<h1>4. Validate + run gates</h1>
+<p>node packages/cli/dist/index.js snapshot projects/acme --update</p>
+<p>node packages/cli/dist/index.js check projects/acme</p>
+
+<h1>5. Render</h1>
+<p>node packages/cli/dist/index.js render projects/acme</p>
+</code>`<code>
+
+<p>The capture command writes:</p>
+<ul><li></code>assets/sites/<domain>/hero.png<code> + </code>full.png<code> (screenshots at 2x DPR)</li>
+<li></code>assets/sites/<domain>/ledger.json<code> (palette, fonts, copy blocks, metadata)</li>
+<li>A starter </code>spec.json<code> with 5 scenes built from the captured content</li>
+</ul>
+<h3>cinematic</h3>
+
+<p><strong>Input:</strong> a text brief or topic.</p>
+<p><strong>Output:</strong> a 30–60 s cinematic clip with generated stills, depth-parallax, narration, music, SFX.</p>
+
+</code>`<code>bash
+<h1>1. Generate procedural stills + matching depth maps</h1>
+<p>node packages/cli/dist/index.js gen image -p projects/cine --seed 21 --style ridge --palette "#070B14,#F59E4C,#F4F7FB" --name ridge-01</p>
+<p>node packages/cli/dist/index.js gen image -p projects/cine --seed 42 --style dune --palette "#070B14,#7FB7D9,#F4F7FB" --name dune-01</p>
+
+<h1>2. Write spec.json referencing the generated assets (see references/spec-format.md.html)</h1>
+
+<h1>3. (Optional) Generate audio assets to preview</h1>
+<p>node packages/cli/dist/index.js gen music -p projects/cine --mood calm --bpm 90 --bars 12 --seed 21</p>
+<p>node packages/cli/dist/index.js gen tts -p projects/cine --text "Every frame computed locally." --name n1</p>
+
+<h1>4. Validate + render</h1>
+<p>node packages/cli/dist/index.js snapshot projects/cine --update</p>
+<p>node packages/cli/dist/index.js check projects/cine</p>
+<p>node packages/cli/dist/index.js render projects/cine</p>
+</code>`<code>
+
+<h3>edit</h3>
+
+<p><strong>Input:</strong> existing footage (MP4) + a brief.</p>
+<p><strong>Output:</strong> the footage composited into a video with overlays, grading, transitions.</p>
+
+<p>Write a spec with </code>video-layer<code> scenes referencing the footage file, plus typography/atmosphere</p>
+<p>scenes for titles and transitions. The engine owns video seeking (deterministic per-machine frame</p>
+<p>extraction). See </code>references/scene-types.md.html<code> for </code>video-layer<code> params.</p>
+
+<h2>4. Agent contract</h2>
+
+<p>The agent's job across all workflows:</p>
+
+<p>1. <strong>Research</strong> the input (read the site, understand the brief, inspect the footage).</p>
+<p>2. <strong>Produce or refine</strong> </code>spec.json<code> — a valid typed spec (see </code>references/spec-format.md.html<code>).</p>
+<p>3. <strong>Generate assets</strong> if needed (</code>lazy gen image<code>, </code>lazy gen music<code>, </code>lazy gen tts<code>).</p>
+<p>4. <strong>Run </code>lazy check<code></strong> and fix every error. Warnings are advisory.</p>
+<p>5. <strong>Run </code>lazy snapshot --update<code></strong> to establish the regression baseline.</p>
+<p>6. <strong>Run </code>lazy check<code></strong> again — snapshot + seek-determinism gates must pass.</p>
+<p>7. <strong>Run </code>lazy preview<code></strong> and hand the URL to the user. Ask whether to revise or render.</p>
+<p>8. <strong>Render only after approval.</strong> </code>lazy render<code> — never before the user says go.</p>
+<p>9. <strong>Verify the output:</strong> confirm the file exists, is non-empty, has the expected duration.</p>
+<p>10. Report the output path + sha256.</p>
+
+<h3>Non-negotiable rules</h3>
+
+<ul><li><strong>Never render before the user approves.</strong> Always pause at preview.</li>
+<li><strong>Never skip </code>lazy check<code>.</strong> It catches schema errors, missing assets, and nondeterminism.</li>
+<li><strong>Always run </code>lazy snapshot --update<code> before the first </code>lazy check<code></strong> in a new project.</li>
+<li><strong>Never edit </code>.lazy/<code></strong> — it's generated. Edit </code>spec.json<code> and re-render.</li>
+<li><strong>Reference assets by project-relative paths</strong> in spec (e.g., </code>assets/gen/ridge-01.png<code>).</li>
+<li><strong>Scenes are sequential with optional overlap.</strong> Overlap + fade/dissolve = crossfade.</li>
+<li><strong>All timing is in milliseconds.</strong> Start times are absolute from the composition start.</li>
+<li><strong>Palette convention:</strong> </code>palette[0]<code> = bg, </code>palette[1]<code> = accent, </code>palette[2]<code> = fg.</li>
+<li><strong>Width/height must be even</strong> (h264 yuv420p requirement).</li>
+<li><strong>Fonts are bundled:</strong> </code>Inter<code> (body) and </code>Space Grotesk<code> (display). No external fonts.</li>
+</ul>
+<h2>5. Key concepts</h2>
+
+<h3>Determinism</h3>
+
+<p>Same spec + same machine = byte-identical MP4 (verified by sha256). Three Chrome flags enforce this:</p>
+</code>--jitless<code> (V8 interpreter only), </code>--use-angle=swiftshader<code> (software rendering), and
+<p>integer-pixel transform rounding in the runtime. CSS sub-pixel text rendering is</p>
+<p>cross-session nondeterministic — the runtime snaps all transforms to integer pixels.</p>
+
+<h3>Gates</h3>
+
+</code>lazy check<code> runs two blocking gates:
+<ul><li><strong>Snapshot regression:</strong> renders keyframes (scene midpoints + transition midpoints), hashes their</li>
+</ul>  pixels, and compares against </code>snapshots/baseline.json<code>. Drift = error with scene + timestamp.
+<ul><li><strong>Seek determinism:</strong> renders 5 sampled timestamps twice in one browser session, compares hashes.</li>
+</ul>
+<h3>Audio</h3>
+
+<p>Audio is declarative in the spec (</code>narration<code>, </code>music<code>, </code>sfx<code>) — no audio files needed in the spec.</p>
+<p>The renderer generates audio at render time (cached by content hash) and mixes via ffmpeg:</p>
+<ul><li><strong>Narration:</strong> macOS </code>say<code> TTS → WAV, placed at </code>startMs<code> with gain</li>
+<li><strong>Music:</strong> procedural synth (chord pads + percussion) seeded by </code>seed<code>, looped to video duration</li>
+<li><strong>SFX:</strong> synthesized whoosh/hit/rise/boom, placed at </code>atMs<code> with gain</li>
+</ul>
+<h3>LUT / grade</h3>
+
+<p>Two layers:</p>
+<ul><li><strong>Stage grade</strong> (</code>style.grade<code>): CSS filter preset on the composition root (fast, subtle)</li>
+<li><strong>Output LUT</strong> (</code>outputs[0].lut<code>): 3D LUT .cube file applied via ffmpeg </code>lut3d<code> during encode</li>
+</ul>  (cinematic color grade). Bundled LUTs: </code>teal-orange<code>, </code>noir-film<code>, </code>faded-vintage<code>.
+
+<h2>6. References</h2>
+
+<table><tr><th>File</th><th>Read it to…</th></tr><tr><td></code>references/spec-format.md.html<code></td><td>author a valid </code>spec.json<code> — full schema, all fields, defaults</td></tr><tr><td></code>references/scene-types.md.html<code></td><td>pick a scene type and configure its params</td></tr><tr><td></code>references/workflows.md.html<code></td><td>step-by-step for website-promo, cinematic, and edit workflows</td></tr><tr><td></code>references/cli.md.html<code></td><td>every CLI command with flags and examples</td></tr><tr><td></code>references/gates.md.html`</td><td>snapshot regression + seek determinism gate usage</td></tr></table>
+
+</div>
+<footer>
+  <div class="footer-brand">
+    <div class="footer-brand-mark"></div>
+    <a href="https://cosmicstack.ai" class="footer-brand-name">Cosmic Stack<span>.ai</span></a>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="https://www.npmjs.com/package/lazy-frames">npm</a>
+    <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
+    <a href="https://cosmicstack.ai">Cosmic Stack.ai</a>
+  </div>
+  <p>&copy; 2025 <a href="https://cosmicstack.ai">Cosmic Stack Labs</a>. Part of the CosmicStack.AI ecosystem.</p>
+</footer>
+</body>
+</html>

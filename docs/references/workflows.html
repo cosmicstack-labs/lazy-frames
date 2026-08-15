@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../styles.css">
+<style>
+body { font-family: var(--sans); background: var(--bg); color: var(--text); }
+.docs-layout { display: flex; max-width: 1100px; margin: 0 auto; padding-top: 80px; }
+.docs-content { flex: 1; padding: 40px 48px; max-width: 820px; }
+.docs-content h1 { font-size: 28px; font-weight: 700; margin: 0 0 24px; letter-spacing: -0.01em; }
+.docs-content h2 { font-size: 22px; font-weight: 700; margin: 36px 0 12px; letter-spacing: -0.01em; }
+.docs-content h3 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
+.docs-content p { margin-bottom: 14px; color: var(--text-dim); line-height: 1.65; }
+.docs-content code { font-family: var(--mono); font-size: 13px; background: var(--bg-soft); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
+.docs-content pre { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; overflow-x: auto; margin: 16px 0; }
+.docs-content pre code { background: none; padding: 0; color: var(--text); font-size: 13px; }
+.docs-content table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.docs-content th, .docs-content td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+.docs-content th { color: var(--text); font-weight: 600; }
+.docs-content td { color: var(--text-dim); }
+.docs-content ul { color: var(--text-dim); padding-left: 20px; line-height: 1.8; }
+.docs-content a { color: var(--accent); }
+.docs-content strong { color: var(--text); }
+.docs-back { display: block; margin-bottom: 24px; font-size: 14px; color: var(--text-dim); }
+.docs-back:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div class="brand-text">
+      <div class="brand-name"><a href="../index.html" style="color:inherit;text-decoration:none;">Lazy Frames</a></div>
+      <a href="https://cosmicstack.ai" class="brand-byline">by Cosmic Stack</a>
+    </div>
+  </div>
+  <div class="links">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs.html">Docs</a>
+    <a href="../skill.html">Skill</a>
+    <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
+  </div>
+</nav>
+<div class="docs-layout">
+  <div class="docs-content">
+    <a href="../skill.html" class="docs-back">← Back to Skill</a>
+    <h1>Workflows reference</h1>
+
+<p>Three workflows. Each ends with a rendered, verified MP4.</p>
+
+<h2>website-promo</h2>
+
+<p><strong>When:</strong> the user gives a URL and wants a promo/showcase video of the site.</p>
+
+<h3>Steps</h3>
+
+<p>1. <strong>Capture the site:</strong></p>
+<p>   ``<code>bash</p>
+<p>   node packages/cli/dist/index.js capture https://example.com projects/acme</p>
+<p>   </code>`<code></p>
+<p>   Writes: </code>assets/sites/<domain>/<code> (hero.png, full.png, ledger.json), a starter </code>spec.json<code>.</p>
+
+<p>2. <strong>Review the starter spec:</strong> read </code>spec.json<code> and </code>ledger.json<code>. The spec has 5 scenes:</p>
+<p>   - typography (site title + description)</p>
+<p>   - browser-frame (hero screenshot + cursor)</p>
+<p>   - parallax (full-page screenshot, dolly-in)</p>
+<p>   - ui-callout (hero screenshot with a hotspot)</p>
+<p>   - typography (domain lockup with gradient bg)</p>
+
+<p>3. <strong>Edit if needed:</strong> adjust copy from the ledger's </code>copy<code> array, change scene timing, swap transitions, add a LUT, add audio. Common edits:</p>
+<p>   - Replace the title text with the site's actual h1 (from </code>ledger.json<code> → </code>copy[0].text<code>)</p>
+<p>   - Add narration: </code>"audio": { "narration": [{ "text": "...", "startMs": 3600 }] }<code></p>
+<p>   - Add a LUT: </code>"outputs": [{ ..., "lut": "assets/luts/teal-orange.cube" }]<code></p>
+
+<p>4. <strong>Establish baseline + validate:</strong></p>
+<p>   </code>`<code>bash</p>
+<p>   node packages/cli/dist/index.js snapshot projects/acme --update</p>
+<p>   node packages/cli/dist/index.js check projects/acme</p>
+<p>   </code>`<code></p>
+
+<p>5. <strong>Preview for the user:</strong></p>
+<p>   </code>`<code>bash</p>
+<p>   node packages/cli/dist/index.js preview projects/acme</p>
+<p>   </code>`<code></p>
+<p>   Hand the URL to the user. Wait for approval.</p>
+
+<p>6. <strong>Render after approval:</strong></p>
+<p>   </code>`<code>bash</p>
+<p>   node packages/cli/dist/index.js render projects/acme</p>
+<p>   </code>`<code></p>
+
+<p>7. <strong>Verify:</strong> confirm the file exists and has the expected duration.</p>
+<p>   </code>`<code>bash</p>
+<p>   ffprobe -v error -show_entries format=duration -of csv=p=0 projects/acme/out/site-promo.mp4</p>
+<p>   </code>`<code></p>
+
+<h2>cinematic</h2>
+
+<p><strong>When:</strong> the user gives a text brief or topic and wants a narrated, cinematic video.</p>
+
+<h3>Steps</h3>
+
+<p>1. <strong>Generate stills + depth maps:</strong></p>
+<p>   </code>`<code>bash</p>
+<p>   node packages/cli/dist/index.js gen image -p projects/cine --seed 21 --style ridge --palette "#070B14,#F59E4C,#F4F7FB" --name ridge-01</p>
+<p>   node packages/cli/dist/index.js gen image -p projects/cine --seed 42 --style dune --palette "#070B14,#7FB7D9,#F4F7FB" --name dune-01</p>
+<p>   </code>`<code></p>
+<p>   Each generates </code><name>.png<code> + </code><name>.depth.png<code> in </code>assets/gen/<code>.</p>
+
+<p>2. <strong>Write </code>spec.json<code>:</strong> reference the generated assets in </code>parallax<code> scenes with </code>depth<code> pointing to the </code>.depth.png<code> file. Add </code>typography<code> scenes for titles/quotes, </code>atmosphere<code> for scene glue, </code>three-scene<code> for abstract motion. Add </code>audio<code> with narration + music + SFX.</p>
+
+<p>3. <strong>Validate + baseline:</strong></p>
+<p>   </code>`<code>bash</p>
+<p>   node packages/cli/dist/index.js snapshot projects/cine --update</p>
+<p>   node packages/cli/dist/index.js check projects/cine</p>
+<p>   </code>`<code></p>
+
+<p>4. <strong>Preview + render</strong> (same as website-promo steps 5–7).</p>
+
+<h3>Tips</h3>
+
+<ul><li><strong>Scene pacing:</strong> 3–6 seconds per scene. Overlap by 400–500ms with dissolve/fade for smooth flow.</li>
+<li><strong>Parallax depth:</strong> </code>depthStrength<code> 0.35–0.55 looks good. Higher = more parallax but risk of edge artifacts.</li>
+<li><strong>Grade:</strong> use </code>warm<code> for golden-hour landscapes, </code>cool<code> for night/ocean, </code>noir<code> for dramatic B&W.</li>
+<li><strong>LUT:</strong> copy a bundled LUT to </code>assets/luts/<code> and reference in </code>outputs[0].lut<code> for a cinematic color grade.</li>
+<li><strong>Music:</strong> </code>calm<code> for ambient pads, </code>pulse<code> for energetic beats. Match </code>bpm<code> to scene pacing (90 = relaxed, 120 = upbeat).</li>
+<li><strong>SFX timing:</strong> place whooshes at transition points, hits at stat reveals, booms at dramatic moments.</li>
+</ul>
+<h2>edit</h2>
+
+<p><strong>When:</strong> the user has existing footage and wants it composited with overlays, grading, transitions.</p>
+
+<h3>Steps</h3>
+
+<p>1. <strong>Place the footage</strong> in the project: </code>projects/edit/assets/footage/clip.mp4<code></p>
+
+<p>2. <strong>Write </code>spec.json<code>:</strong> use </code>video-layer<code> scenes for the footage, interspersed with </code>typography<code> (titles), </code>atmosphere<code> (bridges), </code>ui-callout<code> (annotations over footage screenshots — capture a frame with </code>ffmpeg -i clip.mp4 -ss 5 -frames:v 1 frame.png<code>).</p>
+
+<p>3. <strong>Validate + render</strong> (same as above).</p>
+
+<h3>Tips</h3>
+
+<ul><li><strong></code>trimStartMs<code></strong> offsets into the footage — use different trims for different scenes to show different parts.</li>
+<li><strong></code>speed: 2<code></strong> for time-lapse effect, </code>speed: 0.5<code> for slow-mo.</li>
+<li><strong></code>grade: "noir"<code></strong> on footage for a dramatic B&W look.</li>
+<li><strong></code>fit: "contain"<code></strong> if the footage aspect doesn't match the canvas (letterboxed); </code>"cover"` fills (cropped).</li></ul>
+  </div>
+</div>
+<footer style="padding:40px;text-align:center;border-top:1px solid var(--border);margin-top:40px;">
+  <p style="font-size:14px;color:var(--text-faint);">&copy; 2025 <a href="https://cosmicstack.ai" style="color:var(--text-dim);">Cosmic Stack Labs</a></p>
+</footer>
+</body>
+</html>

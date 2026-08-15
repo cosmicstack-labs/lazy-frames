@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../styles.css">
+<style>
+body { font-family: var(--sans); background: var(--bg); color: var(--text); }
+.docs-layout { display: flex; max-width: 1100px; margin: 0 auto; padding-top: 80px; }
+.docs-content { flex: 1; padding: 40px 48px; max-width: 820px; }
+.docs-content h1 { font-size: 28px; font-weight: 700; margin: 0 0 24px; letter-spacing: -0.01em; }
+.docs-content h2 { font-size: 22px; font-weight: 700; margin: 36px 0 12px; letter-spacing: -0.01em; }
+.docs-content h3 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
+.docs-content p { margin-bottom: 14px; color: var(--text-dim); line-height: 1.65; }
+.docs-content code { font-family: var(--mono); font-size: 13px; background: var(--bg-soft); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
+.docs-content pre { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; overflow-x: auto; margin: 16px 0; }
+.docs-content pre code { background: none; padding: 0; color: var(--text); font-size: 13px; }
+.docs-content table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.docs-content th, .docs-content td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+.docs-content th { color: var(--text); font-weight: 600; }
+.docs-content td { color: var(--text-dim); }
+.docs-content ul { color: var(--text-dim); padding-left: 20px; line-height: 1.8; }
+.docs-content a { color: var(--accent); }
+.docs-content strong { color: var(--text); }
+.docs-back { display: block; margin-bottom: 24px; font-size: 14px; color: var(--text-dim); }
+.docs-back:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div class="brand-text">
+      <div class="brand-name"><a href="../index.html" style="color:inherit;text-decoration:none;">Lazy Frames</a></div>
+      <a href="https://cosmicstack.ai" class="brand-byline">by Cosmic Stack</a>
+    </div>
+  </div>
+  <div class="links">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs.html">Docs</a>
+    <a href="../skill.html">Skill</a>
+    <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
+  </div>
+</nav>
+<div class="docs-layout">
+  <div class="docs-content">
+    <a href="../skill.html" class="docs-back">← Back to Skill</a>
+    <h1>SPEC format reference</h1>
+
+<p>A composition is a <code>spec.json</code> file. The schema is validated by <code>lazy check</code> before anything renders.</p>
+
+<h2>Top-level structure</h2>
+
+<p>``<code>jsonc</p>
+<p>{</p>
+<p>  "specVersion": 1,</p>
+<p>  "meta": { ... },</p>
+<p>  "style": { ... },</p>
+<p>  "scenes": [ ... ],</p>
+<p>  "audio": { ... },         // optional</p>
+<p>  "outputs": [ ... ]</p>
+<p>}</p>
+</code>`<code>
+
+<h2>meta</h2>
+
+<table><tr><th>Field</th><th>Type</th><th>Default</th><th>Notes</th></tr><tr><td></code>id<code></td><td>string (slug)</td><td>required</td><td></code>[a-z0-9-]+<code>, used in filenames</td></tr><tr><td></code>width<code></td><td>int</td><td>required</td><td>even number, 16–7680</td></tr><tr><td></code>height<code></td><td>int</td><td>required</td><td>even number, 16–4320</td></tr><tr><td></code>fps<code></td><td>int</td><td>required</td><td>1–120</td></tr><tr><td></code>durationMs<code></td><td>int</td><td>optional</td><td>advisory; engine computes true duration from scenes</td></tr><tr><td></code>qualityTier<code></td><td></code>"draft"<code> \</td><td></code>"high"<code></td><td></code>"high"<code></td><td>informational</td></tr></table>
+<h2>style</h2>
+
+</code>`<code>jsonc
+<p>"style": {</p>
+<p>  "tokens": {</p>
+<p>    "palette": ["#0B0F19", "#22D3EE", "#F8FAFC"],  // min 3, max 10</p>
+<p>    "fontDisplay": "Space Grotesk",                  // must be bundled</p>
+<p>    "fontBody": "Inter",                             // must be bundled</p>
+<p>    "stageBg": "#0B0F19"                             // optional, defaults to palette[0]</p>
+<p>  },</p>
+<p>  "grade": "vivid"   // none | contrast | vivid | muted | monochrome</p>
+<p>}</p>
+</code>`<code>
+
+<p><strong>Palette convention:</strong> index 0 = background, 1 = accent, 2 = foreground. Scenes reference colors by role (</code>"fg"<code>, </code>"accent"<code>), not by hex.</p>
+
+<p><strong>Grade</strong> applies a CSS filter to the whole composition (subtle, fast). For a real cinematic color grade, use a LUT on the output (see outputs below).</p>
+
+<h2>scenes</h2>
+
+<p>An array of scene objects. Each scene has a base envelope plus type-specific </code>params<code>.</p>
+
+<h3>Scene envelope (all types)</h3>
+
+<table><tr><th>Field</th><th>Type</th><th>Default</th><th>Notes</th></tr><tr><td></code>type<code></td><td>string</td><td>required</td><td>one of the 8 scene types (see scene-types.md)</td></tr><tr><td></code>id<code></td><td>string (slug)</td><td>required</td><td>unique, </code>[a-z0-9-]+<code></td></tr><tr><td></code>startMs<code></td><td>int</td><td>required</td><td>absolute start time in ms</td></tr><tr><td></code>durationMs<code></td><td>int</td><td>required</td><td>100–600000</td></tr><tr><td></code>transitionIn<code></td><td>object</td><td></code>{type:"cut",ms:400}<code></td><td>see transitions below</td></tr><tr><td></code>transitionOut<code></td><td>object</td><td></code>{type:"cut",ms:400}<code></td><td>see transitions below</td></tr><tr><td></code>beat<code></td><td>object</td><td>optional</td><td>audio-reactive pulse (see below)</td></tr></table>
+<h3>Transitions</h3>
+
+<table><tr><th>Type</th><th>Effect</th></tr><tr><td></code>cut<code></td><td>instant (no animation)</td></tr><tr><td></code>fade<code></td><td>opacity in/out</td></tr><tr><td></code>dissolve<code></td><td>alias for fade (crossfade during overlap)</td></tr><tr><td></code>dip-to-black<code></td><td>alias for fade (to/from dark stage bg)</td></tr><tr><td></code>whip-pan<code></td><td>horizontal slide with quick ease</td></tr><tr><td></code>light-leak<code></td><td>hold + fade (flash-like)</td></tr><tr><td></code>luma-wipe<code></td><td>vertical slide wipe</td></tr></table>
+<p>All transitions: </code>{ "type": "...", "ms": N }<code>. Transition </code>ms<code> must be shorter than scene </code>durationMs<code>.</p>
+
+<h3>Beat</h3>
+
+</code>`<code>jsonc
+<p>"beat": { "bpm": 120, "property": "scale", "amount": 0.04, "decayMs": 200 }</p>
+</code>`<code>
+
+<p>Generates deterministic pulse channels at bpm-derived intervals. </code>property<code> can be </code>"scale"<code> (subtle zoom pulse) or </code>"opacity"<code> (brightness pulse). <strong>Note:</strong> </code>scale<code> on scenes containing text may not be cross-session byte-stable due to Chrome sub-pixel rendering. Use on </code>three-scene<code> or </code>atmosphere<code> for guaranteed determinism.</p>
+
+<h2>audio</h2>
+
+</code>`<code>jsonc
+<p>"audio": {</p>
+<p>  "narration": [</p>
+<p>    { "text": "...", "startMs": 3600, "voice": "Samantha", "rate": 165, "gainDb": 0 }</p>
+<p>  ],</p>
+<p>  "music": {</p>
+<p>    "mood": "calm",    // calm | pulse</p>
+<p>    "bpm": 90,</p>
+<p>    "bars": 12,</p>
+<p>    "seed": 21,</p>
+<p>    "gainDb": -14</p>
+<p>  },</p>
+<p>  "sfx": [</p>
+<p>    { "kind": "whoosh", "atMs": 2400, "seed": 1, "gainDb": -6 }</p>
+<p>  ]</p>
+<p>}</p>
+</code>`<code>
+
+<p>All audio is generated at render time (cached by content hash). No audio files in the spec.</p>
+
+<ul><li><strong>Narration:</strong> macOS </code>say<code> TTS. </code>voice<code> must be an installed voice (</code>say -v '?'<code> to list). </code>rate<code> = words/min.</li>
+<li><strong>Music:</strong> procedural synth. </code>bars<code> controls length (each bar = 4 beats). Looped to video duration.</li>
+<li><strong>SFX:</strong> </code>kind<code> = </code>whoosh<code> | </code>hit<code> | </code>rise<code> | </code>boom<code>. </code>seed<code> for deterministic variation.</li>
+</ul>
+<h2>outputs</h2>
+
+</code>`<code>jsonc
+<p>"outputs": [</p>
+<p>  {</p>
+<p>    "format": "mp4",</p>
+<p>    "path": "out/video.mp4",</p>
+<p>    "codec": "h264",</p>
+<p>    "lut": "assets/luts/teal-orange.cube"   // optional, project-relative path to .cube file</p>
+<p>  }</p>
+<p>]</p>
+</code>`<code>
+
+<p>The </code>lut<code> field applies a 3D LUT during encoding via ffmpeg </code>lut3d<code>. Bundled LUTs: </code>teal-orange.cube<code>, </code>noir-film.cube<code>, </code>faded-vintage.cube<code> (copy from </code>packages/engine/assets/luts/<code> into your project's </code>assets/luts/`). Or supply your own .cube file.</p>
+  </div>
+</div>
+<footer style="padding:40px;text-align:center;border-top:1px solid var(--border);margin-top:40px;">
+  <p style="font-size:14px;color:var(--text-faint);">&copy; 2025 <a href="https://cosmicstack.ai" style="color:var(--text-dim);">Cosmic Stack Labs</a></p>
+</footer>
+</body>
+</html>

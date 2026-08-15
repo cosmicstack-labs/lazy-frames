@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../styles.css">
+<style>
+body { font-family: var(--sans); background: var(--bg); color: var(--text); }
+.docs-layout { display: flex; max-width: 1100px; margin: 0 auto; padding-top: 80px; }
+.docs-content { flex: 1; padding: 40px 48px; max-width: 820px; }
+.docs-content h1 { font-size: 28px; font-weight: 700; margin: 0 0 24px; letter-spacing: -0.01em; }
+.docs-content h2 { font-size: 22px; font-weight: 700; margin: 36px 0 12px; letter-spacing: -0.01em; }
+.docs-content h3 { font-size: 17px; font-weight: 600; margin: 24px 0 8px; }
+.docs-content p { margin-bottom: 14px; color: var(--text-dim); line-height: 1.65; }
+.docs-content code { font-family: var(--mono); font-size: 13px; background: var(--bg-soft); padding: 2px 6px; border-radius: 4px; color: var(--accent); }
+.docs-content pre { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; overflow-x: auto; margin: 16px 0; }
+.docs-content pre code { background: none; padding: 0; color: var(--text); font-size: 13px; }
+.docs-content table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.docs-content th, .docs-content td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+.docs-content th { color: var(--text); font-weight: 600; }
+.docs-content td { color: var(--text-dim); }
+.docs-content ul { color: var(--text-dim); padding-left: 20px; line-height: 1.8; }
+.docs-content a { color: var(--accent); }
+.docs-content strong { color: var(--text); }
+.docs-back { display: block; margin-bottom: 24px; font-size: 14px; color: var(--text-dim); }
+.docs-back:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div class="brand-text">
+      <div class="brand-name"><a href="../index.html" style="color:inherit;text-decoration:none;">Lazy Frames</a></div>
+      <a href="https://cosmicstack.ai" class="brand-byline">by Cosmic Stack</a>
+    </div>
+  </div>
+  <div class="links">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs.html">Docs</a>
+    <a href="../skill.html">Skill</a>
+    <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
+  </div>
+</nav>
+<div class="docs-layout">
+  <div class="docs-content">
+    <a href="../skill.html" class="docs-back">← Back to Skill</a>
+    <h1>CLI reference</h1>
+
+<p>Run commands as <code>node packages/cli/dist/index.js <command></code> or symlink the binary.</p>
+
+<h2>doctor</h2>
+
+<p>``<code>bash</p>
+<p>lazy doctor [--json]</p>
+</code>`<code>
+
+<p>Reports: Node platform/arch/cpus/memory, Python version + hardware tier, provider availability</p>
+<p>(procedural imagery, depth, music, TTS, MLX photoreal). Tier: </code>full<code> (≥16GB + MLX), </code>lite<code> (≥8GB),</p>
+</code>minimal<code>.
+
+<h2>capture</h2>
+
+</code>`<code>bash
+<p>lazy capture <url> [project] [--json]</p>
+</code>`<code>
+
+<p>Captures a website: screenshots @2x DPR (hero + full-page), palette extraction, copy blocks (h1/h2/h3/p/a/button), fonts, logo candidates. Writes assets to </code><project>/assets/sites/<domain>/<code> + a starter </code>spec.json<code>. If </code>[project]<code> is omitted, defaults to </code>projects/<host><code>.</p>
+
+<h2>gen</h2>
+
+</code>`<code>bash
+<p>lazy gen <capability> -p <project> [options] [--json]</p>
+</code>`<code>
+
+<h3>gen image</h3>
+
+</code>`<code>bash
+<p>lazy gen image -p projects/cine --seed 21 --style ridge --palette "#0B0F19,#22D3EE,#F8FAFC" --name ridge-01</p>
+</code>`<code>
+
+<p>Generates a procedural still + matching depth map (PNG) via seeded canvas art. Styles: </code>ridge<code> (mountain ridges), </code>dune<code> (soft dunes), </code>nebula<code> (abstract clouds). Outputs </code><name>.png<code> + </code><name>.depth.png<code> in </code>assets/gen/<code>.</p>
+
+<h3>gen music</h3>
+
+</code>`<code>bash
+<p>lazy gen music -p projects/cine --mood calm --bpm 90 --bars 12 --seed 21 --name bgm</p>
+</code>`<code>
+
+<p>Generates a procedural music WAV (chord pads + optional percussion). Outputs </code><name>.wav<code> in </code>assets/gen/<code>.</p>
+
+<h3>gen tts</h3>
+
+</code>`<code>bash
+<p>lazy gen tts -p projects/cine --text "Every frame computed locally." --voice Samantha --rate 165 --name n1</p>
+</code>`<code>
+
+<p>Generates a TTS WAV via macOS </code>say<code>. Outputs </code><name>.wav<code> in </code>assets/gen/<code>.</p>
+
+<h2>check</h2>
+
+</code>`<code>bash
+<p>lazy check <project> [--json] [--skip-gates]</p>
+</code>`<code>
+
+<p>Validates: environment (Chrome, ffmpeg, ffprobe), spec schema (zod), semantic checks (font availability, asset existence, transition timing, narration overlap), and two blocking gates:</p>
+<ul><li><strong>Snapshot regression</strong> (if baseline exists): keyframe pixel-hash comparison</li>
+<li><strong>Seek determinism</strong>: double-render 5 sampled timestamps</li>
+</ul>
+<p>Exit code 0 = pass, 1 = fail. </code>--skip-gates<code> runs env/schema only (fast).</p>
+
+<h2>snapshot</h2>
+
+</code>`<code>bash
+<p>lazy snapshot <project> [--update]</p>
+</code>`<code>
+
+<p>Without </code>--update<code>: compares current keyframes against </code>snapshots/baseline.json<code> (same as the check gate). With </code>--update<code>: writes/refreshes the baseline. Run </code>--update<code> once in a new project or after intentional spec changes.</p>
+
+<h2>render</h2>
+
+</code>`<code>bash
+<p>lazy render <project> [-o <path>] [--fps <n>] [--parallel <n>] [--crf <n>] [--fast] [--keep-frames] [--json]</p>
+</code>`<code>
+
+<p>Renders the composition to an MP4. Steps: compile spec → write composition HTML → capture frames (headless Chrome) → encode (ffmpeg x264, bitexact) → generate audio (if </code>audio<code> in spec) → mux → probe-verify → sha256.</p>
+
+<p>Options:</p>
+<ul><li></code>-o<code>: output path (default: </code>spec.outputs[0].path<code>)</li>
+<li></code>--fps<code>: override fps for draft iteration (e.g., </code>--fps 6<code> for 3x faster previews)</li>
+<li></code>--parallel<code>: number of Chrome pages (default 2)</li>
+<li></code>--crf<code>: x264 quality (default 16, lower = better)</li>
+<li></code>--fast<code>: use more parallel pages (cpus-1, max 4) + report throughput</li>
+<li></code>--keep-frames<code>: keep intermediate PNGs in </code>.lazy/frames/<code></li>
+<li></code>--json<code>: machine-readable summary (sha256, frame count, duration, throughput, audio info)</li>
+</ul>
+<h2>preview</h2>
+
+</code>`<code>bash
+<p>lazy preview <project> [-p <port>]</p>
+</code>`<code>
+
+<p>Serves a scrubbable timeline preview at </code>http://localhost:<port>` (default 4173). The composition loads in an iframe with a play/pause + scrub bar. Frame-accurate seeking via postMessage.</p>
+  </div>
+</div>
+<footer style="padding:40px;text-align:center;border-top:1px solid var(--border);margin-top:40px;">
+  <p style="font-size:14px;color:var(--text-faint);">&copy; 2025 <a href="https://cosmicstack.ai" style="color:var(--text-dim);">Cosmic Stack Labs</a></p>
+</footer>
+</body>
+</html>
