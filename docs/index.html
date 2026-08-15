@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lazy Frames — fully local, byte-stable video generation</title>
+<meta name="description" content="Turn any input into a pixel-perfect MP4 — fully local, no cloud, no keys, no nondeterminism. Same spec + same machine = byte-identical output, every time.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <div class="brand-mark"></div>
+    Lazy Frames
+  </div>
+  <div class="links">
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="docs.html">Docs</a>
+    <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
+    <span class="nav-install">npm install && npm run build</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <h1>Video generation,<br><span class="accent">byte-stable</span> and fully local.</h1>
+    <p class="tagline">
+      Turn any input — a website URL, a text brief, existing footage — into a pixel-perfect MP4.
+      No cloud, no keys, no nondeterminism. Same spec, same machine, same bytes. Every time.
+    </p>
+    <div class="hero-cta">
+      <a href="#quickstart" class="btn btn-primary">Get started →</a>
+      <a href="https://github.com/cosmicstack-labs/lazy-frames" class="btn btn-ghost">View source</a>
+    </div>
+  </div>
+  <div class="filmstrip">
+    <div class="filmstrip-inner"></div>
+  </div>
+  <div class="timeline-bar"><div class="timeline-progress"></div></div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <div class="section-label">What it does</div>
+  <h2 class="section-title">Eight scene types. One typed spec. Zero surprises.</h2>
+  <p class="section-body">
+    A composition is a JSON file. Scenes declare timing, content, and style — the CLI renders it
+    to a deterministic MP4 via headless Chrome + ffmpeg. No HTML authoring, no timeline UI, no
+    guessing. The spec is the source of truth.
+  </p>
+  <div class="features">
+    <div class="feature-card">
+      <div class="fc-icon">⚡</div>
+      <h3>Byte-stable renders</h3>
+      <p>Same spec + same machine = identical SHA-256. Enforced by jitless V8, software rendering, and integer-pixel transforms.</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">🔒</div>
+      <h3>Fully local</h3>
+      <p>No cloud APIs, no network at render time. Headless Chrome, ffmpeg, and a Python audio sidecar. Your data never leaves the machine.</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">🎬</div>
+      <h3>8 scene types</h3>
+      <p>Typography, stat-hit, browser-frame, ui-callout, parallax (2.5D depth), atmosphere, video-layer, three-scene (deterministic 3D).</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">🎨</div>
+      <h3>Grade + LUT pipeline</h3>
+      <p>Stage-level CSS filter presets and output-level 3D LUTs (.cube) via ffmpeg. Bundled teal-orange, noir-film, faded-vintage.</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">🎵</div>
+      <h3>Audio built-in</h3>
+      <p>Procedural music synthesis, macOS TTS narration, and SFX (whoosh/hit/rise/boom) — all declarative in the spec, generated at render time.</p>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">✓</div>
+      <h3>Blocking gates</h3>
+      <p>Snapshot regression (pixel-hash baselines) and seek determinism (double-render comparison) gate every render. No silent drift.</p>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section id="how">
+  <div class="section-label">How it works</div>
+  <h2 class="section-title">Three steps. No ceremony.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Capture or generate your assets</h3>
+        <p><code>lazy capture https://example.com</code> grabs screenshots, palette, copy, and fonts. <code>lazy gen image</code> produces procedural stills with matching depth maps. Or just drop in your own footage.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Write or edit spec.json</h3>
+        <p>A typed JSON file — scenes, timing, style, audio. Validated by zod schema before anything renders. The capture command generates a starter spec for you.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Check, preview, render</h3>
+        <p><code>lazy check</code> runs gates. <code>lazy preview</code> opens a scrubbable timeline. <code>lazy render</code> produces a byte-stable MP4 with audio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick start -->
+<section id="quickstart">
+  <div class="section-label">Quick start</div>
+  <h2 class="section-title">From URL to MP4 in four commands</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dot r"></div><div class="code-dot y"></div><div class="code-dot g"></div>
+      <span class="code-title">bash</span>
+    </div>
+    <div class="code-body code-typing"></div>
+  </div>
+</section>
+
+<!-- Scene showcase -->
+<section id="scenes">
+  <div class="section-label">Scene types</div>
+  <h2 class="section-title">Built for motion</h2>
+  <p class="section-body">
+    Each scene type is a deterministic component — configured by params, rendered by the engine.
+    No CSS authoring, no timeline keyframing. Just declare what you want.
+  </p>
+  <div class="showcase"></div>
+</section>
+
+<!-- Determinism -->
+<section id="determinism">
+  <div class="section-label">The promise</div>
+  <h2 class="section-title">Byte-identical, provably</h2>
+  <div class="determinism">
+    <p class="section-body" style="margin:0 auto 20px;">
+      Two independent renders of the same spec produce the exact same file — verified by SHA-256.
+      No timestamps, no nondeterministic encoders, no sub-pixel rendering drift.
+    </p>
+    <div class="hash-label">SHA-256 of a cinematic render (two passes)</div>
+    <div class="hash"></div>
+    <div class="hash-label">✓ identical</div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-links">
+    <a href="docs.html">Docs</a>
+    <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
+    <a href="https://github.com/cosmicstack-labs/lazy-frames/issues">Issues</a>
+  </div>
+  <p>Lazy Frames — fully local, byte-stable video generation.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

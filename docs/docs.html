@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lazy Frames — Docs</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <a href="index.html" style="color:inherit;text-decoration:none;">Lazy Frames</a>
+  </div>
+  <div class="links">
+    <a href="index.html#features">Features</a>
+    <a href="index.html#how">How it works</a>
+    <a href="docs.html" style="color:var(--accent);">Docs</a>
+    <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
+    <span class="nav-install">npm install && npm run build</span>
+  </div>
+</nav>
+
+<div class="docs-layout">
+  <div class="docs-sidebar">
+    <h4>Getting started</h4>
+    <ul>
+      <li><a href="#install">Install</a></li>
+      <li><a href="#first-video">First video</a></li>
+      <li><a href="#prerequisites">Prerequisites</a></li>
+    </ul>
+    <h4>CLI reference</h4>
+    <ul>
+      <li><a href="#capture">capture</a></li>
+      <li><a href="#gen">gen</a></li>
+      <li><a href="#check">check</a></li>
+      <li><a href="#snapshot">snapshot</a></li>
+      <li><a href="#render">render</a></li>
+      <li><a href="#preview">preview</a></li>
+      <li><a href="#doctor">doctor</a></li>
+    </ul>
+    <h4>Spec reference</h4>
+    <ul>
+      <li><a href="#spec-structure">Structure</a></li>
+      <li><a href="#scene-types">Scene types</a></li>
+      <li><a href="#transitions">Transitions</a></li>
+      <li><a href="#audio">Audio</a></li>
+      <li><a href="#lut-grade">LUT & grade</a></li>
+    </ul>
+    <h4>Concepts</h4>
+    <ul>
+      <li><a href="#determinism">Determinism</a></li>
+      <li><a href="#gates">Gates</a></li>
+    </ul>
+  </div>
+
+  <div class="docs-content">
+
+    <h2 id="install">Install</h2>
+    <p>Clone and build from source (npm package coming soon):</p>
+    <pre><code>git clone https://github.com/cosmicstack-labs/lazy-frames.git
+cd lazy-frames
+npm install && npm run build</code></pre>
+
+    <h3 id="prerequisites">Prerequisites</h3>
+    <table>
+      <tr><th>Dependency</th><th>Required for</th><th>Check</th></tr>
+      <tr><td>Node.js ≥ 20</td><td>CLI + engine</td><td><code>node --version</code></td></tr>
+      <tr><td>ffmpeg + ffprobe</td><td>encoding + audio</td><td><code>ffmpeg -version</code></td></tr>
+      <tr><td>Google Chrome</td><td>headless rendering</td><td><code>lazy doctor</code></td></tr>
+      <tr><td>Python 3</td><td>audio sidecar</td><td><code>python3 --version</code></td></tr>
+      <tr><td>macOS <code>say</code></td><td>TTS narration</td><td><code>say -v '?'</code></td></tr>
+    </table>
+    <p>Run <code>node packages/cli/dist/index.js doctor</code> to verify all providers.</p>
+
+    <h2 id="first-video">First video</h2>
+    <p><strong>Website promo:</strong></p>
+    <pre><code>node packages/cli/dist/index.js capture https://example.com projects/acme
+node packages/cli/dist/index.js snapshot projects/acme --update
+node packages/cli/dist/index.js check projects/acme
+node packages/cli/dist/index.js preview projects/acme   # review in browser
+node packages/cli/dist/index.js render projects/acme     # after approval</code></pre>
+
+    <p><strong>Cinematic clip:</strong></p>
+    <pre><code>node packages/cli/dist/index.js gen image -p projects/cine --seed 21 --style ridge --name r01
+# write spec.json referencing assets/gen/r01.png + r01.depth.png
+node packages/cli/dist/index.js render projects/cine</code></pre>
+
+    <h2 id="capture">capture</h2>
+    <p>Captures a website: screenshots @2x, palette, copy, fonts, logo. Writes a starter spec.</p>
+    <pre><code>lazy capture &lt;url&gt; [project] [--json]</code></pre>
+
+    <h2 id="gen">gen</h2>
+    <p>Generates media with local providers.</p>
+    <pre><code>lazy gen image -p &lt;project&gt; --seed 21 --style ridge --name r01
+lazy gen music -p &lt;project&gt; --mood calm --bpm 90 --bars 12 --seed 21
+lazy gen tts -p &lt;project&gt; --text "Hello world" --voice Samantha --rate 165</code></pre>
+    <p>Image styles: <code>ridge</code>, <code>dune</code>, <code>nebula</code>. Generates <code>&lt;name&gt;.png</code> + <code>&lt;name&gt;.depth.png</code>.</p>
+
+    <h2 id="check">check</h2>
+    <p>Validates: environment, spec schema, semantic checks, and two blocking gates (snapshot regression + seek determinism).</p>
+    <pre><code>lazy check &lt;project&gt; [--json] [--skip-gates]</code></pre>
+
+    <h2 id="snapshot">snapshot</h2>
+    <p>Creates or updates the snapshot regression baseline.</p>
+    <pre><code>lazy snapshot &lt;project&gt; [--update]</code></pre>
+    <p>Run <code>--update</code> once in a new project or after intentional spec changes.</p>
+
+    <h2 id="render">render</h2>
+    <p>Renders the composition to MP4. Generates audio (if in spec), muxes, probe-verifies, prints SHA-256.</p>
+    <pre><code>lazy render &lt;project&gt; [-o &lt;path&gt;] [--fps N] [--parallel N] [--fast] [--json]</code></pre>
+
+    <h2 id="preview">preview</h2>
+    <p>Serves a scrubbable timeline at <code>localhost:4173</code>.</p>
+    <pre><code>lazy preview &lt;project&gt; [-p &lt;port&gt;]</code></pre>
+
+    <h2 id="doctor">doctor</h2>
+    <p>Reports Node/Python versions, memory, hardware tier, and provider availability.</p>
+    <pre><code>lazy doctor [--json]</code></pre>
+
+    <h2 id="spec-structure">Spec structure</h2>
+    <pre><code>{
+  "specVersion": 1,
+  "meta": { "id": "my-video", "width": 1920, "height": 1080, "fps": 24 },
+  "style": {
+    "tokens": {
+      "palette": ["#0B0F19", "#C49A5C", "#E2E0DC"],
+      "fontDisplay": "Space Grotesk",
+      "fontBody": "Inter"
+    },
+    "grade": "none"
+  },
+  "scenes": [ ... ],
+  "audio": { ... },
+  "outputs": [{ "format": "mp4", "path": "out/video.mp4", "codec": "h264" }]
+}</code></pre>
+    <p><strong>Palette convention:</strong> index 0 = background, 1 = accent, 2 = foreground.</p>
+    <p><strong>Width/height must be even</strong> (h264 yuv420p requirement).</p>
+
+    <h2 id="scene-types">Scene types</h2>
+    <table>
+      <tr><th>Type</th><th>What it does</th></tr>
+      <tr><td><code>typography</code></td><td>Text reveals: titles, quotes, lockups (4 reveal styles)</td></tr>
+      <tr><td><code>stat-hit</code></td><td>Count-up numbers, labels, bars</td></tr>
+      <tr><td><code>browser-frame</code></td><td>Screenshot in a browser chrome mockup with cursor</td></tr>
+      <tr><td><code>ui-callout</code></td><td>Screenshot with dimmed mask, hotspot spotlight, label</td></tr>
+      <tr><td><code>atmosphere</code></td><td>Drifting gradient blobs — ambient backdrops</td></tr>
+      <tr><td><code>parallax</code></td><td>2.5D camera move over a still (flat or depth-map mode)</td></tr>
+      <tr><td><code>video-layer</code></td><td>Footage playback with trim, speed, grade</td></tr>
+      <tr><td><code>three-scene</code></td><td>Deterministic 3D: cube/ico/grid/particles (canvas 2D)</td></tr>
+    </table>
+
+    <h2 id="transitions">Transitions</h2>
+    <table>
+      <tr><th>Type</th><th>Effect</th></tr>
+      <tr><td><code>cut</code></td><td>Instant</td></tr>
+      <tr><td><code>fade</code> / <code>dissolve</code> / <code>dip-to-black</code></td><td>Opacity in/out</td></tr>
+      <tr><td><code>whip-pan</code></td><td>Horizontal slide with quick ease</td></tr>
+      <tr><td><code>light-leak</code></td><td>Hold + fade (flash-like)</td></tr>
+      <tr><td><code>luma-wipe</code></td><td>Vertical slide wipe</td></tr>
+    </table>
+    <p>All transitions: <code>{ "type": "...", "ms": N }</code>. Must be shorter than scene duration.</p>
+
+    <h2 id="audio">Audio</h2>
+    <p>All audio is declarative — generated at render time, cached by content hash.</p>
+    <pre><code>"audio": {
+  "narration": [{ "text": "...", "startMs": 3600, "voice": "Samantha", "rate": 165 }],
+  "music": { "mood": "calm", "bpm": 90, "bars": 12, "seed": 21, "gainDb": -14 },
+  "sfx": [{ "kind": "whoosh", "atMs": 2400, "seed": 1, "gainDb": -6 }]
+}</code></pre>
+    <p>SFX kinds: <code>whoosh</code>, <code>hit</code>, <code>rise</code>, <code>boom</code>.</p>
+
+    <h2 id="lut-grade">LUT & grade</h2>
+    <p><strong>Stage grade</strong> (<code>style.grade</code>): CSS filter on the composition root. Presets: <code>none</code>, <code>contrast</code>, <code>vivid</code>, <code>muted</code>, <code>monochrome</code>.</p>
+    <p><strong>Output LUT</strong> (<code>outputs[0].lut</code>): 3D LUT .cube file applied via ffmpeg <code>lut3d</code>. Bundled: <code>teal-orange</code>, <code>noir-film</code>, <code>faded-vintage</code>.</p>
+
+    <h2 id="determinism">Determinism</h2>
+    <p>Same spec + same machine = byte-identical MP4. Enforced by:</p>
+    <ul style="color:var(--text-dim);padding-left:20px;line-height:1.8;">
+      <li><code>--jitless</code> — V8 interpreter only (no JIT nondeterminism)</li>
+      <li><code>--use-angle=swiftshader</code> — software rendering (no GPU variance)</li>
+      <li>Integer-pixel transform rounding — no sub-pixel text rendering</li>
+      <li><code>putImageData</code> for canvas scenes — no skia compositing nondeterminism</li>
+      <li>Bitexact ffmpeg encoding — fixed creation_time, <code>+bitexact</code>, fixed threads</li>
+    </ul>
+
+    <h2 id="gates">Gates</h2>
+    <p><strong>Snapshot regression:</strong> renders keyframes, hashes pixels, compares against <code>snapshots/baseline.json</code>. Drift = error with scene + timestamp.</p>
+    <p><strong>Seek determinism:</strong> renders 5 timestamps twice in one session, compares hashes. Catches in-session nondeterminism.</p>
+
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
