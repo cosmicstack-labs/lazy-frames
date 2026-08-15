@@ -368,7 +368,7 @@ footer .footer-brand-name span { color: var(--accent); }
   nav { padding: 14px 20px; }
   nav .links { gap: 16px; }
   nav .links a:not(.nav-install) { display: none; }
-  nav .brand-text { flex-direction: column; gap: 0; }
+  nav .brand-text { flex-direction: column; gap: 2px; }
   section { padding: 60px 20px; }
   .docs-sidebar { display: none; }
   .docs-content { padding: 24px; }
