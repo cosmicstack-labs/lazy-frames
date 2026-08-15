@@ -11,7 +11,7 @@ const program = new Command();
 
 program
   .name('lazy')
-  .description('Lazy Video Skill — deterministic local video rendering from a typed spec')
+  .description('Lazy Frames — deterministic local video rendering from a typed spec')
   .version('0.3.0');
 
 program

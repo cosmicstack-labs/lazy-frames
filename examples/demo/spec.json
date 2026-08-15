@@ -25,7 +25,7 @@
       "transitionOut": { "type": "dissolve", "ms": 400 },
       "params": {
         "lines": [
-          { "text": "Lazy Video Skill", "size": 132, "weight": 700, "font": "display", "color": "fg" },
+          { "text": "Lazy Frames", "size": 132, "weight": 700, "font": "display", "color": "fg" },
           { "text": "Pixel-perfect. Fully local.", "size": 42, "weight": 400, "font": "body", "color": "accent", "tracking": 2 }
         ],
         "align": "center",
@@ -77,7 +77,7 @@
       "transitionOut": { "type": "cut", "ms": 0 },
       "params": {
         "lines": [
-          { "text": "lazy-video-skill", "size": 96, "weight": 700, "font": "display", "color": "fg", "tracking": -2 }
+          { "text": "lazy-frames", "size": 96, "weight": 700, "font": "display", "color": "fg", "tracking": -2 }
         ],
         "align": "center",
         "reveal": "scale-in",

@@ -1,4 +1,4 @@
-# lazy-video-skill
+# lazy-frames
 
 Fully local, byte-stable video generation from a typed JSON spec. No cloud, no keys, no nondeterminism.
 

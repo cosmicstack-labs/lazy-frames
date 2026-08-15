@@ -3,14 +3,14 @@ name: lazy-video
 description: >
   Turn any input (a website URL, a text brief, existing footage, a music track) into a finished,
   pixel-perfect MP4 — fully local, byte-stable across renders. The agent researches the input and
-  dumps a typed SPEC; the Lazy Video CLI turns that spec into video. Use for website promos,
+  dumps a typed SPEC; the Lazy Frames CLI turns that spec into video. Use for website promos,
   cinematic clips, motion graphics, explainer videos, social ads, and any programmatic video
   generation that must be deterministic and work offline.
 ---
 
-# Lazy Video Skill
+# Lazy Frames
 
-Lazy Video renders video from a **typed JSON spec** — a composition is a `spec.json` file whose
+Lazy Frames renders video from a **typed JSON spec** — a composition is a `spec.json` file whose
 scenes declare timing, content, and style; the CLI turns it into a deterministic, pixel-perfect MP4.
 No cloud, no keys, no nondeterminism. Same spec + same machine = byte-identical output, every time.
 

@@ -1,10 +1,10 @@
-# Lazy Video Skill — Plan
+# Lazy Frames — Plan
 
-Agentic video generation skill: an agent researches any input (a website URL, a text brief, footage) and dumps a typed spec; Lazy Video Skill turns that spec into a finished, pixel-perfect MP4 — fully local.
+Agentic video generation skill: an agent researches any input (a website URL, a text brief, footage) and dumps a typed spec; Lazy Frames turns that spec into a finished, pixel-perfect MP4 — fully local.
 
 ## 1. Positioning
 
-| | HyperFrames | Lazy Video Skill |
+| | HyperFrames | Lazy Frames |
 |---|---|---|
 | Media generation | None (TTS/music/matting only) | Local gen sidecar: photoreal stills, depth maps, TTS, music |
 | Determinism | Author-enforced rules (docs warn of "guaranteed first build failure") | Engine-owned clocks/media — author *cannot* create nondeterminism |
@@ -57,7 +57,7 @@ SPEC (typed JSON — agent dumps; same format for every workflow)
 ### Project layout
 
 ```
-lazy-video-skill/
+lazy-frames/
 ├── PLAN.md
 ├── packages/
 │   ├── cli/            # `lazy` CLI (Node 20+): doctor, capture, gen, check, preview, render
@@ -143,7 +143,7 @@ Shared transitions: `cut`, `film-dissolve`, `whip-pan`, `light-leak`, `dip-to-bl
 
 ## 5. Determinism model (engine-owned)
 
-The failure mode we're eliminating: HyperFrames makes the *author* responsible for seek-safety (bans on render-time clocks, unseeded random, `repeat: -1`, CSS/GSAP transform conflicts…). Lazy Video Skill inverts ownership:
+The failure mode we're eliminating: HyperFrames makes the *author* responsible for seek-safety (bans on render-time clocks, unseeded random, `repeat: -1`, CSS/GSAP transform conflicts…). Lazy Frames inverts ownership:
 
 1. **One clock.** Scenes receive `t` (ms) from the engine's seek loop. No `requestAnimationFrame`, no `Date.now`, no `setInterval` inside scenes — the engine runtime doesn't expose them.
 2. **Declarative params → engine-interpolated motion.** Camera paths, element beats, and transitions are data; the engine evaluates them as pure functions of `t`.

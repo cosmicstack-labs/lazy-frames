@@ -11,7 +11,7 @@ Text reveals: titles, quotes, section stingers, lockups.
   "type": "typography",
   "params": {
     "lines": [
-      { "text": "Lazy Video Skill", "size": 132, "weight": 700, "font": "display", "color": "fg", "tracking": 0, "delayMs": 0 }
+      { "text": "Lazy Frames", "size": 132, "weight": 700, "font": "display", "color": "fg", "tracking": 0, "delayMs": 0 }
     ],
     "align": "center",            // center | left
     "reveal": "letter-stagger",   // fade-up | letter-stagger | mask-wipe | scale-in

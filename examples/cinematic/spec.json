@@ -108,7 +108,7 @@
       "transitionOut": { "type": "cut", "ms": 0 },
       "params": {
         "lines": [
-          { "text": "lazy-video-skill", "size": 100, "weight": 700, "font": "display", "color": "fg", "tracking": -2 },
+          { "text": "lazy-frames", "size": 100, "weight": 700, "font": "display", "color": "fg", "tracking": -2 },
           { "text": "no cloud · no keys · no compromises", "size": 34, "weight": 400, "font": "body", "color": "accent", "delayMs": 600 }
         ],
         "align": "center",
@@ -121,7 +121,7 @@
   "audio": {
     "narration": [
       { "text": "Every frame of this film was computed on one small machine. No cloud, no keys.", "startMs": 3600, "voice": "Samantha", "rate": 160, "gainDb": 0 },
-      { "text": "Lazy video skill. Video generation that lives where you live.", "startMs": 22600, "voice": "Samantha", "rate": 160, "gainDb": 0 }
+      { "text": "Lazy Frames. Video generation that lives where you live.", "startMs": 22600, "voice": "Samantha", "rate": 160, "gainDb": 0 }
     ],
     "music": { "mood": "calm", "bpm": 90, "bars": 12, "seed": 21, "gainDb": -16 }
   },

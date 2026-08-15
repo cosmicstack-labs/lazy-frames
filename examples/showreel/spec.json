@@ -102,7 +102,7 @@
       "transitionOut": { "type": "cut", "ms": 0 },
       "params": {
         "lines": [
-          { "text": "lazy-video-skill", "size": 100, "weight": 700, "font": "display", "color": "fg", "tracking": -2 },
+          { "text": "lazy-frames", "size": 100, "weight": 700, "font": "display", "color": "fg", "tracking": -2 },
           { "text": "grade · lut · sfx · beats · 3d · transitions", "size": 30, "weight": 400, "font": "body", "color": "accent", "delayMs": 600 }
         ],
         "align": "center",
