@@ -1,4 +1,5 @@
 import json
+import os
 import platform
 import shutil
 import sys
@@ -33,6 +34,7 @@ def probe():
         "depth.procedural": {"available": True, "engine": "chrome-canvas"},
         "music.procedural": {"available": True, "engine": "numpy" if has("numpy") else "pure"},
         "tts.say": {"available": say_ok, "voices": len(voices)},
+        "tts.elevenlabs": {"available": bool(os.environ.get("ELEVENLABS_API_KEY")), "credential": "ELEVENLABS_API_KEY"},
         "tts.mlx": {"available": has("mlx")},
     }
     if total_gb is not None and total_gb >= 16 and providers["image.mlx-photoreal"]["available"]:

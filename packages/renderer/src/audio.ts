@@ -1,9 +1,9 @@
 import { spawnSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync } from 'node:fs';
+import { createHash, randomUUID } from 'node:crypto';
+import { existsSync, lstatSync, mkdirSync, realpathSync, renameSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { Audio, NarrationSegment, SfxEntry } from '@lazy/engine';
+import { narrationStartMs, type Audio, type NarrationSegment, type Scene, type SfxEntry } from '@lazy/engine';
 
 function sidecarDir(): string {
   if (process.env['LAZY_SIDECAR_DIR']) return process.env['LAZY_SIDECAR_DIR']!;
@@ -36,29 +36,91 @@ function runSidecar(args: string[]): SidecarResult {
 }
 
 function hashOf(parts: string[]): string {
-  return createHash('sha256').update(parts.join('|')).digest('hex').slice(0, 24);
+  return createHash('sha256').update(JSON.stringify(parts)).digest('hex').slice(0, 24);
+}
+
+export function projectAudioCacheDir(projectDir: string): string {
+  const project = realpathSync(projectDir);
+  let current = project;
+  for (const part of ['.lazy', 'cache', 'audio']) {
+    current = path.join(current, part);
+    if (!existsSync(current)) mkdirSync(current);
+    const resolved = realpathSync(current);
+    const relative = path.relative(project, resolved);
+    if (relative.startsWith('..') || path.isAbsolute(relative)) throw new Error('audio cache resolves outside the project');
+    current = resolved;
+  }
+  return current;
+}
+
+function cachedAudioFile(wavPath: string, generate: (tempPath: string) => SidecarResult, label: string): void {
+  if (existsSync(wavPath)) {
+    if (!lstatSync(wavPath).isFile()) throw new Error(`${label} cache entry is not a regular file`);
+    return;
+  }
+  const temp = path.join(path.dirname(wavPath), `.${path.basename(wavPath, '.wav')}.${randomUUID()}.wav`);
+  try {
+    const res = generate(temp);
+    if (!res.ok || !existsSync(temp) || !lstatSync(temp).isFile()) throw new Error(`${label} generation failed: ${res.error ?? 'no output'}`);
+    renameSync(temp, wavPath);
+  } finally {
+    rmSync(temp, { force: true });
+  }
 }
 
 export interface PreparedNarration {
   wavPath: string;
   startMs: number;
   gainDb: number;
+  durationSec: number;
+  provider: NarrationSegment['provider'];
+  sceneId?: string;
 }
 
-export function buildNarration(cacheDir: string, audio: Audio): PreparedNarration[] {
+export function buildNarration(cacheDir: string, audio: Audio, scenes: Scene[] = []): PreparedNarration[] {
   mkdirSync(cacheDir, { recursive: true });
   const out: PreparedNarration[] = [];
   for (let i = 0; i < audio.narration.length; i++) {
     const seg: NarrationSegment = audio.narration[i]!;
-    const h = hashOf(['tts', seg.text, seg.voice, String(seg.rate)]);
+    const settings = seg.voiceSettings;
+    const h = hashOf([
+      'tts-v2',
+      seg.provider,
+      seg.text,
+      seg.voice,
+      String(seg.rate),
+      seg.model,
+      String(settings.stability),
+      String(settings.similarityBoost),
+      String(settings.style),
+      String(settings.useSpeakerBoost),
+    ]);
     const wavPath = path.join(cacheDir, `${h}.wav`);
     if (!existsSync(wavPath)) {
-      const res = runSidecar(['tts', '--out', wavPath, '--text', seg.text, '--voice', seg.voice, '--rate', String(seg.rate)]);
-      if (!res.ok || !existsSync(wavPath)) {
-        throw new Error(`TTS generation failed for segment ${i}: ${res.error ?? 'no output'}`);
+      const args = [
+        'tts', '--out', wavPath, '--text', seg.text, '--provider', seg.provider, '--voice', seg.voice,
+        '--rate', String(seg.rate), '--model', seg.model, '--stability', String(settings.stability),
+        '--similarity-boost', String(settings.similarityBoost), '--voice-style', String(settings.style),
+      ];
+      if (!settings.useSpeakerBoost) args.push('--no-speaker-boost');
+      cachedAudioFile(wavPath, (temp) => {
+        const outIndex = args.indexOf('--out') + 1;
+        args[outIndex] = temp;
+        return runSidecar(args);
+      }, `TTS segment ${i}`);
+    } else if (!lstatSync(wavPath).isFile()) {
+      throw new Error(`TTS cache entry for segment ${i} is not a regular file`);
+    }
+    const startMs = narrationStartMs(seg, scenes);
+    const durationSec = wavDurationSec(wavPath);
+    if (seg.sceneId) {
+      const scene = scenes.find((candidate) => candidate.id === seg.sceneId)!;
+      const overrunMs = startMs + durationSec * 1000 - (scene.startMs + scene.durationMs);
+      if (overrunMs > 1) {
+        throw new Error(`narration for scene '${seg.sceneId}' overruns the scene by ${Math.ceil(overrunMs)}ms; shorten the script or extend the scene`);
       }
     }
-    out.push({ wavPath, startMs: seg.startMs, gainDb: seg.gainDb });
+    out.push({ wavPath, startMs, gainDb: seg.gainDb, durationSec, provider: seg.provider, sceneId: seg.sceneId });
   }
   return out;
 }
@@ -68,10 +130,10 @@ export function buildMusic(cacheDir: string, music: NonNullable<Audio['music']>)
   const h = hashOf(['music', music.mood, String(music.bpm), String(music.bars), String(music.seed)]);
   const wavPath = path.join(cacheDir, `${h}.wav`);
   if (!existsSync(wavPath)) {
-    const res = runSidecar([
+    cachedAudioFile(wavPath, (temp) => runSidecar([
       'music',
       '--out',
-      wavPath,
+      temp,
       '--mood',
       music.mood,
       '--bpm',
@@ -80,11 +142,8 @@ export function buildMusic(cacheDir: string, music: NonNullable<Audio['music']>)
       String(music.bars),
       '--seed',
       String(music.seed),
-    ]);
-    if (!res.ok || !existsSync(wavPath)) {
-      throw new Error(`music generation failed: ${res.error ?? 'no output'}`);
-    }
-  }
+    ]), 'music');
+  } else if (!lstatSync(wavPath).isFile()) throw new Error('music cache entry is not a regular file');
   return wavPath;
 }
 
@@ -102,11 +161,8 @@ export function buildSfx(cacheDir: string, audio: Audio): PreparedSfx[] {
     const h = hashOf(['sfx', entry.kind, String(entry.seed)]);
     const wavPath = path.join(cacheDir, `${h}.wav`);
     if (!existsSync(wavPath)) {
-      const res = runSidecar(['sfx', '--out', wavPath, '--kind', entry.kind, '--seed', String(entry.seed)]);
-      if (!res.ok || !existsSync(wavPath)) {
-        throw new Error(`SFX generation failed for entry ${i}: ${res.error ?? 'no output'}`);
-      }
-    }
+      cachedAudioFile(wavPath, (temp) => runSidecar(['sfx', '--out', temp, '--kind', entry.kind, '--seed', String(entry.seed)]), `SFX entry ${i}`);
+    } else if (!lstatSync(wavPath).isFile()) throw new Error(`SFX cache entry for entry ${i} is not a regular file`);
     out.push({ wavPath, startMs: entry.atMs, gainDb: entry.gainDb });
   }
   return out;

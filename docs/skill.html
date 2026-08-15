@@ -59,7 +59,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); padd
 
 <p>Lazy Frames renders video from a <strong>typed JSON spec</strong> — a composition is a <code>spec.json</code> file whose</p>
 <p>scenes declare timing, content, and style; the CLI turns it into a deterministic, pixel-perfect MP4.</p>
-<p>No cloud, no keys, no nondeterminism. Same spec + same machine = byte-identical output, every time.</p>
+<p>The core renderer needs no cloud or keys. Reviewed plugins may use explicitly declared external services; generated media is cached locally before deterministic rendering.</p>
 
 <h2>1. Start from project state</h2>
 

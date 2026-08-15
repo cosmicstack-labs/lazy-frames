@@ -6,13 +6,15 @@ import { runCapture } from './capture.js';
 import { runSnapshotGate } from './gates.js';
 import { runDoctor, runGenImage, runGenMusic, runGenTts } from './gen.js';
 import { renderProject } from '@lazy/renderer';
+import { installPlugin, listPlugins, removePlugin, searchPlugins } from './plugins.js';
+import { runScriptPlanner } from './script.js';
 
 const program = new Command();
 
 program
   .name('lazy')
   .description('Lazy Frames — deterministic local video rendering from a typed spec')
-  .version('0.3.0');
+  .version('0.5.0');
 
 program
   .command('doctor')
@@ -21,6 +23,69 @@ program
   .action((_opts: Record<string, never>, cmd: Command) => {
     const opts = cmd.opts<{ json?: boolean }>();
     runDoctor(opts.json ?? false);
+  });
+
+const plugin = program.command('plugin').description('search, install, and manage reviewed Lazy Frames plugins');
+const runPluginAction = (action: () => void): void => {
+  try {
+    action();
+  } catch (err) {
+    console.error(`plugin failed: ${(err as Error).message}`);
+    process.exitCode = 1;
+  }
+};
+
+plugin
+  .command('search')
+  .argument('[query]', 'plugin name or capability', '')
+  .option('--json', 'machine-readable output')
+  .action((query: string, opts: { json?: boolean }) => runPluginAction(() => searchPlugins(query, opts.json ?? false)));
+
+plugin
+  .command('list')
+  .option('-p, --project <dir>', 'project directory', '.')
+  .option('--json', 'machine-readable output')
+  .action((opts: { project: string; json?: boolean }) => runPluginAction(() => listPlugins(opts.project, opts.json ?? false)));
+
+plugin
+  .command('install')
+  .argument('<id>', 'reviewed registry plugin ID')
+  .option('-p, --project <dir>', 'project directory', '.')
+  .action((id: string, opts: { project: string }) => runPluginAction(() => installPlugin(opts.project, id)));
+
+plugin
+  .command('remove')
+  .argument('<id>', 'installed plugin ID')
+  .option('-p, --project <dir>', 'project directory', '.')
+  .action((id: string, opts: { project: string }) => runPluginAction(() => removePlugin(opts.project, id)));
+
+program
+  .command('script')
+  .description('draft scene-linked narration from the visual spec')
+  .argument('<project>', 'project directory containing spec.json')
+  .option('--provider <id>', 'TTS provider for generated beats', 'say')
+  .option('--voice <voice>', 'provider voice name or ID', 'Samantha')
+  .option('--rate <n>', 'target words per minute', parseInt, 165)
+  .option('--offset-ms <n>', 'minimum narration lead-in within each scene', parseInt, 500)
+  .option('--output <file>', 'editable Markdown script path inside the project', 'narration.md')
+  .option('--apply', 'write narration.md and replace spec.audio.narration')
+  .option('--json', 'machine-readable output')
+  .action((project: string, opts: Record<string, unknown>) => {
+    try {
+      runScriptPlanner({
+        project,
+        provider: opts['provider'] as string,
+        voice: opts['voice'] as string,
+        rate: opts['rate'] as number,
+        offsetMs: opts['offsetMs'] as number,
+        output: opts['output'] as string,
+        apply: (opts['apply'] as boolean | undefined) ?? false,
+        json: (opts['json'] as boolean | undefined) ?? false,
+      });
+    } catch (err) {
+      console.error(`script failed: ${(err as Error).message}`);
+      process.exitCode = 1;
+    }
   });
 
 program
@@ -38,8 +103,14 @@ program
   .option('--bpm <n>', 'music bpm', parseInt)
   .option('--bars <n>', 'music bars', parseInt)
   .option('--text <text>', 'tts text')
+  .option('--provider <id>', 'tts provider: say or an installed plugin', 'say')
   .option('--voice <voice>', 'tts voice', 'Samantha')
   .option('--rate <n>', 'tts words per minute', parseInt)
+  .option('--model <id>', 'tts provider model', 'eleven_multilingual_v2')
+  .option('--stability <n>', 'voice stability (0-1)', parseFloat)
+  .option('--similarity-boost <n>', 'voice similarity boost (0-1)', parseFloat)
+  .option('--voice-style <n>', 'voice style exaggeration (0-1)', parseFloat)
+  .option('--no-speaker-boost', 'disable provider speaker boost')
   .option('--json', 'machine-readable output')
   .action(async (capability: string, opts: Record<string, unknown>) => {
     const project = opts['project'] as string;
@@ -74,8 +145,14 @@ program
         runGenTts({
           project,
           text,
+          provider: (opts['provider'] as string | undefined) ?? 'say',
           voice: (opts['voice'] as string | undefined) ?? 'Samantha',
           rate: (opts['rate'] as number | undefined) ?? 165,
+          model: (opts['model'] as string | undefined) ?? 'eleven_multilingual_v2',
+          stability: (opts['stability'] as number | undefined) ?? 0.5,
+          similarityBoost: (opts['similarityBoost'] as number | undefined) ?? 0.75,
+          voiceStyle: (opts['voiceStyle'] as number | undefined) ?? 0,
+          speakerBoost: (opts['speakerBoost'] as boolean | undefined) ?? true,
           name,
           json,
         });

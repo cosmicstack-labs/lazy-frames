@@ -23,7 +23,7 @@ Three workflows. Each ends with a rendered, verified MP4.
 
 3. **Edit if needed:** adjust copy from the ledger's `copy` array, change scene timing, swap transitions, add a LUT, add audio. Common edits:
    - Replace the title text with the site's actual h1 (from `ledger.json` → `copy[0].text`)
-   - Add narration: `"audio": { "narration": [{ "text": "...", "startMs": 3600 }] }`
+   - Draft scene-linked narration: `lazy script projects/acme --apply`, then edit `narration.md` and `spec.audio.narration`
    - Add a LUT: `"outputs": [{ ..., "lut": "assets/luts/teal-orange.cube" }]`
 
 4. **Establish baseline + validate:**
@@ -61,15 +61,17 @@ Three workflows. Each ends with a rendered, verified MP4.
    ```
    Each generates `<name>.png` + `<name>.depth.png` in `assets/gen/`.
 
-2. **Write `spec.json`:** reference the generated assets in `parallax` scenes with `depth` pointing to the `.depth.png` file. Add `typography` scenes for titles/quotes, `atmosphere` for scene glue, `three-scene` for abstract motion. Add `audio` with narration + music + SFX.
+2. **Write `spec.json`:** reference the generated assets in `parallax` scenes with `depth` pointing to the `.depth.png` file. Add `typography` scenes for titles/quotes, `atmosphere` for scene glue, and `three-scene` for abstract motion.
 
-3. **Validate + baseline:**
+3. **Generate the script when requested:** run `lazy script projects/cine --apply`, review `narration.md`, and refine each scene-linked beat. For ElevenLabs, first ask permission, install the reviewed plugin, and use `--provider elevenlabs --voice VOICE_ID`.
+
+4. **Validate + baseline:**
    ```bash
    node packages/cli/dist/index.js snapshot projects/cine --update
    node packages/cli/dist/index.js check projects/cine
    ```
 
-4. **Preview + render** (same as website-promo steps 5–7).
+5. **Preview + render** (same as website-promo steps 5–7).
 
 ### Tips
 

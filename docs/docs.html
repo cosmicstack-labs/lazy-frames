@@ -41,6 +41,7 @@
     <a href="index.html#features">Features</a>
     <a href="index.html#how">How it works</a>
     <a href="index.html#skill">Agentic skill</a>
+    <a href="plugins/">Plugins</a>
     <a href="docs.html" style="color:var(--accent);">Docs</a>
     <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
     <span class="nav-install">npm install lazy-frames</span>
@@ -60,6 +61,8 @@
     <ul>
       <li><a href="#capture">capture</a></li>
       <li><a href="#gen">gen</a></li>
+      <li><a href="#script">script</a></li>
+      <li><a href="#plugins">plugin</a></li>
       <li><a href="#check">check</a></li>
       <li><a href="#snapshot">snapshot</a></li>
       <li><a href="#render">render</a></li>
@@ -141,6 +144,24 @@ npx lazy render projects/cine</code></pre>
 lazy gen music -p &lt;project&gt; --mood calm --bpm 90 --bars 12 --seed 21
 lazy gen tts -p &lt;project&gt; --text "Hello world" --voice Samantha --rate 165</code></pre>
     <p>Image styles: <code>ridge</code>, <code>dune</code>, <code>nebula</code>. Generates <code>&lt;name&gt;.png</code> + <code>&lt;name&gt;.depth.png</code>.</p>
+
+    <h2 id="script">script</h2>
+    <p>Drafts an editable narration script from on-screen scene content. With <code>--apply</code>, it writes <code>narration.md</code> and scene-linked narration beats into <code>spec.json</code>.</p>
+    <pre><code>lazy script &lt;project&gt; [--provider say] [--voice Samantha]
+lazy script projects/cine --provider elevenlabs --voice VOICE_ID --apply</code></pre>
+    <p>Each beat uses <code>sceneId</code> and <code>offsetMs</code>. Lazy Frames measures the synthesized audio and rejects narration that would overrun its scene or the final timeline.</p>
+
+    <h2 id="plugins">plugin</h2>
+    <p>Plugins are reviewed, capability-scoped adapters. Install records the exact version and manifest fingerprint in <code>lazy-plugins.json</code>, plus a separate user-local approval for that project. A committed lockfile cannot grant itself permission. Arbitrary package URLs and install scripts are not accepted.</p>
+    <pre><code>lazy plugin search [tts|script|storytelling]
+lazy plugin install elevenlabs -p projects/cine
+lazy plugin list -p projects/cine
+lazy plugin remove elevenlabs -p projects/cine</code></pre>
+    <p><strong>ElevenLabs setup:</strong></p>
+    <pre><code>export ELEVENLABS_API_KEY="your-key"
+lazy gen tts -p projects/cine --provider elevenlabs --voice VOICE_ID \
+  --text "Every frame follows the story." --name narration-01</code></pre>
+    <p>The credential stays in the environment and is never stored in the spec or lockfile. See the <a href="plugins/">plugin store</a> and its machine-readable <a href="plugins/index.json">registry</a>.</p>
 
     <h2 id="check">check</h2>
     <p>Validates: environment, spec schema, semantic checks, and two blocking gates (snapshot regression + seek determinism).</p>

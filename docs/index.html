@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lazy Frames — Agentic Video Generation</title>
-<meta name="description" content="Agentic video generation — feed a skill URL to your AI agent and it captures, authors, and renders a pixel-perfect MP4. Fully local, byte-stable, no cloud. npm install lazy-frames">
+<meta name="description" content="Agentic video generation with a fully local, byte-stable core and reviewed capability plugins. Feed the skill URL to your AI agent. npm install lazy-frames">
 <meta name="author" content="CosmicStack Labs">
 <meta name="theme-color" content="#0D0E12">
 <link rel="canonical" href="https://lazy-frames.cosmicstack.ai/">
@@ -12,7 +12,7 @@
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Lazy Frames — agentic video generation, byte-stable and fully local">
-<meta property="og:description" content="Feed a skill URL to your AI agent — it captures, authors, and renders a pixel-perfect MP4. No cloud, no keys, no nondeterminism.">
+<meta property="og:description" content="Feed a skill URL to your AI agent. The byte-stable core runs locally; reviewed plugins add explicitly scoped external capabilities.">
 <meta property="og:url" content="https://lazy-frames.cosmicstack.ai/">
 <meta property="og:image" content="https://lazy-frames.cosmicstack.ai/og-card.png">
 <meta property="og:image:width" content="1200">
@@ -23,7 +23,7 @@
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Lazy Frames — agentic video generation, byte-stable and fully local">
-<meta name="twitter:description" content="Feed a skill URL to your AI agent — it captures, authors, and renders a pixel-perfect MP4. No cloud, no keys, no nondeterminism.">
+<meta name="twitter:description" content="Feed a skill URL to your AI agent. Local byte-stable rendering with reviewed, capability-scoped plugins.">
 <meta name="twitter:image" content="https://lazy-frames.cosmicstack.ai/og-card.png">
 <meta name="twitter:image:alt" content="Lazy Frames — agentic video generation, byte-stable and fully local">
 
@@ -58,6 +58,7 @@
     <a href="#features">Features</a>
     <a href="#how">How it works</a>
     <a href="#skill">Agentic skill</a>
+    <a href="plugins/">Plugins</a>
     <a href="docs.html">Docs</a>
     <a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a>
     <span class="nav-install">npm install lazy-frames</span>
@@ -72,7 +73,7 @@
     <h1>Agentic video generation,<br><span class="accent">byte-stable</span> and fully local.</h1>
     <p class="tagline">
       Feed a skill URL to your AI agent — it captures, authors a spec, runs the gates, and renders
-      a pixel-perfect MP4. No cloud, no keys, no nondeterminism. Same spec, same machine, same bytes.
+      a pixel-perfect MP4. The core stays local and byte-stable; reviewed plugins add explicit capabilities.
     </p>
     <div class="hero-cta">
       <a href="#quickstart" class="btn btn-primary">Get started →</a>
@@ -103,7 +104,7 @@
     <div class="feature-card">
       <div class="fc-icon">🔒</div>
       <h3>Fully local</h3>
-      <p>No cloud APIs, no network at render time. Headless Chrome, ffmpeg, and a Python audio sidecar. Your data never leaves the machine.</p>
+      <p>The core uses headless Chrome, ffmpeg, and a Python audio sidecar entirely locally. Optional plugins disclose their network, environment, and filesystem permissions before installation.</p>
     </div>
     <div class="feature-card">
       <div class="fc-icon">🎬</div>

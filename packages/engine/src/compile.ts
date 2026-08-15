@@ -1,7 +1,7 @@
 import type { Channel, WireScene } from './channels.js';
 import { FONTS } from './fonts.js';
 import { generatePage } from './generate.js';
-import type { CheckError, Spec } from './spec.js';
+import { narrationStartMs, type CheckError, type NarrationSegment, type Spec } from './spec.js';
 import { compileStatHit } from './scenes/statHit.js';
 import { compileTypography } from './scenes/typography.js';
 import { compileAtmosphere } from './scenes/atmosphere.js';
@@ -98,9 +98,23 @@ export function compileSpec(spec: Spec, opts: { assetMap?: Map<string, string> }
 
   const totalDurationMs = Math.max(...spec.scenes.map((sc) => sc.startMs + sc.durationMs));
   if (spec.audio) {
-    const sortedNarration = [...spec.audio.narration].sort((a, b) => a.startMs - b.startMs);
+    let sortedNarration: Array<NarrationSegment & { startMs: number }>;
+    try {
+      sortedNarration = spec.audio.narration
+        .map((segment) => ({ ...segment, startMs: narrationStartMs(segment, spec.scenes) }))
+        .sort((a, b) => a.startMs - b.startMs);
+    } catch (err) {
+      errors.push({ code: 'narration_scene', message: (err as Error).message });
+      sortedNarration = [];
+    }
     for (let i = 0; i < sortedNarration.length; i++) {
       const seg = sortedNarration[i]!;
+      if (seg.sceneId) {
+        const scene = spec.scenes.find((candidate) => candidate.id === seg.sceneId)!;
+        if (seg.startMs >= scene.startMs + scene.durationMs) {
+          errors.push({ code: 'narration_scene_offset', message: `narration for scene '${seg.sceneId}' starts outside that scene` });
+        }
+      }
       if (seg.startMs >= totalDurationMs) {
         errors.push({ code: 'narration_beyond_timeline', message: `narration "${seg.text.slice(0, 30)}…" starts at ${seg.startMs}ms but the timeline is only ${totalDurationMs}ms` });
       }

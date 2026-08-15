@@ -9,7 +9,7 @@
 [![npm version](https://img.shields.io/npm/v/lazy-frames.svg)](https://www.npmjs.com/package/lazy-frames)
 [![license](https://img.shields.io/npm/l/lazy-frames.svg)](https://github.com/cosmicstack-labs/lazy-frames)
 
-**Agentic video generation.** Feed a skill URL to your AI agent — it captures, authors a spec, runs the gates, and renders a pixel-perfect MP4. Fully local, byte-stable, no cloud, no keys, no nondeterminism.
+**Agentic video generation.** Feed a skill URL to your AI agent — it captures, authors a spec, runs the gates, and renders a pixel-perfect MP4. The core runs fully locally with no keys; reviewed plugins can opt into explicitly declared external services.
 
 **Same spec + same machine = byte-identical MP4, every time.**
 
@@ -61,6 +61,7 @@ node packages/cli/dist/index.js doctor
 | Google Chrome | headless rendering | `lazy doctor` |
 | Python 3 | audio sidecar (music, TTS, SFX) | `python3 --version` |
 | macOS `say` | TTS narration | `say -v '?'` |
+| `ELEVENLABS_API_KEY` | Optional ElevenLabs plugin | `lazy doctor` |
 
 Run `npx lazy doctor` to verify all providers and see your hardware tier.
 
@@ -88,6 +89,21 @@ npx lazy gen music -p projects/cine --mood calm --bpm 90 --seed 21 --name bgm
 npx lazy render projects/cine
 ```
 
+### ElevenLabs narration plugin
+
+Lazy Frames keeps external services behind reviewed, capability-scoped plugins. Install ElevenLabs in a project, provide the key through the environment, then draft scene-linked narration:
+
+```bash
+npx lazy plugin install elevenlabs -p projects/cine
+export ELEVENLABS_API_KEY="your-key"
+npx lazy script projects/cine --provider elevenlabs --voice YOUR_VOICE_ID --apply
+npx lazy render projects/cine
+```
+
+Each narration beat is anchored with `sceneId` and `offsetMs`, so the spoken line starts on the intended screen. Generated audio is normalized to canonical WAV and cached; the API key is never written to project files. Plugin dependencies are fingerprint-locked in the project, while consent is stored separately as a user-local, project-scoped approval.
+
+Browse reviewed plugins at [lazy-frames.cosmicstack.ai/plugins](https://lazy-frames.cosmicstack.ai/plugins/), or run `npx lazy plugin search`.
+
 ## CLI commands
 
 | Command | What it does |
@@ -97,6 +113,9 @@ npx lazy render projects/cine
 | `lazy gen image` | Generate procedural still + matching depth map |
 | `lazy gen music` | Generate procedural music WAV |
 | `lazy gen tts` | Generate TTS narration WAV (macOS `say`) |
+| `lazy script <project>` | Draft editable, scene-linked narration beats |
+| `lazy plugin search` | Search reviewed plugins by name or capability |
+| `lazy plugin install <id>` | Install a fingerprinted plugin into a project |
 | `lazy check <project>` | Validate spec + run snapshot & determinism gates |
 | `lazy snapshot <project> --update` | Establish/refresh the regression baseline |
 | `lazy render <project>` | Render to MP4 (byte-stable, with audio) |

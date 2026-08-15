@@ -1,4 +1,4 @@
-import { collectAssetRefs, compileSpec, loadSpec, SpecError, type CheckError } from '@lazy/engine';
+import { assertPluginInstalled, collectAssetRefs, compileSpec, loadSpec, SpecError, type CheckError } from '@lazy/engine';
 import { checkFfmpeg, checkFfprobe, findChrome } from '@lazy/renderer';
 import path from 'node:path';
 import { runSeekDeterminismGate, runSnapshotGate } from './gates.js';
@@ -27,6 +27,16 @@ export async function runCheck(projectDir: string, json: boolean, opts: { skipGa
   try {
     const spec = loadSpec(path.join(projectDir, 'spec.json'));
     specOk = true;
+    for (const provider of new Set(spec.audio?.narration.map((segment) => segment.provider).filter((id) => id !== 'say') ?? [])) {
+      try {
+        const plugin = assertPluginInstalled(projectDir, provider, 'tts');
+        for (const variable of plugin.permissions.environment) {
+          if (!process.env[variable]) errors.push({ code: 'plugin_credential', message: `plugin '${provider}' requires ${variable} in the environment` });
+        }
+      } catch (err) {
+        errors.push({ code: 'plugin_unavailable', message: (err as Error).message });
+      }
+    }
     try {
       const assetRefs = collectAssetRefs(spec, projectDir);
       const assetMap = new Map(assetRefs.map((r) => [r.src, r.dest]));

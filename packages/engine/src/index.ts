@@ -5,6 +5,7 @@ import { SpecSchema, type CheckError, type Spec } from './spec.js';
 export * from './constants.js';
 export * from './channels.js';
 export * from './spec.js';
+export * from './plugins.js';
 export * from './fonts.js';
 export { compileSpec, SpecError };
 export type { CompileResult, Wire };

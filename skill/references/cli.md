@@ -46,9 +46,29 @@ Generates a procedural music WAV (chord pads + optional percussion). Outputs `<n
 
 ```bash
 lazy gen tts -p projects/cine --text "Every frame computed locally." --voice Samantha --rate 165 --name n1
+lazy gen tts -p projects/cine --provider elevenlabs --voice VOICE_ID --text "A better story." --name n2
 ```
 
-Generates a TTS WAV via macOS `say`. Outputs `<name>.wav` in `assets/gen/`.
+Generates a TTS WAV via local macOS `say` or an installed TTS plugin. Outputs `<name>.wav` in `assets/gen/`.
+
+## script
+
+```bash
+lazy script <project> [--provider <id>] [--voice <voice>] [--apply] [--json]
+```
+
+Drafts one editable narration beat per text-bearing scene. `--apply` writes `narration.md` and replaces `spec.audio.narration` with beats anchored by `sceneId` and `offsetMs`.
+
+## plugin
+
+```bash
+lazy plugin search [query]
+lazy plugin install <id> [-p <project>]
+lazy plugin list [-p <project>]
+lazy plugin remove <id> [-p <project>]
+```
+
+Only reviewed registry plugins with built-in adapters can be installed. Install writes a versioned, fingerprinted `lazy-plugins.json`; it never runs package lifecycle scripts.
 
 ## check
 

@@ -1,10 +1,10 @@
 {
   "name": "lazy-frames",
-  "version": "0.4.1",
-  "description": "Fully local, byte-stable video generation from a typed JSON spec. No cloud, no keys, no nondeterminism. Same spec + same machine = byte-identical MP4, every time.",
+  "version": "0.5.0",
+  "description": "Agentic video generation with byte-stable local rendering, scene-linked narration, and reviewed capability plugins.",
   "license": "MIT",
   "author": "CosmicStack Labs",
-  "homepage": "https://cosmicstack-labs.github.io/lazy-frames/",
+  "homepage": "https://lazy-frames.cosmicstack.ai/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cosmicstack-labs/lazy-frames.git"
@@ -34,6 +34,7 @@
   ],
   "scripts": {
     "build": "npm run build --workspace @lazy/engine && npm run build --workspace @lazy/capture && npm run build --workspace @lazy/renderer && npm run build --workspace @lazy/cli",
+    "prepack": "npm run build",
     "postinstall": "node scripts/link-workspaces.mjs",
     "verify:demo": "node scripts/verify-demo.mjs",
     "verify:cinematic": "node scripts/verify-cinematic.mjs"
@@ -49,9 +50,13 @@
   "files": [
     "packages/engine/dist/",
     "packages/engine/assets/",
+    "packages/engine/package.json",
     "packages/renderer/dist/",
+    "packages/renderer/package.json",
     "packages/capture/dist/",
+    "packages/capture/package.json",
     "packages/cli/dist/",
+    "packages/cli/package.json",
     "packages/gen-sidecar/gen_sidecar/__init__.py",
     "packages/gen-sidecar/gen_sidecar/__main__.py",
     "packages/gen-sidecar/gen_sidecar/music.py",

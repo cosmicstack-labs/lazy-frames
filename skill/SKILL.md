@@ -13,7 +13,8 @@ description: >
 
 Lazy Frames renders video from a **typed JSON spec** — a composition is a `spec.json` file whose
 scenes declare timing, content, and style; the CLI turns it into a deterministic, pixel-perfect MP4.
-No cloud, no keys, no nondeterminism. Same spec + same machine = byte-identical output, every time.
+The core renderer needs no cloud or keys. Reviewed plugins may use explicitly declared external services;
+generated media is cached locally before deterministic rendering.
 
 ## 1. Start from project state
 
@@ -47,9 +48,22 @@ node packages/cli/dist/index.js doctor
 ```
 
 Doctor reports: Node platform/memory, Python version + tier, and provider availability
-(procedural imagery, depth, music, TTS). If `tts.say` is unavailable, narration won't work
-(macOS only). If `image.mlx-photoreal` is unavailable (expected on <16 GB machines), the
+(procedural imagery, depth, music, TTS). Local narration uses `tts.say`; external providers are
+installed as scoped plugins. If `image.mlx-photoreal` is unavailable (expected on <16 GB machines), the
 procedural image generator is used instead — still produces cinematic stills, just not photoreal.
+
+### Plugins and external providers
+
+When the user requests an external provider or storytelling capability, search the reviewed registry,
+show the requested permissions, and ask before installing it:
+
+```bash
+node packages/cli/dist/index.js plugin search tts
+node packages/cli/dist/index.js plugin install elevenlabs -p projects/cine
+```
+
+Never install arbitrary package URLs or store API keys in project files. ElevenLabs reads
+`ELEVENLABS_API_KEY` from the environment. Registry: https://lazy-frames.cosmicstack.ai/plugins/index.json
 
 ## 3. Workflows
 
@@ -93,7 +107,8 @@ node packages/cli/dist/index.js gen image -p projects/cine --seed 42 --style dun
 
 # 2. Write spec.json referencing the generated assets (see references/spec-format.md)
 
-# 3. (Optional) Generate audio assets to preview
+# 3. Draft scene-linked narration, then generate optional audio assets
+node packages/cli/dist/index.js script projects/cine --apply
 node packages/cli/dist/index.js gen music -p projects/cine --mood calm --bpm 90 --bars 12 --seed 21
 node packages/cli/dist/index.js gen tts -p projects/cine --text "Every frame computed locally." --name n1
 
@@ -118,14 +133,15 @@ The agent's job across all workflows:
 
 1. **Research** the input (read the site, understand the brief, inspect the footage).
 2. **Produce or refine** `spec.json` — a valid typed spec (see `references/spec-format.md`).
-3. **Generate assets** if needed (`lazy gen image`, `lazy gen music`, `lazy gen tts`).
-4. **Run `lazy check`** and fix every error. Warnings are advisory.
-5. **Run `lazy snapshot --update`** to establish the regression baseline.
-6. **Run `lazy check`** again — snapshot + seek-determinism gates must pass.
-7. **Run `lazy preview`** and hand the URL to the user. Ask whether to revise or render.
-8. **Render only after approval.** `lazy render` — never before the user says go.
-9. **Verify the output:** confirm the file exists, is non-empty, has the expected duration.
-10. Report the output path + sha256.
+3. **Generate the narration script** when requested (`lazy script <project> --apply`), then review its scene-linked beats.
+4. **Generate assets** if needed (`lazy gen image`, `lazy gen music`, `lazy gen tts`).
+5. **Run `lazy check`** and fix every error. Warnings are advisory.
+6. **Run `lazy snapshot --update`** to establish the regression baseline.
+7. **Run `lazy check`** again — snapshot + seek-determinism gates must pass.
+8. **Run `lazy preview`** and hand the URL to the user. Ask whether to revise or render.
+9. **Render only after approval.** `lazy render` — never before the user says go.
+10. **Verify the output:** confirm the file exists, is non-empty, has the expected duration.
+11. Report the output path + sha256.
 
 ### Non-negotiable rules
 
@@ -133,6 +149,7 @@ The agent's job across all workflows:
 - **Never skip `lazy check`.** It catches schema errors, missing assets, and nondeterminism.
 - **Always run `lazy snapshot --update` before the first `lazy check`** in a new project.
 - **Never edit `.lazy/`** — it's generated. Edit `spec.json` and re-render.
+- **Never install an unreviewed plugin or persist provider credentials.** Use the registry and environment variables.
 - **Reference assets by project-relative paths** in spec (e.g., `assets/gen/ridge-01.png`).
 - **Scenes are sequential with optional overlap.** Overlap + fade/dissolve = crossfade.
 - **All timing is in milliseconds.** Start times are absolute from the composition start.
@@ -158,9 +175,9 @@ cross-session nondeterministic — the runtime snaps all transforms to integer p
 
 ### Audio
 
-Audio is declarative in the spec (`narration`, `music`, `sfx`) — no audio files needed in the spec.
-The renderer generates audio at render time (cached by content hash) and mixes via ffmpeg:
-- **Narration:** macOS `say` TTS → WAV, placed at `startMs` with gain
+Audio is declarative in the spec (`narration`, `music`, `sfx`). The renderer generates and caches
+canonical WAV audio, then mixes via ffmpeg:
+- **Narration:** local `say` or an installed TTS plugin, placed at `startMs` or anchored to `sceneId` + `offsetMs`
 - **Music:** procedural synth (chord pads + percussion) seeded by `seed`, looped to video duration
 - **SFX:** synthesized whoosh/hit/rise/boom, placed at `atMs` with gain
 

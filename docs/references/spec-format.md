@@ -87,7 +87,8 @@ Generates deterministic pulse channels at bpm-derived intervals. `property` can 
 ```jsonc
 "audio": {
   "narration": [
-    { "text": "...", "startMs": 3600, "voice": "Samantha", "rate": 165, "gainDb": 0 }
+    { "text": "...", "sceneId": "feature", "offsetMs": 500, "provider": "say", "voice": "Samantha", "rate": 165, "gainDb": 0 },
+    { "text": "...", "startMs": 9000, "provider": "elevenlabs", "voice": "VOICE_ID", "model": "eleven_multilingual_v2" }
   ],
   "music": {
     "mood": "calm",    // calm | pulse
@@ -102,9 +103,11 @@ Generates deterministic pulse channels at bpm-derived intervals. `property` can 
 }
 ```
 
-All audio is generated at render time (cached by content hash). No audio files in the spec.
+Audio is generated at render time and cached by provider, model, voice settings, and content hash.
 
-- **Narration:** macOS `say` TTS. `voice` must be an installed voice (`say -v '?'` to list). `rate` = words/min.
+- **Narration timing:** use absolute `startMs`, or bind a beat to a visual with `sceneId` + `offsetMs`. Scene-linked speech is measured and rejected if it overruns that scene.
+- **Local narration:** `provider: "say"`; `voice` must be installed (`say -v '?'` to list). `rate` = words/min.
+- **Plugin narration:** install the provider first. ElevenLabs uses `provider: "elevenlabs"`, a voice ID, optional `model`, and optional `voiceSettings` (`stability`, `similarityBoost`, `style`, `useSpeakerBoost`). Credentials stay in environment variables.
 - **Music:** procedural synth. `bars` controls length (each bar = 4 beats). Looped to video duration.
 - **SFX:** `kind` = `whoosh` | `hit` | `rise` | `boom`. `seed` for deterministic variation.
 

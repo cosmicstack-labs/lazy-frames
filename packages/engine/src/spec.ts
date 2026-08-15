@@ -139,13 +139,33 @@ export const VideoLayerParamsSchema = z.object({
 });
 export type VideoLayerParams = z.infer<typeof VideoLayerParamsSchema>;
 
-export const NarrationSegmentSchema = z.object({
-  text: z.string().min(1).max(400),
-  startMs: z.number().int().min(0).max(600000),
-  voice: z.string().default('Samantha'),
-  rate: z.number().int().min(80).max(300).default(165),
-  gainDb: z.number().min(-24).max(12).default(0),
-});
+export const NarrationSegmentSchema = z
+  .object({
+    text: z.string().min(1).max(2000),
+    startMs: z.number().int().min(0).max(600000).optional(),
+    sceneId: slug.optional(),
+    offsetMs: z.number().int().min(0).max(60000).default(0),
+    provider: z.string().regex(/^[a-z0-9][a-z0-9-]*$/).default('say'),
+    voice: z.string().min(1).max(200).default('Samantha'),
+    rate: z.number().int().min(80).max(300).default(165),
+    model: z.string().min(1).max(120).default('eleven_multilingual_v2'),
+    voiceSettings: z
+      .object({
+        stability: z.number().min(0).max(1).default(0.5),
+        similarityBoost: z.number().min(0).max(1).default(0.75),
+        style: z.number().min(0).max(1).default(0),
+        useSpeakerBoost: z.boolean().default(true),
+      })
+      .default({ stability: 0.5, similarityBoost: 0.75, style: 0, useSpeakerBoost: true }),
+    gainDb: z.number().min(-24).max(12).default(0),
+  })
+  .refine((segment) => (segment.startMs !== undefined) !== (segment.sceneId !== undefined), {
+    message: 'requires exactly one of startMs or sceneId',
+  })
+  .refine((segment) => segment.provider !== 'elevenlabs' || segment.voice !== 'Samantha', {
+    message: 'ElevenLabs requires a voice ID',
+    path: ['voice'],
+  });
 export type NarrationSegment = z.infer<typeof NarrationSegmentSchema>;
 
 export const MusicParamsSchema = z.object({
@@ -183,6 +203,15 @@ export const SceneSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('three-scene'), ...SceneBase, params: ThreeSceneParamsSchema }),
 ]);
 export type Scene = z.infer<typeof SceneSchema>;
+
+export function narrationStartMs(segment: NarrationSegment, scenes: Scene[]): number {
+  if (segment.sceneId !== undefined) {
+    const scene = scenes.find((candidate) => candidate.id === segment.sceneId);
+    if (!scene) throw new Error(`narration references unknown scene '${segment.sceneId}'`);
+    return scene.startMs + segment.offsetMs;
+  }
+  return segment.startMs!;
+}
 
 export const SpecSchema = z.object({
   specVersion: z.literal(1),

@@ -1,9 +1,9 @@
 import { copyFileSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { FONTS, collectAssetRefs, compileSpec, fontAssetPath, loadSpec, type Wire } from '@lazy/engine';
+import { FONTS, assertPluginInstalled, collectAssetRefs, compileSpec, fontAssetPath, loadSpec, type Wire } from '@lazy/engine';
 import { renderFrames } from './driver.js';
-import { assembleAudio, buildMusic, buildNarration, buildSfx } from './audio.js';
+import { assembleAudio, buildMusic, buildNarration, buildSfx, projectAudioCacheDir } from './audio.js';
 import { assertProbe, encodeFrames, probeVideo, sha256File } from './ffmpeg.js';
 
 export interface PreparedComposition {
@@ -62,6 +62,12 @@ export interface RenderSummary {
 export async function renderProject(projectDir: string, opts: RenderOptions = {}): Promise<RenderSummary> {
   const started = Date.now();
   const spec = loadSpec(path.join(projectDir, 'spec.json'));
+  for (const provider of new Set(spec.audio?.narration.map((segment) => segment.provider).filter((id) => id !== 'say') ?? [])) {
+    const plugin = assertPluginInstalled(projectDir, provider, 'tts');
+    for (const variable of plugin.permissions.environment) {
+      if (!process.env[variable]) throw new Error(`plugin '${provider}' requires ${variable} in the environment`);
+    }
+  }
   const fps = opts.fps ?? spec.meta.fps;
   const { compositionPath, wire, warnings, lutPath } = prepareComposition(projectDir);
 
@@ -96,8 +102,12 @@ export async function renderProject(projectDir: string, opts: RenderOptions = {}
   if (wantAudio && spec.audio) {
     const silentVideo = path.join(projectDir, '.lazy', 'video-silent.mp4');
     encodeFrames({ framesDir, fps, output: silentVideo, crf: opts.crf, lutPath });
-    const cacheDir = path.resolve(projectDir, '.lazy', 'cache', 'audio');
-    const narration = buildNarration(cacheDir, spec.audio);
+    const cacheDir = projectAudioCacheDir(projectDir);
+    const narration = buildNarration(cacheDir, spec.audio, spec.scenes);
+    const clipped = narration.find((segment) => segment.startMs + segment.durationSec * 1000 > durationSec * 1000 + 1);
+    if (clipped) {
+      warnings.push(`legacy narration at ${clipped.startMs}ms extends beyond the video and will be clipped; use sceneId timing to enforce a complete spoken beat`);
+    }
     const sfx = buildSfx(cacheDir, spec.audio);
     const musicWav = spec.audio.music ? buildMusic(cacheDir, spec.audio.music) : undefined;
     assembleAudio({

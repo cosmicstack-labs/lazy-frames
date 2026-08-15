@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lazy Frames Plugins — Reviewed Agent Capabilities</title>
+<meta name="description" content="Install reviewed, capability-scoped plugins for Lazy Frames. Add ElevenLabs narration today, with storytelling and media plugins coming next.">
+<meta name="theme-color" content="#0D0E12">
+<link rel="canonical" href="https://lazy-frames.cosmicstack.ai/plugins/">
+<link rel="stylesheet" href="../styles.css">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<style>
+  .plugin-page { max-width: 980px; margin: 0 auto; padding: 150px 40px 100px; }
+  .plugin-hero { max-width: 760px; margin-bottom: 64px; }
+  .plugin-eyebrow { color: var(--accent); font-family: var(--mono); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  .plugin-hero h1 { margin: 12px 0 18px; font-size: clamp(42px, 7vw, 72px); letter-spacing: -.04em; line-height: 1; }
+  .plugin-hero p { color: var(--text-dim); font-size: 18px; max-width: 650px; }
+  .plugin-card { border: 1px solid var(--border); border-radius: 14px; background: var(--bg-card); padding: 30px; }
+  .plugin-top { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; }
+  .plugin-card h2 { font-size: 26px; margin-bottom: 5px; }
+  .verified { color: var(--accent); font-family: var(--mono); font-size: 12px; }
+  .plugin-card > p { color: var(--text-dim); margin: 18px 0 24px; max-width: 680px; }
+  .install-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); }
+  .install-row code { color: var(--text); overflow-wrap: anywhere; }
+  .copy { border: 1px solid var(--accent-dim); background: transparent; color: var(--accent); border-radius: 6px; padding: 7px 11px; cursor: pointer; }
+  .permissions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; }
+  .permission { padding: 14px; border: 1px solid var(--border); border-radius: 8px; }
+  .permission strong { display: block; font-size: 12px; color: var(--text-faint); text-transform: uppercase; letter-spacing: .06em; }
+  .permission span { display: block; margin-top: 5px; color: var(--text-dim); font-family: var(--mono); font-size: 12px; }
+  .security { margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border); }
+  .security p { color: var(--text-dim); max-width: 720px; }
+  @media (max-width: 700px) { .plugin-page { padding: 120px 20px 70px; } .permissions { grid-template-columns: 1fr; } .plugin-top { flex-direction: column; } }
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand"><div class="brand-mark"></div><div class="brand-text"><div class="brand-name"><a href="../index.html" style="color:inherit">Lazy Frames</a></div><a href="https://cosmicstack.ai" class="brand-byline">by Cosmic Stack</a></div></div>
+  <div class="links"><a href="../docs.html">Docs</a><a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a><span class="nav-install">lazy plugin search</span></div>
+</nav>
+<main class="plugin-page">
+  <header class="plugin-hero">
+    <div class="plugin-eyebrow">Reviewed plugin registry</div>
+    <h1>Extend the agent.<br>Keep the boundary.</h1>
+    <p>Plugins add scoped capabilities without silently gaining access to the rest of your machine. Every install records an exact project lock plus separate user-local consent and a declared permission set.</p>
+  </header>
+  <article class="plugin-card" id="elevenlabs">
+    <div class="plugin-top"><div><h2>ElevenLabs TTS</h2><div class="verified">Verified publisher · Cosmic Stack</div></div><code>tts · v1.0.0</code></div>
+    <p>Generate expressive narration, normalize it to canonical WAV, and anchor each spoken beat to the scene it describes.</p>
+    <div class="install-row"><code id="install-elevenlabs">npx lazy plugin install elevenlabs</code><button class="copy" type="button" data-copy="install-elevenlabs">Copy</button></div>
+    <div class="permissions">
+      <div class="permission"><strong>Network</strong><span>api.elevenlabs.io</span></div>
+      <div class="permission"><strong>Environment</strong><span>ELEVENLABS_API_KEY</span></div>
+      <div class="permission"><strong>Filesystem</strong><span>project cache + assets</span></div>
+    </div>
+  </article>
+  <section class="security">
+    <h2>Secure by default</h2>
+    <p>Lazy Frames currently accepts only reviewed registry plugins backed by built-in adapters. A repository lockfile cannot authorize itself: approval is user-local and scoped to the canonical project path. Arbitrary URLs, install scripts, lifecycle hooks, and unreviewed executable packages are rejected. Community runtimes will not be enabled until they can run with enforceable isolation and signed artifacts.</p>
+    <p style="margin-top:14px"><a href="index.json">Machine-readable registry →</a> · <a href="schema.json">Universal manifest schema →</a></p>
+  </section>
+</main>
+<script>
+document.querySelectorAll('[data-copy]').forEach((button) => button.addEventListener('click', async () => {
+  const target = document.getElementById(button.dataset.copy);
+  await navigator.clipboard.writeText(target.textContent);
+  button.textContent = 'Copied';
+}));
+</script>
+</body>
+</html>

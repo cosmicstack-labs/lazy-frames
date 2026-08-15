@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lazy-frames.cosmicstack.ai/plugins/schema.json",
+  "title": "Lazy Frames Plugin Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["apiVersion", "id", "name", "version", "description", "publisher", "capabilities", "runtime", "permissions", "homepage", "featured"],
+  "properties": {
+    "apiVersion": { "const": "lazy-frames.cosmicstack.ai/plugin/v1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "description": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "publisher": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "url", "verified"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" },
+        "verified": { "type": "boolean" }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["tts", "script", "storytelling", "image", "music", "sfx"] }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "adapter"],
+      "properties": {
+        "type": { "const": "builtin" },
+        "adapter": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["networkHosts", "environment", "filesystem"],
+      "properties": {
+        "networkHosts": { "type": "array", "maxItems": 10, "items": { "type": "string", "pattern": "^[a-z0-9.-]+$" } },
+        "environment": { "type": "array", "maxItems": 10, "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]+$" } },
+        "filesystem": { "type": "array", "maxItems": 6, "items": { "enum": ["project-read", "project-cache-write", "project-assets-write"] } }
+      }
+    },
+    "homepage": { "type": "string", "format": "uri" },
+    "featured": { "type": "boolean" }
+  }
+}
