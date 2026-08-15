@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/lazy-frames.svg)](https://www.npmjs.com/package/lazy-frames)
 [![license](https://img.shields.io/npm/l/lazy-frames.svg)](https://github.com/cosmicstack-labs/lazy-frames)
 
-Fully local, byte-stable video generation from a typed JSON spec. No cloud, no keys, no nondeterminism.
+**Agentic video generation.** Feed a skill URL to your AI agent — it captures, authors a spec, runs the gates, and renders a pixel-perfect MP4. Fully local, byte-stable, no cloud, no keys, no nondeterminism.
 
 **Same spec + same machine = byte-identical MP4, every time.**
 
