@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "t": 1500,
+      "scene": "open-cube",
+      "kind": "midpoint",
+      "hash": "f5a5fd42d16a20302798ef6ed309979b43003d2320d9f0e8ea9831a92759fb4b"
+    },
+    {
+      "t": 2800,
+      "scene": "open-cube",
+      "kind": "transition-out",
+      "hash": "341b1094d3c030dce9d995cac33807fdf80a0afc791cccfd10d142bdf6132e71"
+    },
+    {
+      "t": 2800,
+      "scene": "stat",
+      "kind": "transition-in",
+      "hash": "341b1094d3c030dce9d995cac33807fdf80a0afc791cccfd10d142bdf6132e71"
+    },
+    {
+      "t": 4600,
+      "scene": "stat",
+      "kind": "midpoint",
+      "hash": "1679735162a6c00c5ddbe70dddd9b3aba2c69777a2812834481b26698ac55fb5"
+    },
+    {
+      "t": 6350,
+      "scene": "stat",
+      "kind": "transition-out",
+      "hash": "72145b9ff15c4f88c1a6a358de5103a6582bba83af521a69c4562a3b86be22a1"
+    },
+    {
+      "t": 6350,
+      "scene": "particles",
+      "kind": "transition-in",
+      "hash": "72145b9ff15c4f88c1a6a358de5103a6582bba83af521a69c4562a3b86be22a1"
+    },
+    {
+      "t": 7600,
+      "scene": "particles",
+      "kind": "midpoint",
+      "hash": "a6020ce60c5b7d167b91129172f1be0c97e7d89165ad7036d18139d588fd5b0d"
+    },
+    {
+      "t": 8850,
+      "scene": "particles",
+      "kind": "transition-out",
+      "hash": "c0cc445eedd0058713feb746db3bdcc35cdcb439ad8a3a14da630b5be3154fd9"
+    },
+    {
+      "t": 8850,
+      "scene": "transitions",
+      "kind": "transition-in",
+      "hash": "c0cc445eedd0058713feb746db3bdcc35cdcb439ad8a3a14da630b5be3154fd9"
+    },
+    {
+      "t": 10100,
+      "scene": "transitions",
+      "kind": "midpoint",
+      "hash": "68f084753eda9bbab3faa1151d5f53a6c666fa773b055e25f3c9d27b673911f0"
+    },
+    {
+      "t": 11300,
+      "scene": "grid",
+      "kind": "transition-in",
+      "hash": "f5a5fd42d16a20302798ef6ed309979b43003d2320d9f0e8ea9831a92759fb4b"
+    },
+    {
+      "t": 11350,
+      "scene": "transitions",
+      "kind": "transition-out",
+      "hash": "f5a5fd42d16a20302798ef6ed309979b43003d2320d9f0e8ea9831a92759fb4b"
+    },
+    {
+      "t": 12600,
+      "scene": "grid",
+      "kind": "midpoint",
+      "hash": "f5a5fd42d16a20302798ef6ed309979b43003d2320d9f0e8ea9831a92759fb4b"
+    },
+    {
+      "t": 13900,
+      "scene": "grid",
+      "kind": "transition-out",
+      "hash": "e0190a9f715d83ef7f8117477acf576b977b9f6dd6cff23872417d66a2c90d5a"
+    },
+    {
+      "t": 13900,
+      "scene": "lockup",
+      "kind": "transition-in",
+      "hash": "e0190a9f715d83ef7f8117477acf576b977b9f6dd6cff23872417d66a2c90d5a"
+    },
+    {
+      "t": 15200,
+      "scene": "lockup",
+      "kind": "midpoint",
+      "hash": "28f582114249924d9be413d7e2534c03b4b4766b08324632cae3121ee0563492"
+    }
+  ]
+}

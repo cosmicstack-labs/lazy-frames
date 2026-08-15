@@ -1,0 +1,129 @@
+{
+  "specVersion": 1,
+  "meta": {
+    "id": "lazy-showreel",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "qualityTier": "high"
+  },
+  "style": {
+    "tokens": {
+      "palette": ["#0A0A12", "#22D3EE", "#F4F7FB"],
+      "fontDisplay": "Space Grotesk",
+      "fontBody": "Inter",
+      "stageBg": "#0A0A12"
+    },
+    "grade": "vivid"
+  },
+  "scenes": [
+    {
+      "type": "three-scene",
+      "id": "open-cube",
+      "startMs": 0,
+      "durationMs": 3000,
+      "transitionIn": { "type": "cut", "ms": 0 },
+      "transitionOut": { "type": "whip-pan", "ms": 400 },
+      "params": {
+        "primitive": "cube",
+        "mode": "fill",
+        "orbit": "tumble",
+        "color": "accent"
+      }
+    },
+    {
+      "type": "stat-hit",
+      "id": "stat",
+      "startMs": 2600,
+      "durationMs": 4000,
+      "transitionIn": { "type": "whip-pan", "ms": 400 },
+      "transitionOut": { "type": "luma-wipe", "ms": 500 },
+      "params": {
+        "kicker": "P3 SHOWREEL",
+        "value": 7,
+        "suffix": " scenes",
+        "label": "every feature exercised",
+        "bars": [{ "value": 80 }, { "value": 95 }, { "value": 60 }, { "value": 72 }],
+        "valueSize": 180
+      }
+    },
+    {
+      "type": "three-scene",
+      "id": "particles",
+      "startMs": 6100,
+      "durationMs": 3000,
+      "transitionIn": { "type": "luma-wipe", "ms": 500 },
+      "transitionOut": { "type": "light-leak", "ms": 500 },
+      "params": {
+        "primitive": "particles",
+        "mode": "wireframe",
+        "orbit": "slow-spin",
+        "density": 20,
+        "color": "fg"
+      }
+    },
+    {
+      "type": "typography",
+      "id": "transitions",
+      "startMs": 8600,
+      "durationMs": 3000,
+      "transitionIn": { "type": "light-leak", "ms": 500 },
+      "transitionOut": { "type": "dissolve", "ms": 500 },
+      "params": {
+        "lines": [
+          { "text": "WHIP-PAN", "size": 120, "weight": 700, "font": "display", "color": "fg" },
+          { "text": "LUMA-WIPE · LIGHT-LEAK", "size": 36, "weight": 400, "font": "body", "color": "accent", "delayMs": 500 }
+        ],
+        "align": "center",
+        "reveal": "letter-stagger"
+      }
+    },
+    {
+      "type": "three-scene",
+      "id": "grid",
+      "startMs": 11100,
+      "durationMs": 3000,
+      "transitionIn": { "type": "fade", "ms": 400 },
+      "transitionOut": { "type": "whip-pan", "ms": 400 },
+      "params": {
+        "primitive": "grid",
+        "mode": "wireframe",
+        "orbit": "tumble",
+        "density": 16,
+        "color": "accent"
+      }
+    },
+    {
+      "type": "typography",
+      "id": "lockup",
+      "startMs": 13700,
+      "durationMs": 3000,
+      "transitionIn": { "type": "whip-pan", "ms": 400 },
+      "transitionOut": { "type": "cut", "ms": 0 },
+      "params": {
+        "lines": [
+          { "text": "lazy-video-skill", "size": 100, "weight": 700, "font": "display", "color": "fg", "tracking": -2 },
+          { "text": "grade · lut · sfx · beats · 3d · transitions", "size": 30, "weight": 400, "font": "body", "color": "accent", "delayMs": 600 }
+        ],
+        "align": "center",
+        "reveal": "scale-in",
+        "revealMs": 800,
+        "bg": { "type": "gradient", "from": "#0A0A12", "to": "#0E1A26", "angle": 135 }
+      }
+    }
+  ],
+  "audio": {
+    "narration": [],
+    "music": { "mood": "pulse", "bpm": 120, "bars": 8, "seed": 21, "gainDb": -12 },
+    "sfx": [
+      { "kind": "whoosh", "atMs": 2400, "seed": 1, "gainDb": -6 },
+      { "kind": "hit", "atMs": 2600, "seed": 2, "gainDb": -3 },
+      { "kind": "whoosh", "atMs": 5900, "seed": 3, "gainDb": -6 },
+      { "kind": "whoosh", "atMs": 8400, "seed": 4, "gainDb": -6 },
+      { "kind": "boom", "atMs": 10900, "seed": 5, "gainDb": -8 },
+      { "kind": "whoosh", "atMs": 13500, "seed": 6, "gainDb": -6 },
+      { "kind": "hit", "atMs": 13700, "seed": 7, "gainDb": -3 }
+    ]
+  },
+  "outputs": [{ "format": "mp4", "path": "out/showreel.mp4", "codec": "h264", "lut": "assets/luts/teal-orange.cube" }]
+}

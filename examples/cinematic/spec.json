@@ -1,0 +1,129 @@
+{
+  "specVersion": 1,
+  "meta": {
+    "id": "lazy-cinematic",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "qualityTier": "high"
+  },
+  "style": {
+    "tokens": {
+      "palette": ["#070B14", "#F59E4C", "#F4F7FB"],
+      "fontDisplay": "Space Grotesk",
+      "fontBody": "Inter",
+      "stageBg": "#070B14"
+    }
+  },
+  "scenes": [
+    {
+      "type": "typography",
+      "id": "title",
+      "startMs": 0,
+      "durationMs": 3200,
+      "transitionIn": { "type": "cut", "ms": 0 },
+      "transitionOut": { "type": "dissolve", "ms": 500 },
+      "params": {
+        "lines": [
+          { "text": "THE LOCAL MACHINE", "size": 110, "weight": 700, "font": "display", "color": "fg", "tracking": 3 },
+          { "text": "a fully local cinematic", "size": 40, "weight": 400, "font": "body", "color": "accent", "delayMs": 800 }
+        ],
+        "align": "center",
+        "reveal": "letter-stagger",
+        "staggerMs": 200,
+        "charStaggerMs": 22
+      }
+    },
+    {
+      "type": "parallax",
+      "id": "ridge-flyover",
+      "startMs": 2700,
+      "durationMs": 6000,
+      "transitionIn": { "type": "fade", "ms": 500 },
+      "transitionOut": { "type": "dissolve", "ms": 500 },
+      "params": {
+        "src": "assets/gen/ridge-21.png",
+        "depth": "assets/gen/ridge-21.depth.png",
+        "depthStrength": 0.45,
+        "move": "dolly-in",
+        "grade": "warm",
+        "overlay": "vignette"
+      }
+    },
+    {
+      "type": "typography",
+      "id": "quote-1",
+      "startMs": 8200,
+      "durationMs": 3600,
+      "transitionIn": { "type": "fade", "ms": 500 },
+      "transitionOut": { "type": "dissolve", "ms": 500 },
+      "params": {
+        "lines": [
+          { "text": "Every frame,", "size": 104, "weight": 700, "font": "display", "color": "fg" },
+          { "text": "computed here.", "size": 104, "weight": 700, "font": "display", "color": "accent" }
+        ],
+        "align": "center",
+        "reveal": "mask-wipe",
+        "staggerMs": 350,
+        "revealMs": 700
+      }
+    },
+    {
+      "type": "parallax",
+      "id": "dune-pan",
+      "startMs": 11300,
+      "durationMs": 6000,
+      "transitionIn": { "type": "fade", "ms": 500 },
+      "transitionOut": { "type": "dissolve", "ms": 500 },
+      "params": {
+        "src": "assets/gen/dune-42.png",
+        "depth": "assets/gen/dune-42.depth.png",
+        "depthStrength": 0.5,
+        "move": "pan-left",
+        "grade": "cool",
+        "overlay": "vignette"
+      }
+    },
+    {
+      "type": "video-layer",
+      "id": "footage",
+      "startMs": 16800,
+      "durationMs": 6000,
+      "transitionIn": { "type": "fade", "ms": 500 },
+      "transitionOut": { "type": "dissolve", "ms": 500 },
+      "params": {
+        "src": "assets/footage/flow.mp4",
+        "trimStartMs": 0,
+        "speed": 1,
+        "grade": "noir",
+        "fit": "cover"
+      }
+    },
+    {
+      "type": "typography",
+      "id": "lockup",
+      "startMs": 22300,
+      "durationMs": 3600,
+      "transitionIn": { "type": "fade", "ms": 500 },
+      "transitionOut": { "type": "cut", "ms": 0 },
+      "params": {
+        "lines": [
+          { "text": "lazy-video-skill", "size": 100, "weight": 700, "font": "display", "color": "fg", "tracking": -2 },
+          { "text": "no cloud · no keys · no compromises", "size": 34, "weight": 400, "font": "body", "color": "accent", "delayMs": 600 }
+        ],
+        "align": "center",
+        "reveal": "scale-in",
+        "revealMs": 800,
+        "bg": { "type": "gradient", "from": "#070B14", "to": "#3A2A18", "angle": 135 }
+      }
+    }
+  ],
+  "audio": {
+    "narration": [
+      { "text": "Every frame of this film was computed on one small machine. No cloud, no keys.", "startMs": 3600, "voice": "Samantha", "rate": 160, "gainDb": 0 },
+      { "text": "Lazy video skill. Video generation that lives where you live.", "startMs": 22600, "voice": "Samantha", "rate": 160, "gainDb": 0 }
+    ],
+    "music": { "mood": "calm", "bpm": 90, "bars": 12, "seed": 21, "gainDb": -16 }
+  },
+  "outputs": [{ "format": "mp4", "path": "out/cinematic.mp4", "codec": "h264" }]
+}

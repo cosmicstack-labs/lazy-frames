@@ -1,0 +1,199 @@
+{
+  "specVersion": 1,
+  "meta": {
+    "id": "example-com",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "qualityTier": "high"
+  },
+  "style": {
+    "tokens": {
+      "palette": [
+        "#334488",
+        "#22D3EE",
+        "#F8FAFC"
+      ],
+      "fontDisplay": "Space Grotesk",
+      "fontBody": "Inter",
+      "stageBg": "#334488"
+    }
+  },
+  "scenes": [
+    {
+      "type": "typography",
+      "id": "title",
+      "startMs": 0,
+      "durationMs": 2800,
+      "transitionIn": {
+        "type": "cut",
+        "ms": 0
+      },
+      "transitionOut": {
+        "type": "dissolve",
+        "ms": 400
+      },
+      "params": {
+        "lines": [
+          {
+            "text": "Example Domain",
+            "size": 118,
+            "weight": 700,
+            "font": "display",
+            "color": "fg",
+            "tracking": 0
+          },
+          {
+            "text": "This domain is for use in documentation examples without needing permi",
+            "size": 40,
+            "weight": 400,
+            "font": "body",
+            "color": "accent",
+            "tracking": 0,
+            "delayMs": 700
+          }
+        ],
+        "align": "center",
+        "reveal": "letter-stagger",
+        "staggerMs": 200,
+        "revealMs": 600,
+        "charStaggerMs": 26
+      }
+    },
+    {
+      "type": "browser-frame",
+      "id": "browser",
+      "startMs": 2400,
+      "durationMs": 3600,
+      "transitionIn": {
+        "type": "fade",
+        "ms": 400
+      },
+      "transitionOut": {
+        "type": "dissolve",
+        "ms": 400
+      },
+      "params": {
+        "src": "assets/sites/example.com/hero.png",
+        "url": "example.com",
+        "zoom": "slow-in",
+        "cursor": {
+          "moves": [
+            {
+              "xPct": 34,
+              "yPct": 40,
+              "atMs": 900
+            },
+            {
+              "xPct": 62,
+              "yPct": 58,
+              "atMs": 2100
+            }
+          ],
+          "clickAtMs": 2800
+        },
+        "bg": {
+          "type": "solid",
+          "color": "#334488"
+        }
+      }
+    },
+    {
+      "type": "parallax",
+      "id": "parallax",
+      "startMs": 5600,
+      "durationMs": 3400,
+      "transitionIn": {
+        "type": "fade",
+        "ms": 400
+      },
+      "transitionOut": {
+        "type": "dissolve",
+        "ms": 400
+      },
+      "params": {
+        "src": "assets/sites/example.com/full.png",
+        "move": "dolly-in",
+        "grade": "none",
+        "overlay": "vignette",
+        "bg": {
+          "type": "solid",
+          "color": "#334488"
+        }
+      }
+    },
+    {
+      "type": "ui-callout",
+      "id": "callout",
+      "startMs": 8600,
+      "durationMs": 3200,
+      "transitionIn": {
+        "type": "fade",
+        "ms": 400
+      },
+      "transitionOut": {
+        "type": "dissolve",
+        "ms": 400
+      },
+      "params": {
+        "src": "assets/sites/example.com/hero.png",
+        "hotspot": {
+          "x": 33,
+          "y": 52,
+          "w": 34,
+          "h": 16
+        },
+        "label": "Learn more",
+        "zoomStrength": 8,
+        "bg": {
+          "type": "solid",
+          "color": "#334488"
+        }
+      }
+    },
+    {
+      "type": "typography",
+      "id": "lockup",
+      "startMs": 11400,
+      "durationMs": 2600,
+      "transitionIn": {
+        "type": "fade",
+        "ms": 400
+      },
+      "transitionOut": {
+        "type": "cut",
+        "ms": 0
+      },
+      "params": {
+        "lines": [
+          {
+            "text": "example.com",
+            "size": 104,
+            "weight": 700,
+            "font": "display",
+            "color": "fg",
+            "tracking": -2
+          }
+        ],
+        "align": "center",
+        "reveal": "scale-in",
+        "staggerMs": 120,
+        "revealMs": 800,
+        "charStaggerMs": 26,
+        "bg": {
+          "type": "gradient",
+          "from": "#334488",
+          "to": "#22D3EE",
+          "angle": 135
+        }
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "format": "mp4",
+      "path": "out/site-promo.mp4",
+      "codec": "h264"
+    }
+  ]
+}

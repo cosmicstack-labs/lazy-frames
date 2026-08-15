@@ -1,0 +1,16 @@
+{
+  "name": "@lazy/capture",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@lazy/engine": "*",
+    "puppeteer-core": "^24.0.0"
+  }
+}

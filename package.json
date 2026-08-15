@@ -1,0 +1,19 @@
+{
+  "name": "lazy-video-skill",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "npm run build --workspace @lazy/engine && npm run build --workspace @lazy/capture && npm run build --workspace @lazy/renderer && npm run build --workspace @lazy/cli",
+    "verify:demo": "node scripts/verify-demo.mjs",
+    "verify:cinematic": "node scripts/verify-cinematic.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

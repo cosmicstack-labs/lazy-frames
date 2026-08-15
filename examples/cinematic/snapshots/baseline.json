@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "t": 1600,
+      "scene": "title",
+      "kind": "midpoint",
+      "hash": "7015c02812db78ec2cf5ff0a87ed43cfb4ae32e5daa16cde5405d03a42c829e5"
+    },
+    {
+      "t": 2950,
+      "scene": "title",
+      "kind": "transition-out",
+      "hash": "0be7dee1f380ccb0e5b16b8a3fb267e010b92d8d39976b29aaa76e7cfddd87e7"
+    },
+    {
+      "t": 2950,
+      "scene": "ridge-flyover",
+      "kind": "transition-in",
+      "hash": "0be7dee1f380ccb0e5b16b8a3fb267e010b92d8d39976b29aaa76e7cfddd87e7"
+    },
+    {
+      "t": 5700,
+      "scene": "ridge-flyover",
+      "kind": "midpoint",
+      "hash": "2f956754dd8541ab575e1f8c682b05619a421fde23a47aa0e97c31f6170e1574"
+    },
+    {
+      "t": 8450,
+      "scene": "ridge-flyover",
+      "kind": "transition-out",
+      "hash": "de99e07e59c2822ef64eb5fde89301557632412130264542eb8171969604c8e2"
+    },
+    {
+      "t": 8450,
+      "scene": "quote-1",
+      "kind": "transition-in",
+      "hash": "de99e07e59c2822ef64eb5fde89301557632412130264542eb8171969604c8e2"
+    },
+    {
+      "t": 10000,
+      "scene": "quote-1",
+      "kind": "midpoint",
+      "hash": "0076740b674a09902a0ea7ec09051ea577304cea4c56a961df1d5ba52cf75dad"
+    },
+    {
+      "t": 11550,
+      "scene": "quote-1",
+      "kind": "transition-out",
+      "hash": "47534c1435b1c5fe4236ac9357b903d45f9d5dfd235311aae3b890bb2a640b49"
+    },
+    {
+      "t": 11550,
+      "scene": "dune-pan",
+      "kind": "transition-in",
+      "hash": "47534c1435b1c5fe4236ac9357b903d45f9d5dfd235311aae3b890bb2a640b49"
+    },
+    {
+      "t": 14300,
+      "scene": "dune-pan",
+      "kind": "midpoint",
+      "hash": "47534c1435b1c5fe4236ac9357b903d45f9d5dfd235311aae3b890bb2a640b49"
+    },
+    {
+      "t": 17050,
+      "scene": "dune-pan",
+      "kind": "transition-out",
+      "hash": "7d0ff8747400920d86664320228a1527f7688ac140587e917aa3ad4f9183040e"
+    },
+    {
+      "t": 17050,
+      "scene": "footage",
+      "kind": "transition-in",
+      "hash": "7d0ff8747400920d86664320228a1527f7688ac140587e917aa3ad4f9183040e"
+    },
+    {
+      "t": 19800,
+      "scene": "footage",
+      "kind": "midpoint",
+      "hash": "7d0ff8747400920d86664320228a1527f7688ac140587e917aa3ad4f9183040e"
+    },
+    {
+      "t": 22550,
+      "scene": "footage",
+      "kind": "transition-out",
+      "hash": "bce1d061024ba257c74c5318bf5ab1bf7f70d63fc1ad138653a48b008a32ccc6"
+    },
+    {
+      "t": 22550,
+      "scene": "lockup",
+      "kind": "transition-in",
+      "hash": "bce1d061024ba257c74c5318bf5ab1bf7f70d63fc1ad138653a48b008a32ccc6"
+    },
+    {
+      "t": 24100,
+      "scene": "lockup",
+      "kind": "midpoint",
+      "hash": "578f918c3013c8fdc37bb67cfead7a1d68a1a67bbfd6a8d8af65e2d0e709b152"
+    }
+  ]
+}

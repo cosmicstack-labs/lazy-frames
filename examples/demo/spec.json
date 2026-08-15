@@ -1,0 +1,90 @@
+{
+  "specVersion": 1,
+  "meta": {
+    "id": "lazy-demo",
+    "width": 1920,
+    "height": 1080,
+    "fps": 24,
+    "durationMs": 11200,
+    "qualityTier": "high"
+  },
+  "style": {
+    "tokens": {
+      "palette": ["#0B0F19", "#22D3EE", "#F8FAFC"],
+      "fontDisplay": "Space Grotesk",
+      "fontBody": "Inter"
+    }
+  },
+  "scenes": [
+    {
+      "type": "typography",
+      "id": "title",
+      "startMs": 0,
+      "durationMs": 2800,
+      "transitionIn": { "type": "cut", "ms": 0 },
+      "transitionOut": { "type": "dissolve", "ms": 400 },
+      "params": {
+        "lines": [
+          { "text": "Lazy Video Skill", "size": 132, "weight": 700, "font": "display", "color": "fg" },
+          { "text": "Pixel-perfect. Fully local.", "size": 42, "weight": 400, "font": "body", "color": "accent", "tracking": 2 }
+        ],
+        "align": "center",
+        "reveal": "letter-stagger",
+        "staggerMs": 200,
+        "charStaggerMs": 26
+      }
+    },
+    {
+      "type": "typography",
+      "id": "promise",
+      "startMs": 2400,
+      "durationMs": 2800,
+      "transitionIn": { "type": "fade", "ms": 400 },
+      "transitionOut": { "type": "dissolve", "ms": 400 },
+      "params": {
+        "lines": [
+          { "text": "One spec in.", "size": 110, "weight": 700, "font": "display", "color": "fg" },
+          { "text": "One video out.", "size": 110, "weight": 700, "font": "display", "color": "accent" }
+        ],
+        "align": "center",
+        "reveal": "mask-wipe",
+        "staggerMs": 300,
+        "revealMs": 700
+      }
+    },
+    {
+      "type": "stat-hit",
+      "id": "stat",
+      "startMs": 4800,
+      "durationMs": 4000,
+      "transitionIn": { "type": "fade", "ms": 400 },
+      "transitionOut": { "type": "dissolve", "ms": 400 },
+      "params": {
+        "kicker": "Deterministic",
+        "value": 100,
+        "suffix": "%",
+        "label": "byte-stable renders",
+        "bars": [{ "value": 72 }, { "value": 88 }, { "value": 64 }],
+        "valueSize": 230
+      }
+    },
+    {
+      "type": "typography",
+      "id": "lockup",
+      "startMs": 8400,
+      "durationMs": 2800,
+      "transitionIn": { "type": "fade", "ms": 400 },
+      "transitionOut": { "type": "cut", "ms": 0 },
+      "params": {
+        "lines": [
+          { "text": "lazy-video-skill", "size": 96, "weight": 700, "font": "display", "color": "fg", "tracking": -2 }
+        ],
+        "align": "center",
+        "reveal": "scale-in",
+        "revealMs": 800,
+        "bg": { "type": "gradient", "from": "#0B0F19", "to": "#123B47", "angle": 135 }
+      }
+    }
+  ],
+  "outputs": [{ "format": "mp4", "path": "out/demo.mp4", "codec": "h264" }]
+}

@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "t": 1400,
+      "scene": "title",
+      "kind": "midpoint",
+      "hash": "873f912fa52eb5c8d16c9f7565a554cd4bf546182a604dd9d165d8ba32de3ef2"
+    },
+    {
+      "t": 2600,
+      "scene": "title",
+      "kind": "transition-out",
+      "hash": "ece772a4b8a279036af4cf6f834475fea854e1dda42bd910e43038bd9468c5fd"
+    },
+    {
+      "t": 2600,
+      "scene": "browser",
+      "kind": "transition-in",
+      "hash": "ece772a4b8a279036af4cf6f834475fea854e1dda42bd910e43038bd9468c5fd"
+    },
+    {
+      "t": 4200,
+      "scene": "browser",
+      "kind": "midpoint",
+      "hash": "1919e694f8c2418281d564b2eb94885143793fde35e3acf9bc8fb2a3b2bb306a"
+    },
+    {
+      "t": 5800,
+      "scene": "browser",
+      "kind": "transition-out",
+      "hash": "a4c8f2c50da2c598e65c0936f133762dc71eab26870496c62a98018033e4db10"
+    },
+    {
+      "t": 5800,
+      "scene": "parallax",
+      "kind": "transition-in",
+      "hash": "a4c8f2c50da2c598e65c0936f133762dc71eab26870496c62a98018033e4db10"
+    },
+    {
+      "t": 7300,
+      "scene": "parallax",
+      "kind": "midpoint",
+      "hash": "1bc5e46a397635663b96c8dd4278c167bef7d8bdf7e47311f4285407e4e592a9"
+    },
+    {
+      "t": 8800,
+      "scene": "parallax",
+      "kind": "transition-out",
+      "hash": "7aeb6273d90bb9e718ab935b9e89e5091fa8768d813eb714e6aa57634a04d077"
+    },
+    {
+      "t": 8800,
+      "scene": "callout",
+      "kind": "transition-in",
+      "hash": "7aeb6273d90bb9e718ab935b9e89e5091fa8768d813eb714e6aa57634a04d077"
+    },
+    {
+      "t": 10200,
+      "scene": "callout",
+      "kind": "midpoint",
+      "hash": "c7904ccf306775473daa2e014d30c3ba4cad3336ad676156810917caf980f7cb"
+    },
+    {
+      "t": 11600,
+      "scene": "callout",
+      "kind": "transition-out",
+      "hash": "98222fc744d03f020b9331beac522ddca0f61a7904905d5fd08ebbd565b63a12"
+    },
+    {
+      "t": 11600,
+      "scene": "lockup",
+      "kind": "transition-in",
+      "hash": "98222fc744d03f020b9331beac522ddca0f61a7904905d5fd08ebbd565b63a12"
+    },
+    {
+      "t": 12700,
+      "scene": "lockup",
+      "kind": "midpoint",
+      "hash": "5601a62df8a02fcb6ab55e160de3d791023480d2b99b8ae09754cae428655305"
+    }
+  ]
+}

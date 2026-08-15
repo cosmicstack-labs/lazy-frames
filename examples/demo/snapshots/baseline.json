@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "t": 1400,
+      "scene": "title",
+      "kind": "midpoint",
+      "hash": "6ead7592b0c2415f1bd86623c6d1507241f8109b386e37e6e8463e5810eac868"
+    },
+    {
+      "t": 2600,
+      "scene": "title",
+      "kind": "transition-out",
+      "hash": "fd4cf8134bf136e79ae70db746d4cb182abc35f1ccdd7357667ccbf01ab9db05"
+    },
+    {
+      "t": 2600,
+      "scene": "promise",
+      "kind": "transition-in",
+      "hash": "fd4cf8134bf136e79ae70db746d4cb182abc35f1ccdd7357667ccbf01ab9db05"
+    },
+    {
+      "t": 3800,
+      "scene": "promise",
+      "kind": "midpoint",
+      "hash": "569ced9e35db47ebfb1ee75a6d3c9de20ca3b17bf2e3ab7a194ef09721f1235f"
+    },
+    {
+      "t": 5000,
+      "scene": "promise",
+      "kind": "transition-out",
+      "hash": "19b6209cf7dd612a2a42f569faf01dc3a367351b19bb86ca2e33acd57eadd554"
+    },
+    {
+      "t": 5000,
+      "scene": "stat",
+      "kind": "transition-in",
+      "hash": "19b6209cf7dd612a2a42f569faf01dc3a367351b19bb86ca2e33acd57eadd554"
+    },
+    {
+      "t": 6800,
+      "scene": "stat",
+      "kind": "midpoint",
+      "hash": "8166edce0c30e1567f14ec4ab646a0130ee6f50031a9ca816ed36d34633473b6"
+    },
+    {
+      "t": 8600,
+      "scene": "stat",
+      "kind": "transition-out",
+      "hash": "6dc08b9475949a9a8e4ea117ebfcfa27e985055ae312ddad94645571eefac12e"
+    },
+    {
+      "t": 8600,
+      "scene": "lockup",
+      "kind": "transition-in",
+      "hash": "6dc08b9475949a9a8e4ea117ebfcfa27e985055ae312ddad94645571eefac12e"
+    },
+    {
+      "t": 9800,
+      "scene": "lockup",
+      "kind": "midpoint",
+      "hash": "d1b3ce3cf361c3291974a5524b28e102a232f4c839af2016bd7bfb38f184e526"
+    }
+  ]
+}

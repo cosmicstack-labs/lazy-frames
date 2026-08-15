@@ -1,0 +1,63 @@
+{
+  "site": "https://example.com/",
+  "finalUrl": "https://example.com/",
+  "capturedAt": "2026-08-15T13:50:47.279Z",
+  "meta": {
+    "title": "Example Domain",
+    "description": ""
+  },
+  "palette": [
+    {
+      "hex": "#334488",
+      "count": 2
+    }
+  ],
+  "fonts": [
+    "system-ui"
+  ],
+  "copy": [
+    {
+      "tag": "h1",
+      "text": "Example Domain",
+      "y": 120,
+      "fontSize": 24
+    },
+    {
+      "tag": "p",
+      "text": "This domain is for use in documentation examples without needing permission. Avoid use in operations.",
+      "y": 164,
+      "fontSize": 16
+    },
+    {
+      "tag": "p",
+      "text": "Learn more",
+      "y": 198,
+      "fontSize": 16
+    },
+    {
+      "tag": "a",
+      "text": "Learn more",
+      "y": 198,
+      "fontSize": 16
+    }
+  ],
+  "assets": [
+    {
+      "id": "site:example.com:hero",
+      "file": "assets/sites/example.com/hero.png",
+      "kind": "screenshot",
+      "meta": {
+        "viewport": "1280x800",
+        "dpr": 2
+      }
+    },
+    {
+      "id": "site:example.com:full",
+      "file": "assets/sites/example.com/full.png",
+      "kind": "screenshot",
+      "meta": {
+        "mode": "fullpage"
+      }
+    }
+  ]
+}

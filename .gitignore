@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.log
+.lazy/
+out/
+frames/
+.DS_Store
