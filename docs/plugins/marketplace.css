@@ -52,4 +52,4 @@
 .metadata strong { margin-top: 5px; font-size: 13px; }
 [hidden] { display: none !important; }
 @media (max-width: 900px) { .market-grid { grid-template-columns: repeat(2, 1fr); } .market-tools { align-items: start; flex-direction: column; } .filters { justify-content: start; } }
-@media (max-width: 620px) { .marketplace-page, .detail-page { padding: 120px 20px 70px; } .market-grid, .detail-grid, .metadata { grid-template-columns: 1fr; } .market-card { min-height: 330px; } .detail-hero { grid-template-columns: 1fr; } .metadata div { border-right: 0; border-bottom: 1px solid var(--border); } nav .links a:not(:first-child) { display: none; } }
+@media (max-width: 620px) { .marketplace-page, .detail-page { padding: 120px 20px 70px; } .market-grid, .detail-grid, .metadata { grid-template-columns: 1fr; } .market-card { min-height: 330px; } .detail-hero { grid-template-columns: 1fr; } .metadata div { border-right: 0; border-bottom: 1px solid var(--border); } }

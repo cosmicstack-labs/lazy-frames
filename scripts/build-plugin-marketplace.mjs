@@ -43,7 +43,7 @@ function shell(title, description, body, depth = 0) {
 <link rel="icon" type="image/svg+xml" href="${prefix}favicon.svg">
 </head>
 <body>
-<nav><div class="brand"><div class="brand-mark"></div><div class="brand-text"><div class="brand-name"><a href="${prefix}index.html">Lazy Frames</a></div><a href="https://cosmicstack.ai" class="brand-byline">by Cosmic Stack</a></div></div><div class="links"><a href="${marketplace}">Plugins</a><a href="${prefix}docs.html">Docs</a><a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a></div></nav>
+<nav><div class="brand"><div class="brand-mark"></div><div class="brand-text"><div class="brand-name"><a href="${prefix}index.html">Lazy Frames</a></div><a href="https://cosmicstack.ai" class="brand-byline">by Cosmic Stack</a></div></div><input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation menu"><label for="nav-toggle" class="nav-toggle-label" aria-hidden="true"><span></span></label><div class="links"><a href="${marketplace}">Plugins</a><a href="${prefix}docs.html">Docs</a><a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a></div></nav>
 ${body}
 <script src="${marketplace}marketplace.js"></script>
 </body>

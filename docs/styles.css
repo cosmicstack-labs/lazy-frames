@@ -70,6 +70,25 @@ nav .links .nav-install {
 }
 nav .links .nav-install:hover { border-color: var(--accent-dim); color: var(--accent); }
 
+/* Hamburger toggle (mobile only) */
+nav .nav-toggle { display: none; }
+nav .nav-toggle-label {
+  display: none; cursor: pointer; width: 28px; height: 22px;
+  position: relative; flex: none; margin-left: 16px;
+}
+nav .nav-toggle-label span,
+nav .nav-toggle-label span::before,
+nav .nav-toggle-label span::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 2px;
+  background: var(--text); border-radius: 2px; transition: transform 0.25s, opacity 0.2s;
+}
+nav .nav-toggle-label span { top: 50%; transform: translateY(-50%); }
+nav .nav-toggle-label span::before { top: -8px; }
+nav .nav-toggle-label span::after { top: 8px; }
+nav .nav-toggle:checked ~ .nav-toggle-label span { background: transparent; }
+nav .nav-toggle:checked ~ .nav-toggle-label span::before { transform: translateY(8px) rotate(45deg); }
+nav .nav-toggle:checked ~ .nav-toggle-label span::after { transform: translateY(-8px) rotate(-45deg); }
+
 /* ---- Hero ---- */
 .hero {
   min-height: 100vh; display: flex; flex-direction: column;
@@ -366,9 +385,23 @@ footer .footer-brand-name span { color: var(--accent); }
 /* ---- Responsive ---- */
 @media (max-width: 768px) {
   nav { padding: 14px 20px; }
-  nav .links { gap: 16px; }
-  nav .links a:not(.nav-install) { display: none; }
   nav .brand-text { flex-direction: column; gap: 2px; }
+  nav .nav-toggle-label { display: block; }
+  nav .links {
+    position: absolute; top: 100%; right: 0; left: 0;
+    flex-direction: column; align-items: stretch; gap: 0;
+    padding: 8px 20px 16px; background: rgba(13, 14, 18, 0.96);
+    border-bottom: 1px solid var(--border);
+    max-height: 0; overflow: hidden; opacity: 0;
+    transition: max-height 0.25s ease, opacity 0.2s ease;
+  }
+  nav .links a, nav .links .nav-install {
+    display: block; padding: 12px 0; border-bottom: 1px solid var(--border);
+    font-size: 15px; text-align: left;
+  }
+  nav .links a:last-of-type, nav .links .nav-install { border-bottom: 0; }
+  nav .links .nav-install { border: 1px solid var(--border); margin-top: 12px; text-align: center; }
+  nav .nav-toggle:checked ~ .links { max-height: 420px; opacity: 1; }
   section { padding: 60px 20px; }
   .docs-sidebar { display: none; }
   .docs-content { padding: 24px; }
