@@ -2,6 +2,10 @@
 
 Run commands as `node packages/cli/dist/index.js <command>` or symlink the binary.
 
+## Progress output
+
+`capture`, `check`, `gen`, `preview`, and `render` print live phase updates to stderr. Render also reports frame completion in five-percent increments. This remains enabled with `--json`, where stdout is reserved for the final machine-readable result.
+
 ## doctor
 
 ```bash
@@ -18,7 +22,7 @@ Reports: Node platform/arch/cpus/memory, Python version + hardware tier, provide
 lazy capture <url> [project] [--json]
 ```
 
-Captures a website: screenshots @2x DPR (hero + full-page), palette extraction, copy blocks (h1/h2/h3/p/a/button), fonts, logo candidates. Writes assets to `<project>/assets/sites/<domain>/` + a starter `spec.json`. If `[project]` is omitted, defaults to `projects/<host>`.
+Captures a website: screenshots @2x DPR (hero + full-page), palette extraction, copy blocks (h1/h2/h3/p/a/button), fonts, logo candidates. Writes assets to `<project>/assets/sites/<domain>/` + a starter `spec.json` whose media crop anchors default to center. If `[project]` is omitted, defaults to `projects/<host>`.
 
 ## gen
 

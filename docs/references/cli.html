@@ -53,6 +53,10 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); }
 
 <p>Run commands as <code>node packages/cli/dist/index.js <command></code> or symlink the binary.</p>
 
+<h2>Progress output</h2>
+
+<p><code>capture</code>, <code>check</code>, <code>gen</code>, <code>preview</code>, and <code>render</code> print live phase updates to stderr. Render also reports frame completion in five-percent increments. This remains enabled with <code>--json</code>, where stdout is reserved for the final machine-readable result.</p>
+
 <h2>doctor</h2>
 
 <p>``<code>bash</p>
@@ -69,7 +73,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); }
 <p>lazy capture <url> [project] [--json]</p>
 </code>`<code>
 
-<p>Captures a website: screenshots @2x DPR (hero + full-page), palette extraction, copy blocks (h1/h2/h3/p/a/button), fonts, logo candidates. Writes assets to </code><project>/assets/sites/<domain>/<code> + a starter </code>spec.json<code>. If </code>[project]<code> is omitted, defaults to </code>projects/<host><code>.</p>
+<p>Captures a website: screenshots @2x DPR (hero + full-page), palette extraction, copy blocks (h1/h2/h3/p/a/button), fonts, logo candidates. Writes assets to </code><project>/assets/sites/<domain>/<code> + a starter </code>spec.json<code> whose media crop anchors default to center. If </code>[project]<code> is omitted, defaults to </code>projects/<host><code>.</p>
 
 <h2>gen</h2>
 

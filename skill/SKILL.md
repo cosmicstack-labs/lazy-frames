@@ -16,6 +16,11 @@ scenes declare timing, content, and style; the CLI turns it into a deterministic
 The core renderer needs no cloud or keys. Reviewed plugins may use explicitly declared external services;
 generated media is cached locally before deterministic rendering.
 
+Current CLI release: `lazy-frames@0.6.3`.
+
+- Captured website media is center-cropped by default in `browser-frame`, `ui-callout`, and both flat and depth `parallax` scenes. Override `params.position` only when the subject requires a different anchor.
+- `capture`, `check`, `gen`, `preview`, and `render` report live phases on stderr. Render reports frame percentages. With `--json`, stdout remains clean machine-readable JSON.
+
 ## 1. Start from project state
 
 | State | Action |
@@ -35,7 +40,14 @@ python3 --version  # required for audio (music, TTS, SFX)
 ls "/Applications/Google Chrome.app"  # required (headless renderer)
 ```
 
-Build the CLI from the repo root:
+Install from npm:
+
+```bash
+npm install lazy-frames
+npx lazy doctor
+```
+
+Or build from source:
 
 ```bash
 npm install && npm run build
@@ -97,6 +109,7 @@ The capture command writes:
 - `assets/sites/<domain>/hero.png` + `full.png` (screenshots at 2x DPR)
 - `assets/sites/<domain>/ledger.json` (palette, fonts, copy blocks, metadata)
 - A starter `spec.json` with 5 scenes built from the captured content
+- Screenshot scenes explicitly use `{ "x": "center", "y": "center" }` unless the spec overrides the crop anchor
 
 ### cinematic
 
@@ -159,6 +172,7 @@ The agent's job across all workflows:
 - **Palette convention:** `palette[0]` = bg, `palette[1]` = accent, `palette[2]` = fg.
 - **Width/height must be even** (h264 yuv420p requirement).
 - **Fonts are bundled:** `Inter` (body) and `Space Grotesk` (display). No external fonts.
+- **Progress belongs on stderr.** Commands using `--json` reserve stdout for their final JSON result.
 
 ## 5. Key concepts
 
@@ -193,10 +207,12 @@ Two layers:
 
 ## 6. References
 
-| File | Read it to… |
-|---|---|
-| `references/spec-format.md` | author a valid `spec.json` — full schema, all fields, defaults |
-| `references/scene-types.md` | pick a scene type and configure its params |
-| `references/workflows.md` | step-by-step for website-promo, cinematic, and edit workflows |
-| `references/cli.md` | every CLI command with flags and examples |
-| `references/gates.md` | snapshot regression + seek determinism gate usage |
+| File | URL | Read it to… |
+|---|---|---|
+| `spec-format.md` | https://lazy-frames.cosmicstack.ai/references/spec-format.md | author a valid `spec.json` — full schema, all fields, defaults |
+| `scene-types.md` | https://lazy-frames.cosmicstack.ai/references/scene-types.md | pick a scene type and configure its params |
+| `workflows.md` | https://lazy-frames.cosmicstack.ai/references/workflows.md | step-by-step for website-promo, cinematic, and edit workflows |
+| `cli.md` | https://lazy-frames.cosmicstack.ai/references/cli.md | every CLI command with flags and examples |
+| `gates.md` | https://lazy-frames.cosmicstack.ai/references/gates.md | snapshot regression + seek determinism gate usage |
+
+> These references are also available in the installed package at `skill/references/` and in the repo at `skill/references/`.

@@ -16,6 +16,11 @@ scenes declare timing, content, and style; the CLI turns it into a deterministic
 The core renderer needs no cloud or keys. Reviewed plugins may use explicitly declared external services;
 generated media is cached locally before deterministic rendering.
 
+Current CLI release: `lazy-frames@0.6.3`.
+
+- Captured website media is center-cropped by default in `browser-frame`, `ui-callout`, and both flat and depth `parallax` scenes. Override `params.position` only when the subject requires a different anchor.
+- `capture`, `check`, `gen`, `preview`, and `render` report live phases on stderr. Render reports frame percentages. With `--json`, stdout remains clean machine-readable JSON.
+
 ## 1. Start from project state
 
 | State | Action |
@@ -104,6 +109,7 @@ The capture command writes:
 - `assets/sites/<domain>/hero.png` + `full.png` (screenshots at 2x DPR)
 - `assets/sites/<domain>/ledger.json` (palette, fonts, copy blocks, metadata)
 - A starter `spec.json` with 5 scenes built from the captured content
+- Screenshot scenes explicitly use `{ "x": "center", "y": "center" }` unless the spec overrides the crop anchor
 
 ### cinematic
 
@@ -166,6 +172,7 @@ The agent's job across all workflows:
 - **Palette convention:** `palette[0]` = bg, `palette[1]` = accent, `palette[2]` = fg.
 - **Width/height must be even** (h264 yuv420p requirement).
 - **Fonts are bundled:** `Inter` (body) and `Space Grotesk` (display). No external fonts.
+- **Progress belongs on stderr.** Commands using `--json` reserve stdout for their final JSON result.
 
 ## 5. Key concepts
 
