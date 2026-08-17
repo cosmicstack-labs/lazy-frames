@@ -14,7 +14,9 @@ lazy doctor [--json]
 
 Reports: Node platform/arch/cpus/memory, Python version + hardware tier, provider availability
 (procedural imagery, depth, music, TTS, MLX photoreal). Tier: `full` (≥16GB + MLX), `lite` (≥8GB),
-`minimal`.
+`minimal`. Chrome is resolved from `CHROME_PATH`, then macOS `/Applications`, Windows Program Files
+(Chrome or Edge), then Linux binaries. The gen sidecar is launched with `python3`, `python`, `py -3`,
+or `LAZY_PYTHON`.
 
 ## capture
 

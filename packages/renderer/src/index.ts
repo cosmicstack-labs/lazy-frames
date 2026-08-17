@@ -1,4 +1,6 @@
 export { findChrome } from './chrome.js';
+export { findPython } from './python.js';
+export type { PythonCommand } from './python.js';
 export { renderFrames } from './driver.js';
 export { encodeFrames, probeVideo, assertProbe, sha256File, checkFfmpeg, checkFfprobe, hashImagePixels } from './ffmpeg.js';
 export { prepareComposition, renderProject } from './render.js';

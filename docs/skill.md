@@ -36,8 +36,8 @@ Current CLI release: `lazy-frames@0.6.3`.
 ```bash
 node --version   # >= 20
 ffmpeg -version  # required
-python3 --version  # required for audio (music, TTS, SFX)
-ls "/Applications/Google Chrome.app"  # required (headless renderer)
+python3 --version   # Python 3; on Windows `python` is fine
+ls "/Applications/Google Chrome.app"  # macOS; Windows uses Chrome in Program Files, or set CHROME_PATH
 ```
 
 Install from npm:

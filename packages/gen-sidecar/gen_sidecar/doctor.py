@@ -5,6 +5,46 @@ import shutil
 import sys
 
 
+def _total_memory_gb():
+    if sys.platform == "win32":
+        try:
+            import ctypes
+
+            class MEMORYSTATUSEX(ctypes.Structure):
+                _fields_ = [
+                    ("dwLength", ctypes.c_ulong),
+                    ("dwMemoryLoad", ctypes.c_ulong),
+                    ("ullTotalPhys", ctypes.c_ulonglong),
+                    ("ullAvailPhys", ctypes.c_ulonglong),
+                    ("ullTotalPageFile", ctypes.c_ulonglong),
+                    ("ullAvailPageFile", ctypes.c_ulonglong),
+                    ("ullTotalVirtual", ctypes.c_ulonglong),
+                    ("ullAvailVirtual", ctypes.c_ulonglong),
+                    ("ullAvailExtendedVirtual", ctypes.c_ulonglong),
+                ]
+
+            stat = MEMORYSTATUSEX()
+            stat.dwLength = ctypes.sizeof(MEMORYSTATUSEX)
+            if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(stat)):
+                return round(stat.ullTotalPhys / (1024 ** 3), 1)
+        except Exception:
+            return None
+    try:
+        import subprocess
+
+        res = subprocess.run(["sysctl", "-n", "hw.memsize"], capture_output=True, text=True, timeout=10)
+        if res.returncode == 0:
+            return round(int(res.stdout.strip()) / (1024 ** 3), 1)
+    except Exception:
+        pass
+    try:
+        pages = os.sysconf("SC_PHYS_PAGES")
+        page = os.sysconf("SC_PAGE_SIZE")
+        return round(pages * page / (1024 ** 3), 1)
+    except (AttributeError, OSError, ValueError, TypeError):
+        return None
+
+
 def probe():
     def has(mod):
         try:
@@ -19,15 +59,8 @@ def probe():
         from . import tts
 
         voices = tts.list_voices()
-    total_gb = None
-    try:
-        import subprocess
-
-        res = subprocess.run(["sysctl", "-n", "hw.memsize"], capture_output=True, text=True, timeout=10)
-        if res.returncode == 0:
-            total_gb = round(int(res.stdout.strip()) / (1024 ** 3), 1)
-    except Exception:
-        pass
+    total_gb = _total_memory_gb()
+    ram = None if total_gb is None else round(total_gb)
     providers = {
         "image.procedural": {"available": True, "engine": "chrome-canvas"},
         "image.mlx-photoreal": {"available": has("mlx.core")},
@@ -37,9 +70,9 @@ def probe():
         "tts.elevenlabs": {"available": bool(os.environ.get("ELEVENLABS_API_KEY")), "credential": "ELEVENLABS_API_KEY"},
         "tts.mlx": {"available": has("mlx")},
     }
-    if total_gb is not None and total_gb >= 16 and providers["image.mlx-photoreal"]["available"]:
+    if ram is not None and ram >= 16 and providers["image.mlx-photoreal"]["available"]:
         tier = "full"
-    elif total_gb is not None and total_gb >= 8:
+    elif ram is not None and ram >= 8:
         tier = "lite"
     else:
         tier = "minimal"

@@ -58,8 +58,8 @@ node packages/cli/dist/index.js doctor
 |---|---|---|
 | Node.js ≥ 20 | CLI + engine | `node --version` |
 | ffmpeg + ffprobe | encoding + audio | `ffmpeg -version` |
-| Google Chrome | headless rendering | `lazy doctor` |
-| Python 3 | audio sidecar (music, TTS, SFX) | `python3 --version` |
+| Google Chrome | headless rendering | `lazy doctor` (Windows: Chrome/Edge in Program Files, or `CHROME_PATH`) |
+| Python 3 | audio sidecar (music, TTS, SFX) | `python3 --version` or `python --version`; override with `LAZY_PYTHON` |
 | macOS `say` | TTS narration | `say -v '?'` |
 | `ELEVENLABS_API_KEY` | Optional ElevenLabs plugin | `lazy doctor` |
 

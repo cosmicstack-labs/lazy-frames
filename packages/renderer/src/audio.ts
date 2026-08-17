@@ -4,6 +4,7 @@ import { existsSync, lstatSync, mkdirSync, realpathSync, renameSync, rmSync } fr
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { narrationStartMs, type Audio, type NarrationSegment, type Scene, type SfxEntry } from '../../engine/dist/index.js';
+import { findPython } from './python.js';
 
 function sidecarDir(): string {
   if (process.env['LAZY_SIDECAR_DIR']) return process.env['LAZY_SIDECAR_DIR']!;
@@ -19,10 +20,17 @@ export interface SidecarResult {
 }
 
 function runSidecar(args: string[]): SidecarResult {
-  const res = spawnSync('python3', ['-m', 'gen_sidecar', ...args], {
+  let python;
+  try {
+    python = findPython();
+  } catch (err) {
+    return { ok: false, error: (err as Error).message };
+  }
+  const res = spawnSync(python.bin, [...python.prefix, '-m', 'gen_sidecar', ...args], {
     cwd: sidecarDir(),
     encoding: 'utf8',
     timeout: 300000,
+    windowsHide: true,
   });
   if (res.status !== 0) {
     return { ok: false, error: res.stderr?.trim() || `sidecar exited ${res.status}` };
