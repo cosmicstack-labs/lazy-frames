@@ -37,7 +37,7 @@ function shell(title, description, body, depth = 0) {
 <link rel="icon" type="image/svg+xml" href="${prefix}favicon.svg">
 </head>
 <body>
-<nav><div class="brand"><div class="brand-mark"></div><div class="brand-text"><div class="brand-name"><a href="${prefix}index.html">Lazy Frames</a></div><a href="https://cosmicstack.ai" class="brand-byline">by Cosmic Stack</a></div></div><div class="links"><a href="${marketplace}">Marketplace</a><a href="${prefix}docs.html">Docs</a><a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a></div></nav>
+<nav><div class="brand"><div class="brand-mark"></div><div class="brand-text"><div class="brand-name"><a href="${prefix}index.html">Lazy Frames</a></div><a href="https://cosmicstack.ai" class="brand-byline">by Cosmic Stack</a></div></div><div class="links"><a href="${marketplace}">Plugins</a><a href="${prefix}docs.html">Docs</a><a href="https://github.com/cosmicstack-labs/lazy-frames">GitHub</a></div></nav>
 ${body}
 <script src="${marketplace}marketplace.js"></script>
 </body>
@@ -90,7 +90,7 @@ for (const plugin of PLUGIN_REGISTRY) {
   writeFileSync(path.join(dir, 'manifest.json'), `${JSON.stringify(plugin, null, 2)}\n`);
   const command = `npx lazy plugin install ${plugin.id} -p &lt;project&gt;`;
   const detailBody = `<main class="detail-page">
-    <a class="back" href="../">← Marketplace</a>
+    <a class="back" href="../">← Plugins</a>
     <header class="detail-hero"><div class="plugin-mark large">${esc(plugin.name.slice(0, 2).toUpperCase())}</div><div><div class="badges">${badge(plugin)}</div><div class="card-provider">${esc(plugin.provider.name)} · ${esc(plugin.category)}</div><h1>${esc(plugin.name)}</h1><p>${esc(plugin.description)}</p></div></header>
     <section class="detail-grid"><div class="detail-main"><h2>${plugin.status === 'available' ? 'Ready for scene-linked work' : 'Installable integration scaffold'}</h2><p>${plugin.status === 'available' ? 'This adapter is implemented and available after its declared credentials are approved for the project.' : 'This manifest can be installed, locked, and evaluated today. Execution remains blocked until its reviewed adapter ships, so a scaffold never silently runs incomplete code.'}</p><h3>Capabilities</h3><div class="tag-row">${plugin.capabilities.map((item) => `<span>${esc(item)}</span>`).join('')}</div><h3>Install</h3><div class="detail-command"><code id="detail-install">${plugin.default ? 'Included by default · run to approve: ' : ''}${command}</code><button class="copy" data-copy="detail-install">Copy</button></div></div>
     <aside class="permission-panel"><h2>Declared scope</h2><dl><dt>Network</dt><dd>${esc(plugin.permissions.networkHosts.join(', ') || 'None')}</dd><dt>Environment</dt><dd>${esc(plugin.permissions.environment.join(', ') || 'None')}</dd><dt>Filesystem</dt><dd>${esc(plugin.permissions.filesystem.join(', ') || 'None')}</dd><dt>Fingerprint</dt><dd class="fingerprint">${pluginFingerprint(plugin)}</dd></dl></aside></section>
