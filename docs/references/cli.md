@@ -55,7 +55,7 @@ lazy gen tts -p projects/cine --text "Every frame computed locally." --voice Sam
 lazy gen tts -p projects/cine --provider elevenlabs --voice VOICE_ID --text "A better story." --name n2
 ```
 
-Generates a TTS WAV via local macOS `say` or an installed TTS plugin. Outputs `<name>.wav` in `assets/gen/`.
+Generates a TTS WAV via local macOS `say`, Windows SAPI, or an installed TTS plugin. Outputs `<name>.wav` in `assets/gen/`.
 
 ## script
 

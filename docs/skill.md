@@ -60,7 +60,7 @@ node packages/cli/dist/index.js doctor
 ```
 
 Doctor reports: Node platform/memory, Python version + tier, and provider availability
-(procedural imagery, depth, music, TTS). Local narration uses `tts.say`; external providers are
+(procedural imagery, depth, music, TTS). Local narration uses `tts.say` (macOS `say` or Windows SAPI); external providers are
 installed as scoped plugins. If `image.mlx-photoreal` is unavailable (expected on <16 GB machines), the
 procedural image generator is used instead — still produces cinematic stills, just not photoreal.
 

@@ -53,12 +53,10 @@ def probe():
         except ImportError:
             return False
 
-    say_ok = shutil.which("say") is not None
-    voices = []
-    if say_ok:
-        from . import tts
+    from . import tts
 
-        voices = tts.list_voices()
+    voices = tts.list_voices()
+    say_ok = shutil.which("say") is not None or (sys.platform == "win32" and len(voices) > 0)
     total_gb = _total_memory_gb()
     ram = None if total_gb is None else round(total_gb)
     providers = {
@@ -66,7 +64,7 @@ def probe():
         "image.mlx-photoreal": {"available": has("mlx.core")},
         "depth.procedural": {"available": True, "engine": "chrome-canvas"},
         "music.procedural": {"available": True, "engine": "numpy" if has("numpy") else "pure"},
-        "tts.say": {"available": say_ok, "voices": len(voices)},
+        "tts.say": {"available": say_ok, "voices": len(voices), "engine": "sapi" if sys.platform == "win32" and shutil.which("say") is None else "say"},
         "tts.elevenlabs": {"available": bool(os.environ.get("ELEVENLABS_API_KEY")), "credential": "ELEVENLABS_API_KEY"},
         "tts.mlx": {"available": has("mlx")},
     }
