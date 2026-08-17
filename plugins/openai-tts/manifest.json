@@ -1,0 +1,9 @@
+{
+  "apiVersion": "lazy-frames.cosmicstack.ai/plugin/v1", "id": "openai-tts", "name": "OpenAI Voices", "version": "0.1.0",
+  "description": "A provider scaffold for scene-linked speech synthesis with OpenAI audio models.",
+  "publisher": { "name": "Cosmic Stack", "url": "https://cosmicstack.ai", "verified": true },
+  "provider": { "name": "OpenAI", "url": "https://openai.com" }, "category": "voice", "tags": ["voice", "tts", "openai"],
+  "capabilities": ["tts"], "runtime": { "type": "scaffold", "adapter": "openai-tts" },
+  "permissions": { "networkHosts": ["api.openai.com"], "environment": ["OPENAI_API_KEY"], "filesystem": ["project-cache-write", "project-assets-write"] },
+  "homepage": "https://lazy-frames.cosmicstack.ai/plugins/openai-tts/", "featured": true, "default": false, "installable": true, "status": "scaffold"
+}

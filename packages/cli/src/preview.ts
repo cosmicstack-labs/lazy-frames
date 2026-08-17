@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { prepareComposition } from '@lazy/renderer';
+import { prepareComposition } from '../../renderer/dist/index.js';
 
 const PREVIEW_PAGE = `<!doctype html>
 <html>

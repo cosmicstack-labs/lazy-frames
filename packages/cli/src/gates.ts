@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { keyframeTimes, loadSpec } from '@lazy/engine';
-import { captureKeyframes, prepareComposition, type KeyframeShot } from '@lazy/renderer';
+import { keyframeTimes, loadSpec } from '../../engine/dist/index.js';
+import { captureKeyframes, prepareComposition, type KeyframeShot } from '../../renderer/dist/index.js';
 
 interface Baseline {
   version: 1;

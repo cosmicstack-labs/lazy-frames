@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import puppeteer from 'puppeteer-core';
-import { findChrome } from '@lazy/renderer';
+import { findChrome } from '../../renderer/dist/index.js';
 import { paletteRoles, type CaptureLedger } from './model.js';
 
 const PALETTE_SCRIPT = () => {

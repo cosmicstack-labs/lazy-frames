@@ -63,12 +63,13 @@ Drafts one editable narration beat per text-bearing scene. `--apply` writes `nar
 
 ```bash
 lazy plugin search [query]
+lazy plugin info <id> [--json]
 lazy plugin install <id> [-p <project>]
 lazy plugin list [-p <project>]
 lazy plugin remove <id> [-p <project>]
 ```
 
-Only reviewed registry plugins with built-in adapters can be installed. Install writes a versioned, fingerprinted `lazy-plugins.json`; it never runs package lifecycle scripts.
+ElevenLabs is included by default; `install` grants project-scoped approval. Other marketplace manifests are installable, versioned, and fingerprinted. A `scaffold` can be evaluated but cannot execute until its reviewed adapter ships. Plugin installation never runs package lifecycle scripts.
 
 ## check
 

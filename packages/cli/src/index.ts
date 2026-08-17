@@ -5,8 +5,8 @@ import { runPreview } from './preview.js';
 import { runCapture } from './capture.js';
 import { runSnapshotGate } from './gates.js';
 import { runDoctor, runGenImage, runGenMusic, runGenTts } from './gen.js';
-import { renderProject } from '@lazy/renderer';
-import { installPlugin, listPlugins, removePlugin, searchPlugins } from './plugins.js';
+import { renderProject } from '../../renderer/dist/index.js';
+import { installPlugin, listPlugins, removePlugin, searchPlugins, showPlugin } from './plugins.js';
 import { runScriptPlanner } from './script.js';
 
 const program = new Command();
@@ -14,7 +14,7 @@ const program = new Command();
 program
   .name('lazy')
   .description('Lazy Frames — deterministic local video rendering from a typed spec')
-  .version('0.5.0');
+  .version('0.6.0');
 
 program
   .command('doctor')
@@ -46,6 +46,12 @@ plugin
   .option('-p, --project <dir>', 'project directory', '.')
   .option('--json', 'machine-readable output')
   .action((opts: { project: string; json?: boolean }) => runPluginAction(() => listPlugins(opts.project, opts.json ?? false)));
+
+plugin
+  .command('info')
+  .argument('<id>', 'registry plugin ID')
+  .option('--json', 'machine-readable output')
+  .action((id: string, opts: { json?: boolean }) => runPluginAction(() => showPlugin(id, opts.json ?? false)));
 
 plugin
   .command('install')

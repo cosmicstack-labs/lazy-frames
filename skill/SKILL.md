@@ -54,15 +54,18 @@ procedural image generator is used instead — still produces cinematic stills, 
 
 ### Plugins and external providers
 
-When the user requests an external provider or storytelling capability, search the reviewed registry,
-show the requested permissions, and ask before installing it:
+ElevenLabs is included by default but still requires project-scoped approval before network use. When
+the user requests any provider or storytelling capability, search the registry, inspect its status and
+permissions, and ask before approving or installing it:
 
 ```bash
 node packages/cli/dist/index.js plugin search tts
+node packages/cli/dist/index.js plugin info elevenlabs
 node packages/cli/dist/index.js plugin install elevenlabs -p projects/cine
 ```
 
-Never install arbitrary package URLs or store API keys in project files. ElevenLabs reads
+Marketplace scaffolds may be installed but cannot execute until a reviewed adapter ships. Never install
+arbitrary package URLs or store API keys in project files. ElevenLabs reads
 `ELEVENLABS_API_KEY` from the environment. Registry: https://lazy-frames.cosmicstack.ai/plugins/index.json
 
 ## 3. Workflows

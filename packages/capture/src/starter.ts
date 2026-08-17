@@ -1,4 +1,4 @@
-import type { Spec } from '@lazy/engine';
+import type { Spec } from '../../engine/dist/index.js';
 import type { CaptureLedger } from './model.js';
 import { paletteRoles } from './model.js';
 

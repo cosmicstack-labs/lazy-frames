@@ -2,8 +2,8 @@ import { constants as fsConstants, copyFileSync, existsSync, lstatSync, mkdirSyn
 import { randomUUID } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
-import { NarrationSegmentSchema, assertPluginInstalled, buildGeneratorHtml, type GeneratorStyle } from '@lazy/engine';
-import { buildMusic, buildNarration, projectAudioCacheDir, renderStill, sidecarDoctor } from '@lazy/renderer';
+import { NarrationSegmentSchema, assertPluginInstalled, buildGeneratorHtml, type GeneratorStyle } from '../../engine/dist/index.js';
+import { buildMusic, buildNarration, projectAudioCacheDir, renderStill, sidecarDoctor } from '../../renderer/dist/index.js';
 
 function generatedAssetDir(projectDir: string, name: string): string {
   if (!/^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$/.test(name)) {

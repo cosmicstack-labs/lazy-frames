@@ -1,0 +1,46 @@
+{
+  "apiVersion": "lazy-frames.cosmicstack.ai/plugin/v1",
+  "id": "stability-visuals",
+  "name": "Stability Visuals",
+  "version": "0.1.0",
+  "description": "A visual generation scaffold for producing project-frozen stills and backgrounds with Stability AI.",
+  "publisher": {
+    "name": "Cosmic Stack",
+    "url": "https://cosmicstack.ai",
+    "verified": true
+  },
+  "provider": {
+    "name": "Stability AI",
+    "url": "https://stability.ai"
+  },
+  "category": "visuals",
+  "tags": [
+    "image",
+    "visuals",
+    "generation",
+    "backgrounds"
+  ],
+  "capabilities": [
+    "image"
+  ],
+  "runtime": {
+    "type": "scaffold",
+    "adapter": "stability-visuals"
+  },
+  "permissions": {
+    "networkHosts": [
+      "api.stability.ai"
+    ],
+    "environment": [
+      "STABILITY_API_KEY"
+    ],
+    "filesystem": [
+      "project-assets-write"
+    ]
+  },
+  "homepage": "https://lazy-frames.cosmicstack.ai/plugins/stability-visuals/",
+  "featured": true,
+  "default": false,
+  "installable": true,
+  "status": "scaffold"
+}

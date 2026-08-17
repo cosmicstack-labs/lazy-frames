@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { buildStarterSpec, captureSite } from '@lazy/capture';
-import { SpecSchema } from '@lazy/engine';
+import { buildStarterSpec, captureSite } from '../../capture/dist/index.js';
+import { SpecSchema } from '../../engine/dist/index.js';
 
 export async function runCapture(url: string, projectDir: string | undefined, json: boolean): Promise<void> {
   const parsedUrl = new URL(url.includes('://') ? url : `https://${url}`);

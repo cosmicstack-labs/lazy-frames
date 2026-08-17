@@ -1,5 +1,5 @@
-import { assertPluginInstalled, collectAssetRefs, compileSpec, loadSpec, SpecError, type CheckError } from '@lazy/engine';
-import { checkFfmpeg, checkFfprobe, findChrome } from '@lazy/renderer';
+import { assertPluginInstalled, collectAssetRefs, compileSpec, loadSpec, SpecError, type CheckError } from '../../engine/dist/index.js';
+import { checkFfmpeg, checkFfprobe, findChrome } from '../../renderer/dist/index.js';
 import path from 'node:path';
 import { runSeekDeterminismGate, runSnapshotGate } from './gates.js';
 

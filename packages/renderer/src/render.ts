@@ -1,7 +1,7 @@
 import { copyFileSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { FONTS, assertPluginInstalled, collectAssetRefs, compileSpec, fontAssetPath, loadSpec, type Wire } from '@lazy/engine';
+import { FONTS, assertPluginInstalled, collectAssetRefs, compileSpec, fontAssetPath, loadSpec, type Wire } from '../../engine/dist/index.js';
 import { renderFrames } from './driver.js';
 import { assembleAudio, buildMusic, buildNarration, buildSfx, projectAudioCacheDir } from './audio.js';
 import { assertProbe, encodeFrames, probeVideo, sha256File } from './ffmpeg.js';

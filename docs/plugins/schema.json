@@ -4,7 +4,7 @@
   "title": "Lazy Frames Plugin Manifest",
   "type": "object",
   "additionalProperties": false,
-  "required": ["apiVersion", "id", "name", "version", "description", "publisher", "capabilities", "runtime", "permissions", "homepage", "featured"],
+  "required": ["apiVersion", "id", "name", "version", "description", "publisher", "provider", "category", "tags", "capabilities", "runtime", "permissions", "homepage", "featured", "default", "installable", "status"],
   "properties": {
     "apiVersion": { "const": "lazy-frames.cosmicstack.ai/plugin/v1" },
     "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
@@ -17,22 +17,33 @@
       "required": ["name", "url", "verified"],
       "properties": {
         "name": { "type": "string", "minLength": 1 },
-        "url": { "type": "string", "format": "uri" },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://" },
         "verified": { "type": "boolean" }
       }
     },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "url"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://" }
+      }
+    },
+    "category": { "enum": ["voice", "storytelling", "visuals", "audio", "workflow"] },
+    "tags": { "type": "array", "minItems": 1, "maxItems": 12, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9-]+$" } },
     "capabilities": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "enum": ["tts", "script", "storytelling", "image", "music", "sfx"] }
+      "items": { "enum": ["tts", "script", "storytelling", "image", "music", "sfx", "stock-media", "transcription", "captions", "export"] }
     },
     "runtime": {
       "type": "object",
       "additionalProperties": false,
       "required": ["type", "adapter"],
       "properties": {
-        "type": { "const": "builtin" },
+        "type": { "enum": ["builtin", "scaffold"] },
         "adapter": { "type": "string", "pattern": "^[a-z0-9-]+$" }
       }
     },
@@ -46,7 +57,15 @@
         "filesystem": { "type": "array", "maxItems": 6, "items": { "enum": ["project-read", "project-cache-write", "project-assets-write"] } }
       }
     },
-    "homepage": { "type": "string", "format": "uri" },
-    "featured": { "type": "boolean" }
-  }
+    "homepage": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "featured": { "type": "boolean" },
+    "default": { "type": "boolean" },
+    "installable": { "type": "boolean" },
+    "status": { "enum": ["available", "scaffold"] }
+  },
+  "allOf": [
+    { "if": { "properties": { "status": { "const": "available" } } }, "then": { "properties": { "runtime": { "properties": { "type": { "const": "builtin" } } } } } },
+    { "if": { "properties": { "status": { "const": "scaffold" } } }, "then": { "properties": { "runtime": { "properties": { "type": { "const": "scaffold" } } } } } },
+    { "if": { "properties": { "default": { "const": true } } }, "then": { "properties": { "status": { "const": "available" }, "installable": { "const": true }, "runtime": { "properties": { "type": { "const": "builtin" } } } } } }
+  ]
 }

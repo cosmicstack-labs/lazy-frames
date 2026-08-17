@@ -1,0 +1,9 @@
+{
+  "apiVersion": "lazy-frames.cosmicstack.ai/plugin/v1", "id": "playht-voice", "name": "PlayHT Voice", "version": "0.1.0",
+  "description": "A multilingual voice provider scaffold for long-form narration and character voices.",
+  "publisher": { "name": "Cosmic Stack", "url": "https://cosmicstack.ai", "verified": true },
+  "provider": { "name": "PlayHT", "url": "https://play.ht" }, "category": "voice", "tags": ["voice", "tts", "multilingual"],
+  "capabilities": ["tts"], "runtime": { "type": "scaffold", "adapter": "playht-voice" },
+  "permissions": { "networkHosts": ["api.play.ht"], "environment": ["PLAYHT_API_KEY", "PLAYHT_USER_ID"], "filesystem": ["project-cache-write", "project-assets-write"] },
+  "homepage": "https://lazy-frames.cosmicstack.ai/plugins/playht-voice/", "featured": false, "default": false, "installable": true, "status": "scaffold"
+}

@@ -91,7 +91,7 @@ npx lazy render projects/cine
 
 ### Plugin marketplace
 
-The [Lazy Frames Plugin Marketplace](https://lazy-frames.cosmicstack.ai/plugins/) lists reviewed, capability-scoped extensions and their exact permissions. ElevenLabs is the featured first-party plugin:
+The [Lazy Frames Plugin Marketplace](https://lazy-frames.cosmicstack.ai/plugins/) indexes folder-owned, schema-validated extensions and their exact permissions. ElevenLabs is the only plugin included by default; running install grants project-scoped approval for external access:
 
 ```bash
 npx lazy plugin install elevenlabs -p projects/cine
@@ -102,7 +102,9 @@ npx lazy render projects/cine
 
 Each narration beat is anchored with `sceneId` and `offsetMs`, so the spoken line starts on the intended screen. Generated audio is normalized to canonical WAV and cached; the API key is never written to project files. Plugin dependencies are fingerprint-locked in the project, while consent is stored separately as a user-local, project-scoped approval.
 
-Browse the marketplace or run `npx lazy plugin search`. Future storytelling and media plugins use the same manifest, permissions, fingerprint, and approval model.
+Browse 16 plugins across voice, storytelling, visuals, audio, captions, and delivery, or run `npx lazy plugin search`. The other integrations are installable scaffolds: their manifests and permission locks work now, while execution remains blocked until a reviewed adapter ships.
+
+Contributors add one self-contained `plugins/<id>/manifest.json` folder and run `npm run plugins:build`; the CLI registry, machine index, marketplace card, and detail page are generated from that folder.
 
 ## CLI commands
 
@@ -115,6 +117,7 @@ Browse the marketplace or run `npx lazy plugin search`. Future storytelling and 
 | `lazy gen tts` | Generate TTS narration WAV (macOS `say`) |
 | `lazy script <project>` | Draft editable, scene-linked narration beats |
 | `lazy plugin search` | Search reviewed plugins by name or capability |
+| `lazy plugin info <id>` | Inspect status, provider, permissions, and detail URL |
 | `lazy plugin install <id>` | Install a fingerprinted plugin into a project |
 | `lazy check <project>` | Validate spec + run snapshot & determinism gates |
 | `lazy snapshot <project> --update` | Establish/refresh the regression baseline |

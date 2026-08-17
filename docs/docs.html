@@ -152,11 +152,13 @@ lazy script projects/cine --provider elevenlabs --voice VOICE_ID --apply</code><
     <p>Each beat uses <code>sceneId</code> and <code>offsetMs</code>. Lazy Frames measures the synthesized audio and rejects narration that would overrun its scene or the final timeline.</p>
 
     <h2 id="plugins">plugin</h2>
-    <p>Plugins are reviewed, capability-scoped adapters. Install records the exact version and manifest fingerprint in <code>lazy-plugins.json</code>, plus a separate user-local approval for that project. A committed lockfile cannot grant itself permission. Arbitrary package URLs and install scripts are not accepted.</p>
+    <p>The marketplace is generated from independent <code>plugins/&lt;id&gt;/manifest.json</code> folders. ElevenLabs is included by default; all other entries are installable. Install records the exact version and fingerprint in <code>lazy-plugins.json</code>, plus separate user-local approval. A committed lockfile cannot grant itself permission.</p>
     <pre><code>lazy plugin search [tts|script|storytelling]
+lazy plugin info &lt;id&gt;
 lazy plugin install elevenlabs -p projects/cine
 lazy plugin list -p projects/cine
 lazy plugin remove elevenlabs -p projects/cine</code></pre>
+    <p>Scaffold entries can be installed and evaluated, but cannot execute until a reviewed adapter ships. Arbitrary package URLs, lifecycle scripts, and undeclared permissions are rejected.</p>
     <p><strong>ElevenLabs setup:</strong></p>
     <pre><code>export ELEVENLABS_API_KEY="your-key"
 lazy gen tts -p projects/cine --provider elevenlabs --voice VOICE_ID \

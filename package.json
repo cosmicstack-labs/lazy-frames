@@ -1,6 +1,6 @@
 {
   "name": "lazy-frames",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Agentic video generation with byte-stable local rendering, scene-linked narration, and reviewed capability plugins.",
   "license": "MIT",
   "author": "CosmicStack Labs",
@@ -33,9 +33,10 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace @lazy/engine && npm run build --workspace @lazy/capture && npm run build --workspace @lazy/renderer && npm run build --workspace @lazy/cli",
+    "build": "npm run build --workspace @lazy/engine && npm run build --workspace @lazy/renderer && npm run build --workspace @lazy/capture && npm run build --workspace @lazy/cli && npm run plugins:build",
+    "plugins:build": "node scripts/build-plugin-marketplace.mjs",
+    "verify:plugins": "npm run build && node scripts/test-plugins.mjs",
     "prepack": "npm run build",
-    "postinstall": "node scripts/link-workspaces.mjs",
     "verify:demo": "node scripts/verify-demo.mjs",
     "verify:cinematic": "node scripts/verify-cinematic.mjs"
   },
@@ -63,8 +64,11 @@
     "packages/gen-sidecar/gen_sidecar/tts.py",
     "packages/gen-sidecar/gen_sidecar/sfx.py",
     "packages/gen-sidecar/gen_sidecar/doctor.py",
+    "plugins/",
+    "docs/plugins/",
     "skill/",
-    "scripts/link-workspaces.mjs",
+    "scripts/build-plugin-marketplace.mjs",
+    "scripts/test-plugins.mjs",
     "PLAN.md",
     "README.md"
   ]

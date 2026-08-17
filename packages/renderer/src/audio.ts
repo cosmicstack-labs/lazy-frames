@@ -3,7 +3,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { existsSync, lstatSync, mkdirSync, realpathSync, renameSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { narrationStartMs, type Audio, type NarrationSegment, type Scene, type SfxEntry } from '@lazy/engine';
+import { narrationStartMs, type Audio, type NarrationSegment, type Scene, type SfxEntry } from '../../engine/dist/index.js';
 
 function sidecarDir(): string {
   if (process.env['LAZY_SIDECAR_DIR']) return process.env['LAZY_SIDECAR_DIR']!;

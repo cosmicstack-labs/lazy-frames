@@ -11,7 +11,7 @@ import {
   readPluginLock,
   type PluginApprovals,
   type PluginLock,
-} from '@lazy/engine';
+} from '../../engine/dist/index.js';
 
 function writeLock(projectDir: string, lock: PluginLock): void {
   const project = path.resolve(projectDir);
@@ -43,11 +43,15 @@ function writeApprovals(approvals: PluginApprovals): void {
 export function searchPlugins(query: string, json: boolean): void {
   const needle = query.trim().toLowerCase();
   const matches = PLUGIN_REGISTRY.filter((plugin) =>
-    !needle || plugin.id.includes(needle) || plugin.name.toLowerCase().includes(needle) || plugin.capabilities.some((capability) => capability.includes(needle)),
+    !needle || plugin.id.includes(needle) || plugin.name.toLowerCase().includes(needle) || plugin.category.includes(needle) ||
+    plugin.tags.some((tag) => tag.includes(needle)) || plugin.capabilities.some((capability) => capability.includes(needle)),
   );
   if (json) console.log(JSON.stringify(matches, null, 2));
   else if (matches.length === 0) console.log(`no reviewed plugins match '${query}'`);
-  else for (const plugin of matches) console.log(`${plugin.id}@${plugin.version}  ${plugin.capabilities.join(', ')}  ${plugin.description}`);
+  else for (const plugin of matches) {
+    const availability = plugin.default ? 'default' : plugin.status;
+    console.log(`${plugin.id}@${plugin.version}  ${plugin.capabilities.join(', ')}  [${availability}]  ${plugin.description}`);
+  }
 }
 
 export function listPlugins(projectDir: string, json: boolean): void {
@@ -63,15 +67,29 @@ export function listPlugins(projectDir: string, json: boolean): void {
   if (json) console.log(JSON.stringify(installed, null, 2));
   else if (installed.length === 0) console.log('no plugins installed');
   else for (const plugin of installed) {
-    const status = !plugin.integrityValid ? 'INVALID LOCK ENTRY' : !plugin.approved ? 'APPROVAL REQUIRED' : plugin.manifest?.capabilities.join(', ');
+    const prefix = plugin.manifest?.default ? 'DEFAULT · ' : '';
+    const status = !plugin.integrityValid ? 'INVALID LOCK ENTRY' : !plugin.approved ? `${prefix}APPROVAL REQUIRED` : `${prefix}${plugin.manifest?.capabilities.join(', ')}`;
     console.log(`${plugin.id}@${plugin.version}  ${status}`);
+  }
+}
+
+export function showPlugin(id: string, json: boolean): void {
+  const plugin = pluginById(id);
+  if (!plugin) throw new Error(`plugin '${id}' is not in the reviewed registry; run lazy plugin search`);
+  if (json) console.log(JSON.stringify(plugin, null, 2));
+  else {
+    console.log(`${plugin.name} (${plugin.id}@${plugin.version})`);
+    console.log(`${plugin.status}${plugin.default ? ' · included by default' : ''} · ${plugin.capabilities.join(', ')}`);
+    console.log(plugin.description);
+    console.log(`permissions: network=${plugin.permissions.networkHosts.join(',') || 'none'} env=${plugin.permissions.environment.join(',') || 'none'} filesystem=${plugin.permissions.filesystem.join(',') || 'none'}`);
+    console.log(`details: ${plugin.homepage}`);
   }
 }
 
 export function installPlugin(projectDir: string, id: string): void {
   const manifest = pluginById(id);
   if (!manifest) throw new Error(`plugin '${id}' is not in the reviewed registry; run lazy plugin search`);
-  if (manifest.runtime.type !== 'builtin') throw new Error(`plugin '${id}' uses an unsupported runtime`);
+  if (!manifest.installable) throw new Error(`plugin '${id}' is not installable`);
   const lock = readPluginLock(projectDir);
   for (const installed of lock.plugins.filter((entry) => entry.id !== id)) {
     const registered = pluginById(installed.id);
@@ -90,12 +108,21 @@ export function installPlugin(projectDir: string, id: string): void {
     approvals: [...approvals.approvals.filter((item) => item.project !== project || item.id !== id), approval]
       .sort((a, b) => `${a.project}:${a.id}`.localeCompare(`${b.project}:${b.id}`)),
   });
-  console.log(`installed ${id}@${manifest.version}`);
+  console.log(manifest.default ? `approved default plugin ${id}@${manifest.version}` : `installed ${id}@${manifest.version}`);
+  if (manifest.status === 'scaffold') console.log('status: scaffold installed; runtime adapter is not available yet');
   console.log(`permissions: network=${manifest.permissions.networkHosts.join(',') || 'none'} env=${manifest.permissions.environment.join(',') || 'none'} filesystem=${manifest.permissions.filesystem.join(',') || 'none'}`);
 }
 
 export function removePlugin(projectDir: string, id: string): void {
+  const manifest = pluginById(id);
   const lock = readPluginLock(projectDir);
+  if (manifest?.default) {
+    const project = pluginProjectIdentity(projectDir);
+    const approvals = readPluginApprovals();
+    writeApprovals({ approvalVersion: 1, approvals: approvals.approvals.filter((item) => item.project !== project || item.id !== id) });
+    console.log(`revoked approval for default plugin ${id}; its bundled manifest remains installed`);
+    return;
+  }
   const plugins = lock.plugins.filter((plugin) => plugin.id !== id);
   if (plugins.length === lock.plugins.length) throw new Error(`plugin '${id}' is not installed`);
   writeLock(projectDir, { lockVersion: 1, plugins });

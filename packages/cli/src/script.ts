@@ -1,6 +1,6 @@
 import { lstatSync, readFileSync, realpathSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { assertPluginInstalled, loadSpec, type NarrationSegment, type Scene } from '@lazy/engine';
+import { assertPluginInstalled, loadSpec, type NarrationSegment, type Scene } from '../../engine/dist/index.js';
 
 function sentence(text: string): string {
   const clean = text.replace(/\s+/g, ' ').trim();
