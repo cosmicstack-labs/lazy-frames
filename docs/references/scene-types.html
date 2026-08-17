@@ -116,6 +116,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); }
 <p>  "type": "browser-frame",</p>
 <p>  "params": {</p>
 <p>    "src": "assets/sites/example.com/hero.png",</p>
+<p>    "position": { "x": "center", "y": "center" },</p>
 <p>    "url": "example.com",</p>
 <p>    "zoom": "slow-in",    // none | slow-in (subtle zoom on the screenshot)</p>
 <p>    "cursor": {</p>
@@ -130,7 +131,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); }
 <p>}</p>
 </code>`<code>
 
-</code>src<code> is a project-relative path to a PNG. </code>cursor.moves<code> = waypoints the cursor travels through (percent of frame). </code>xPct<code>/</code>yPct<code> are 0–100. </code>atMs<code> is scene-local time.
+</code>src<code> is a project-relative path to a PNG. </code>position<code> controls the cover-crop anchor and defaults to center on both axes; </code>x<code> accepts </code>left | center | right<code> and </code>y<code> accepts </code>top | center | bottom<code>. </code>cursor.moves<code> = waypoints the cursor travels through (percent of frame). </code>xPct<code>/</code>yPct<code> are 0–100. </code>atMs<code> is scene-local time.
 
 <h2>ui-callout</h2>
 
@@ -141,6 +142,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); }
 <p>  "type": "ui-callout",</p>
 <p>  "params": {</p>
 <p>    "src": "assets/sites/example.com/hero.png",</p>
+<p>    "position": { "x": "center", "y": "center" },</p>
 <p>    "hotspot": { "x": 33, "y": 52, "w": 34, "h": 16 },</p>
 <p>    "label": "Primary CTA",</p>
 <p>    "zoomStrength": 8,    // 0–10, how much the camera dollies toward the hotspot</p>
@@ -181,6 +183,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); }
 <p>  "type": "parallax",</p>
 <p>  "params": {</p>
 <p>    "src": "assets/sites/example.com/full.png",</p>
+<p>    "position": { "x": "center", "y": "center" },</p>
 <p>    "move": "dolly-in",    // dolly-in | dolly-out | pan-left | pan-right</p>
 <p>    "grade": "none",       // none | warm | cool | noir (per-scene CSS filter)</p>
 <p>    "overlay": "vignette", // none | scrim | vignette</p>
@@ -198,6 +201,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); }
 <p>  "type": "parallax",</p>
 <p>  "params": {</p>
 <p>    "src": "assets/gen/ridge-21.png",</p>
+<p>    "position": { "x": "center", "y": "center" },</p>
 <p>    "depth": "assets/gen/ridge-21.depth.png",</p>
 <p>    "depthStrength": 0.45,  // 0–1, parallax intensity</p>
 <p>    "move": "dolly-in",</p>
