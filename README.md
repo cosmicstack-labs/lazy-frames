@@ -89,9 +89,9 @@ npx lazy gen music -p projects/cine --mood calm --bpm 90 --seed 21 --name bgm
 npx lazy render projects/cine
 ```
 
-### ElevenLabs narration plugin
+### Plugin marketplace
 
-Lazy Frames keeps external services behind reviewed, capability-scoped plugins. Install ElevenLabs in a project, provide the key through the environment, then draft scene-linked narration:
+The [Lazy Frames Plugin Marketplace](https://lazy-frames.cosmicstack.ai/plugins/) lists reviewed, capability-scoped extensions and their exact permissions. ElevenLabs is the featured first-party plugin:
 
 ```bash
 npx lazy plugin install elevenlabs -p projects/cine
@@ -102,7 +102,7 @@ npx lazy render projects/cine
 
 Each narration beat is anchored with `sceneId` and `offsetMs`, so the spoken line starts on the intended screen. Generated audio is normalized to canonical WAV and cached; the API key is never written to project files. Plugin dependencies are fingerprint-locked in the project, while consent is stored separately as a user-local, project-scoped approval.
 
-Browse reviewed plugins at [lazy-frames.cosmicstack.ai/plugins](https://lazy-frames.cosmicstack.ai/plugins/), or run `npx lazy plugin search`.
+Browse the marketplace or run `npx lazy plugin search`. Future storytelling and media plugins use the same manifest, permissions, fingerprint, and approval model.
 
 ## CLI commands
 
