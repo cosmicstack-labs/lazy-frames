@@ -2,6 +2,8 @@
 
 Agentic video generation skill: an agent researches any input (a website URL, a text brief, footage) and dumps a typed spec; Lazy Frames turns that spec into a finished, pixel-perfect MP4 — fully local.
 
+Release versions remain on the `0.6.x` line until a deliberate minor release is approved. Routine releases increment only the patch component (for example, `0.6.2` to `0.6.3`).
+
 ## 1. Positioning
 
 | | HyperFrames | Lazy Frames |

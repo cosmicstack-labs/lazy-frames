@@ -8,13 +8,14 @@ import { runDoctor, runGenImage, runGenMusic, runGenTts } from './gen.js';
 import { renderProject } from '../../renderer/dist/index.js';
 import { installPlugin, listPlugins, removePlugin, searchPlugins, showPlugin } from './plugins.js';
 import { runScriptPlanner } from './script.js';
+import { createCliProgressReporter } from './progress.js';
 
 const program = new Command();
 
 program
   .name('lazy')
   .description('Lazy Frames — deterministic local video rendering from a typed spec')
-  .version('0.6.2');
+  .version('0.6.3');
 
 program
   .command('doctor')
@@ -122,6 +123,7 @@ program
     const project = opts['project'] as string;
     const json = (opts['json'] as boolean | undefined) ?? false;
     const name = (opts['name'] as string | undefined) ?? `gen-${Date.now().toString(36)}`;
+    const onProgress = createCliProgressReporter();
     try {
       if (capability === 'image') {
         const palette = ((opts['palette'] as string | undefined) ?? '#0B0F19,#22D3EE,#F8FAFC').split(',').map((s) => s.trim());
@@ -134,6 +136,7 @@ program
           palette,
           name,
           json,
+          onProgress,
         });
       } else if (capability === 'music') {
         runGenMusic({
@@ -144,6 +147,7 @@ program
           seed: (opts['seed'] as number | undefined) ?? 11,
           name,
           json,
+          onProgress,
         });
       } else if (capability === 'tts') {
         const text = opts['text'] as string | undefined;
@@ -161,6 +165,7 @@ program
           speakerBoost: (opts['speakerBoost'] as boolean | undefined) ?? true,
           name,
           json,
+          onProgress,
         });
       } else {
         throw new Error(`unknown capability '${capability}'; use image | music | tts`);
@@ -178,7 +183,7 @@ program
   .option('--json', 'machine-readable output')
   .option('--skip-gates', 'skip snapshot + seek-determinism gates (env/schema only)')
   .action(async (project: string, opts: { json?: boolean; skipGates?: boolean }) => {
-    process.exitCode = await runCheck(project, opts.json ?? false, { skipGates: opts.skipGates });
+    process.exitCode = await runCheck(project, opts.json ?? false, { skipGates: opts.skipGates, onProgress: createCliProgressReporter() });
   });
 
 program
@@ -189,7 +194,7 @@ program
   .option('--json', 'machine-readable output')
   .action(async (url: string, project: string | undefined, opts: { json?: boolean }) => {
     try {
-      await runCapture(url, project, opts.json ?? false);
+      await runCapture(url, project, opts.json ?? false, createCliProgressReporter());
     } catch (err) {
       console.error(`capture failed: ${(err as Error).message}`);
       process.exitCode = 1;
@@ -235,6 +240,7 @@ program
         crf: opts['crf'] as number | undefined,
         keepFrames: (opts['keepFrames'] as boolean | undefined) ?? false,
         fast: (opts['fast'] as boolean | undefined) ?? false,
+        onProgress: createCliProgressReporter(),
       });
       if (opts['json']) {
         console.log(JSON.stringify(summary, null, 2));
@@ -257,7 +263,7 @@ program
   .option('-p, --port <n>', 'port', parseInt)
   .action(async (project: string, opts: { port?: number }) => {
     try {
-      await runPreview(project, opts.port ?? 4173);
+      await runPreview(project, opts.port ?? 4173, createCliProgressReporter());
     } catch (err) {
       console.error(`preview failed: ${(err as Error).message}`);
       process.exitCode = 1;

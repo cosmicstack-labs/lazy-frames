@@ -72,7 +72,7 @@ export function compileBrowserFrame(p: BrowserFrameParams, ctx: SceneCtx): Scene
     `#${sid} .bw-dot-r{background:#FF5F57;}#${sid} .bw-dot-y{background:#FEBC2E;}#${sid} .bw-dot-g{background:#28C840;}`,
     `#${sid} .bw-url{flex:1;margin:0 12px;height:26px;border-radius:13px;background:${hexA(fg, 0.08)};color:${hexA(fg, 0.6)};font-family:'${bodyFont}';font-size:14px;line-height:26px;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0 12px;}`,
     `#${sid} .bw-shot-wrap{position:relative;width:100%;height:calc(100% - 44px);overflow:hidden;}`,
-    `#${sid} .bw-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform;transform-origin:center;}`,
+    `#${sid} .bw-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:${p.position.x} ${p.position.y};will-change:transform;transform-origin:center;}`,
     `#${sid} .bw-cur{position:absolute;left:0;top:0;width:34px;height:34px;will-change:transform,opacity;z-index:3;pointer-events:none;}`,
     `#${sid} .bw-ring{position:absolute;left:0;top:0;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;border:3px solid #F8FAFC;opacity:0;will-change:transform,opacity;z-index:2;pointer-events:none;}`,
   ].join('\n');

@@ -48,7 +48,7 @@ export function compileUiCallout(p: UiCalloutParams, ctx: SceneCtx): SceneBuild 
   const css = [
     `#${sid}{background:${p.bg ? bgCss(p.bg) : stageBg(tokens)};}`,
     `#${sid}-wrap{position:absolute;inset:0;overflow:hidden;}`,
-    `#${imgId}{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform;transform-origin:center;}`,
+    `#${imgId}{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:${p.position.x} ${p.position.y};will-change:transform;transform-origin:center;}`,
     `#${holeId}{position:absolute;left:${p.hotspot.x}%;top:${p.hotspot.y}%;width:${p.hotspot.w}%;height:${p.hotspot.h}%;border-radius:12px;border:2.5px solid ${accent};box-shadow:0 0 0 9999px rgba(5,8,15,0.6);will-change:transform,opacity;z-index:2;}`,
     `#${sid} .uc-label{position:absolute;${labelCss}display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:10px;background:rgba(8,12,20,0.88);border:1px solid ${hexA(accent, 0.35)};color:${fg};font-family:'${bodyFont}';font-size:30px;font-weight:600;white-space:nowrap;will-change:transform,opacity;z-index:3;}`,
     `#${sid} .uc-dot{width:10px;height:10px;border-radius:50%;background:${accent};flex:none;}`,

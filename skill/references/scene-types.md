@@ -65,6 +65,7 @@ A screenshot inside a macOS browser chrome mockup with cursor choreography.
   "type": "browser-frame",
   "params": {
     "src": "assets/sites/example.com/hero.png",
+    "position": { "x": "center", "y": "center" },
     "url": "example.com",
     "zoom": "slow-in",    // none | slow-in (subtle zoom on the screenshot)
     "cursor": {
@@ -79,7 +80,7 @@ A screenshot inside a macOS browser chrome mockup with cursor choreography.
 }
 ```
 
-`src` is a project-relative path to a PNG. `cursor.moves` = waypoints the cursor travels through (percent of frame). `xPct`/`yPct` are 0–100. `atMs` is scene-local time.
+`src` is a project-relative path to a PNG. `position` controls the cover-crop anchor and defaults to center on both axes; `x` accepts `left | center | right` and `y` accepts `top | center | bottom`. `cursor.moves` = waypoints the cursor travels through (percent of frame). `xPct`/`yPct` are 0–100. `atMs` is scene-local time.
 
 ## ui-callout
 
@@ -90,6 +91,7 @@ A screenshot with a dimmed mask, highlighted hotspot, and label.
   "type": "ui-callout",
   "params": {
     "src": "assets/sites/example.com/hero.png",
+    "position": { "x": "center", "y": "center" },
     "hotspot": { "x": 33, "y": 52, "w": 34, "h": 16 },
     "label": "Primary CTA",
     "zoomStrength": 8,    // 0–10, how much the camera dollies toward the hotspot
@@ -130,6 +132,7 @@ Blobs are blurred radial-gradient divs that drift via deterministic seeded motio
   "type": "parallax",
   "params": {
     "src": "assets/sites/example.com/full.png",
+    "position": { "x": "center", "y": "center" },
     "move": "dolly-in",    // dolly-in | dolly-out | pan-left | pan-right
     "grade": "none",       // none | warm | cool | noir (per-scene CSS filter)
     "overlay": "vignette", // none | scrim | vignette
@@ -147,6 +150,7 @@ Ken Burns-style scale + pan with easing. Good for screenshots.
   "type": "parallax",
   "params": {
     "src": "assets/gen/ridge-21.png",
+    "position": { "x": "center", "y": "center" },
     "depth": "assets/gen/ridge-21.depth.png",
     "depthStrength": 0.45,  // 0–1, parallax intensity
     "move": "dolly-in",

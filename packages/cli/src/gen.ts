@@ -2,7 +2,7 @@ import { constants as fsConstants, copyFileSync, existsSync, lstatSync, mkdirSyn
 import { randomUUID } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
-import { NarrationSegmentSchema, assertPluginInstalled, buildGeneratorHtml, type GeneratorStyle } from '../../engine/dist/index.js';
+import { NarrationSegmentSchema, assertPluginInstalled, buildGeneratorHtml, emitProgress, type GeneratorStyle, type ProgressReporter } from '../../engine/dist/index.js';
 import { buildMusic, buildNarration, projectAudioCacheDir, renderStill, sidecarDoctor } from '../../renderer/dist/index.js';
 
 function generatedAssetDir(projectDir: string, name: string): string {
@@ -37,7 +37,9 @@ export async function runGenImage(opts: {
   palette: string[];
   name: string;
   json: boolean;
+  onProgress?: ProgressReporter;
 }): Promise<void> {
+  emitProgress(opts.onProgress, { command: 'gen', phase: 'still', status: 'start', message: 'Rendering the generated image' });
   const dir = generatedAssetDir(opts.project, opts.name);
   const genOpts = { seed: opts.seed, style: opts.style, width: opts.width, height: opts.height, palette: opts.palette };
   const stillPath = path.join(dir, `${opts.name}.png`);
@@ -47,7 +49,10 @@ export async function runGenImage(opts: {
   const depthTemp = path.join(dir, `.${opts.name}.${token}.depth.png`);
   try {
     await renderStill({ html: buildGeneratorHtml(genOpts, 'still'), width: opts.width, height: opts.height, outPng: stillTemp });
+    emitProgress(opts.onProgress, { command: 'gen', phase: 'still', status: 'complete', message: 'Generated image rendered' });
+    emitProgress(opts.onProgress, { command: 'gen', phase: 'depth', status: 'start', message: 'Rendering the depth map' });
     await renderStill({ html: buildGeneratorHtml(genOpts, 'depth'), width: opts.width, height: opts.height, outPng: depthTemp });
+    emitProgress(opts.onProgress, { command: 'gen', phase: 'depth', status: 'complete', message: 'Depth map rendered' });
     commitGeneratedFile(stillTemp, stillPath);
     commitGeneratedFile(depthTemp, depthPath);
   } finally {
@@ -55,6 +60,7 @@ export async function runGenImage(opts: {
     rmSync(depthTemp, { force: true });
   }
   const result = { ok: true, still: path.relative(realpathSync(opts.project), stillPath), depth: path.relative(realpathSync(opts.project), depthPath) };
+  emitProgress(opts.onProgress, { command: 'gen', phase: 'complete', status: 'complete', message: 'Image assets written' });
   console.log(opts.json ? JSON.stringify(result) : `generated ${result.still} + ${result.depth}`);
 }
 
@@ -66,7 +72,9 @@ export function runGenMusic(opts: {
   seed: number;
   name: string;
   json: boolean;
+  onProgress?: ProgressReporter;
 }): void {
+  emitProgress(opts.onProgress, { command: 'gen', phase: 'music', status: 'start', message: 'Synthesizing the music track' });
   const cacheDir = projectAudioCacheDir(opts.project);
   const wav = buildMusic(cacheDir, { mood: opts.mood, bpm: opts.bpm, bars: opts.bars, seed: opts.seed, gainDb: 0 });
   const dir = generatedAssetDir(opts.project, opts.name);
@@ -79,6 +87,7 @@ export function runGenMusic(opts: {
     rmSync(temp, { force: true });
   }
   const result = { ok: true, file: path.relative(realpathSync(opts.project), out) };
+  emitProgress(opts.onProgress, { command: 'gen', phase: 'complete', status: 'complete', message: 'Music asset written' });
   console.log(opts.json ? JSON.stringify(result) : `generated ${result.file}`);
 }
 
@@ -95,7 +104,9 @@ export function runGenTts(opts: {
   speakerBoost: boolean;
   name: string;
   json: boolean;
+  onProgress?: ProgressReporter;
 }): void {
+  emitProgress(opts.onProgress, { command: 'gen', phase: 'tts', status: 'start', message: `Generating speech with ${opts.provider}` });
   if (opts.provider !== 'say') assertPluginInstalled(opts.project, opts.provider, 'tts');
   const cacheDir = projectAudioCacheDir(opts.project);
   const segment = NarrationSegmentSchema.parse({
@@ -128,6 +139,7 @@ export function runGenTts(opts: {
     rmSync(temp, { force: true });
   }
   const result = { ok: true, file: path.relative(realpathSync(opts.project), out), provider: opts.provider, durationSec: segs[0]!.durationSec };
+  emitProgress(opts.onProgress, { command: 'gen', phase: 'complete', status: 'complete', message: 'Speech asset written' });
   console.log(opts.json ? JSON.stringify(result) : `generated ${result.file}`);
 }
 

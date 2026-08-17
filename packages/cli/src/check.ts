@@ -1,4 +1,4 @@
-import { assertPluginInstalled, collectAssetRefs, compileSpec, loadSpec, SpecError, type CheckError } from '../../engine/dist/index.js';
+import { assertPluginInstalled, collectAssetRefs, compileSpec, emitProgress, loadSpec, SpecError, type CheckError, type ProgressReporter } from '../../engine/dist/index.js';
 import { checkFfmpeg, checkFfprobe, findChrome } from '../../renderer/dist/index.js';
 import path from 'node:path';
 import { runSeekDeterminismGate, runSnapshotGate } from './gates.js';
@@ -10,11 +10,12 @@ export interface CheckOutput {
   gates: { snapshots: 'skipped' | 'passed' | 'failed'; seekDeterminism: 'skipped' | 'passed' | 'failed' };
 }
 
-export async function runCheck(projectDir: string, json: boolean, opts: { skipGates?: boolean } = {}): Promise<number> {
+export async function runCheck(projectDir: string, json: boolean, opts: { skipGates?: boolean; onProgress?: ProgressReporter } = {}): Promise<number> {
   const errors: CheckError[] = [];
   const warnings: string[] = [];
   const gates: CheckOutput['gates'] = { snapshots: 'skipped', seekDeterminism: 'skipped' };
 
+  emitProgress(opts.onProgress, { command: 'check', phase: 'environment', status: 'start', message: 'Checking Chrome and FFmpeg' });
   try {
     findChrome();
   } catch (err) {
@@ -22,8 +23,10 @@ export async function runCheck(projectDir: string, json: boolean, opts: { skipGa
   }
   if (!checkFfmpeg()) errors.push({ code: 'ffmpeg_not_found', message: 'ffmpeg is not on PATH; install it (brew install ffmpeg)' });
   if (!checkFfprobe()) errors.push({ code: 'ffprobe_not_found', message: 'ffprobe is not on PATH; install it (brew install ffmpeg)' });
+  emitProgress(opts.onProgress, { command: 'check', phase: 'environment', status: 'complete', message: 'Environment checked' });
 
   let specOk = false;
+  emitProgress(opts.onProgress, { command: 'check', phase: 'spec', status: 'start', message: 'Validating schema, assets, and plugin permissions' });
   try {
     const spec = loadSpec(path.join(projectDir, 'spec.json'));
     specOk = true;
@@ -50,8 +53,10 @@ export async function runCheck(projectDir: string, json: boolean, opts: { skipGa
     if (err instanceof SpecError) errors.push(...err.errors);
     else errors.push({ code: 'check_failed', message: (err as Error).message });
   }
+  emitProgress(opts.onProgress, { command: 'check', phase: 'spec', status: 'complete', message: 'Project spec checked' });
 
   if (opts.skipGates !== true && specOk && errors.length === 0) {
+    emitProgress(opts.onProgress, { command: 'check', phase: 'snapshots', status: 'start', message: 'Comparing visual snapshots' });
     try {
       const snap = await runSnapshotGate(projectDir, 'compare');
       gates.snapshots = snap.ok ? 'passed' : 'failed';
@@ -65,7 +70,9 @@ export async function runCheck(projectDir: string, json: boolean, opts: { skipGa
       errors.push({ code: 'snapshot_gate_error', message: (err as Error).message });
       gates.snapshots = 'failed';
     }
+    emitProgress(opts.onProgress, { command: 'check', phase: 'snapshots', status: 'complete', message: 'Snapshot gate finished' });
 
+    emitProgress(opts.onProgress, { command: 'check', phase: 'seek', status: 'start', message: 'Testing deterministic seeks' });
     try {
       const seek = await runSeekDeterminismGate(projectDir);
       gates.seekDeterminism = seek.ok ? 'passed' : 'failed';
@@ -78,9 +85,11 @@ export async function runCheck(projectDir: string, json: boolean, opts: { skipGa
       errors.push({ code: 'seek_gate_error', message: (err as Error).message });
       gates.seekDeterminism = 'failed';
     }
+    emitProgress(opts.onProgress, { command: 'check', phase: 'seek', status: 'complete', message: 'Seek-determinism gate finished' });
   }
 
   const ok = errors.length === 0;
+  emitProgress(opts.onProgress, { command: 'check', phase: 'complete', status: 'complete', message: ok ? 'All checks passed' : `Checks found ${errors.length} error(s)` });
   const output: CheckOutput = { ok, errors, warnings, gates };
   if (json) {
     console.log(JSON.stringify(output, null, 2));

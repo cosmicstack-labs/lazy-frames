@@ -25,7 +25,7 @@ export function compileParallax(p: ParallaxParams, ctx: SceneCtx): SceneBuild {
   const H = ctx.height;
 
   const program = `(function(){
-  var P = ${JSON.stringify({ move: p.move, strength: p.depthStrength, dur: ctx.durationMs })};
+  var P = ${JSON.stringify({ move: p.move, strength: p.depthStrength, dur: ctx.durationMs, position: p.position })};
   var SID = ${JSON.stringify(sid)};
   var W = ${W}, H = ${H};
   window.__lazyRegister('prog-' + SID, {
@@ -35,14 +35,22 @@ export function compileParallax(p: ParallaxParams, ctx: SceneCtx): SceneBuild {
       var decodes = [imgEl, depEl].map(function (el) {
         return el.decode ? el.decode().catch(function () {}) : Promise.resolve();
       });
-      return Promise.all(decodes).then(function () {
-        var off = document.createElement('canvas');
-        off.width = W; off.height = H;
-        var octx = off.getContext('2d');
-        octx.drawImage(imgEl, 0, 0, W, H);
-        var img = octx.getImageData(0, 0, W, H);
-        octx.clearRect(0, 0, W, H);
-        octx.drawImage(depEl, 0, 0, W, H);
+       return Promise.all(decodes).then(function () {
+         function drawCover(c, image) {
+           var iw = image.naturalWidth, ih = image.naturalHeight;
+           var scale = Math.max(W / iw, H / ih);
+           var sw = W / scale, sh = H / scale;
+           var sx = P.position.x === 'left' ? 0 : P.position.x === 'right' ? iw - sw : (iw - sw) / 2;
+           var sy = P.position.y === 'top' ? 0 : P.position.y === 'bottom' ? ih - sh : (ih - sh) / 2;
+           c.drawImage(image, sx, sy, sw, sh, 0, 0, W, H);
+         }
+         var off = document.createElement('canvas');
+         off.width = W; off.height = H;
+         var octx = off.getContext('2d');
+         drawCover(octx, imgEl);
+         var img = octx.getImageData(0, 0, W, H);
+         octx.clearRect(0, 0, W, H);
+         drawCover(octx, depEl);
         var dep = octx.getImageData(0, 0, W, H);
         var cv = document.getElementById(${JSON.stringify(cvId)});
         var dctx = cv.getContext('2d');
@@ -148,7 +156,7 @@ function compileFlat(p: ParallaxParams, ctx: SceneCtx, sid: string, cssBg: strin
   const css = [
     cssBg,
     `#${sid}-wrap{position:absolute;inset:0;overflow:hidden;}`,
-    `#${imgId}{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:${GRADES[p.grade]};will-change:transform;transform-origin:center;}`,
+    `#${imgId}{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:${p.position.x} ${p.position.y};filter:${GRADES[p.grade]};will-change:transform;transform-origin:center;}`,
     overlayCss,
   ]
     .filter((s) => s.length > 0)

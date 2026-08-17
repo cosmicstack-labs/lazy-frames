@@ -69,8 +69,17 @@ const SceneBase = {
 
 const assetSrc = z.string().min(1).max(300);
 
+export const MediaPositionSchema = z
+  .object({
+    x: z.enum(['left', 'center', 'right']).default('center'),
+    y: z.enum(['top', 'center', 'bottom']).default('center'),
+  })
+  .default({ x: 'center', y: 'center' });
+export type MediaPosition = z.infer<typeof MediaPositionSchema>;
+
 export const BrowserFrameParamsSchema = z.object({
   src: assetSrc,
+  position: MediaPositionSchema,
   url: z.string().min(1).max(200),
   zoom: z.enum(['none', 'slow-in']).default('slow-in'),
   cursor: z
@@ -87,6 +96,7 @@ export type BrowserFrameParams = z.infer<typeof BrowserFrameParamsSchema>;
 
 export const UiCalloutParamsSchema = z.object({
   src: assetSrc,
+  position: MediaPositionSchema,
   hotspot: z.object({
     x: z.number().min(0).max(100),
     y: z.number().min(0).max(100),
@@ -120,6 +130,7 @@ export type AtmosphereParams = z.infer<typeof AtmosphereParamsSchema>;
 
 export const ParallaxParamsSchema = z.object({
   src: assetSrc,
+  position: MediaPositionSchema,
   depth: assetSrc.optional(),
   depthStrength: z.number().min(0).max(1).default(0.35),
   move: z.enum(['dolly-in', 'dolly-out', 'pan-left', 'pan-right']).default('dolly-in'),

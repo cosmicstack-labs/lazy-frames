@@ -1,6 +1,7 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { emitProgress, type ProgressReporter } from '../../engine/dist/index.js';
 import { prepareComposition } from '../../renderer/dist/index.js';
 
 const PREVIEW_PAGE = `<!doctype html>
@@ -11,29 +12,35 @@ const PREVIEW_PAGE = `<!doctype html>
 <style>
   html,body{margin:0;height:100%;background:#0a0a0f;color:#e6e6ef;font-family:system-ui,-apple-system,sans-serif;overflow:hidden}
   #frame{position:absolute;top:0;left:0;right:0;bottom:64px;display:flex;align-items:center;justify-content:center;background:#000}
-  iframe{border:0;background:#000}
+  #viewport{position:relative;overflow:hidden;flex:none}
+  iframe{position:absolute;left:0;top:0;border:0;background:#000;transform-origin:top left}
   #bar{position:absolute;bottom:0;left:0;right:0;height:64px;display:flex;align-items:center;gap:14px;padding:0 18px;background:#14141c;border-top:1px solid #26263a}
   button{background:#22d3ee;color:#04222a;border:0;border-radius:6px;padding:8px 16px;font-weight:600;font-size:14px;cursor:pointer}
   input[type=range]{flex:1;accent-color:#22d3ee}
   #tc{font-variant-numeric:tabular-nums;font-size:13px;color:#9aa0b5;min-width:120px;text-align:right}
+  #status{position:absolute;padding:8px 12px;border-radius:6px;background:#14141c;color:#9aa0b5;font-size:13px;box-shadow:0 8px 30px #0008}
 </style>
 </head>
 <body>
-<div id="frame"><iframe id="comp" src="/composition"></iframe></div>
+<div id="frame"><div id="status">Loading composition...</div><div id="viewport"><iframe id="comp" src="/composition"></iframe></div></div>
 <div id="bar">
   <button id="play">Play</button>
   <input id="scrub" type="range" min="0" max="1000" step="1" value="0">
   <span id="tc">0.00 / 0.00 s</span>
 </div>
 <script>
-  var wire = null, frameDur = 0, frameCount = 0, frameIdx = 0, playing = false, acc = 0, lastTs = 0;
+  var wire = null, compositionLoaded = false, frameDur = 0, frameCount = 0, frameIdx = 0, playing = false, acc = 0, lastTs = 0;
   var comp = document.getElementById('comp');
+  var viewport = document.getElementById('viewport');
   function fit() {
     if (!wire) return;
     var fw = window.innerWidth, fh = window.innerHeight - 64;
     var scale = Math.min(fw / wire.width, fh / wire.height, 1);
-    comp.style.width = Math.round(wire.width * scale) + 'px';
-    comp.style.height = Math.round(wire.height * scale) + 'px';
+    viewport.style.width = Math.round(wire.width * scale) + 'px';
+    viewport.style.height = Math.round(wire.height * scale) + 'px';
+    comp.style.width = wire.width + 'px';
+    comp.style.height = wire.height + 'px';
+    comp.style.transform = 'scale(' + scale + ')';
   }
   function seekFrame(i) {
     frameIdx = Math.max(0, Math.min(frameCount - 1, i));
@@ -41,10 +48,15 @@ const PREVIEW_PAGE = `<!doctype html>
     document.getElementById('scrub').value = Math.round((frameIdx / Math.max(1, frameCount - 1)) * 1000);
     document.getElementById('tc').textContent = (frameIdx * frameDur / 1000).toFixed(2) + ' / ' + (frameCount * frameDur / 1000).toFixed(2) + ' s';
   }
+  comp.addEventListener('load', function () {
+    compositionLoaded = true;
+    if (wire) seekFrame(0);
+    document.getElementById('status').style.display = 'none';
+  });
   fetch('/meta').then(function (r) { return r.json(); }).then(function (w) {
     wire = w; frameDur = 1000 / w.fps; frameCount = w.frameCount;
     fit(); window.addEventListener('resize', fit);
-    comp.addEventListener('load', function () { seekFrame(0); });
+    if (compositionLoaded) seekFrame(0);
   });
   document.getElementById('scrub').addEventListener('input', function (e) {
     playing = false; document.getElementById('play').textContent = 'Play';
@@ -67,8 +79,10 @@ const PREVIEW_PAGE = `<!doctype html>
 </html>
 `;
 
-export async function runPreview(projectDir: string, port: number): Promise<void> {
+export async function runPreview(projectDir: string, port: number, onProgress?: ProgressReporter): Promise<void> {
+  emitProgress(onProgress, { command: 'preview', phase: 'prepare', status: 'start', message: 'Preparing the centered preview composition' });
   const { compositionPath, wire } = prepareComposition(projectDir);
+  emitProgress(onProgress, { command: 'preview', phase: 'prepare', status: 'complete', message: 'Preview composition prepared' });
   const lazyDir = path.dirname(compositionPath);
 
   const server = createServer(async (req, res) => {
@@ -101,6 +115,8 @@ export async function runPreview(projectDir: string, port: number): Promise<void
     }
   });
 
+  emitProgress(onProgress, { command: 'preview', phase: 'server', status: 'start', message: `Starting the preview server on port ${port}` });
   await new Promise<void>((resolve) => server.listen(port, resolve));
+  emitProgress(onProgress, { command: 'preview', phase: 'server', status: 'complete', message: 'Preview server is ready' });
   console.log(`preview: http://localhost:${port}  (${wire.width}x${wire.height}, ${(wire.durationMs / 1000).toFixed(2)}s, ${wire.frameCount} frames)`);
 }

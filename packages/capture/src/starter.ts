@@ -58,6 +58,7 @@ export function buildStarterSpec(ledger: CaptureLedger, host: string): Spec {
         transitionOut: { type: 'dissolve', ms: 400 },
         params: {
           src: heroAsset,
+          position: { x: 'center', y: 'center' },
           url: host,
           zoom: 'slow-in',
           cursor: {
@@ -79,6 +80,7 @@ export function buildStarterSpec(ledger: CaptureLedger, host: string): Spec {
         transitionOut: { type: 'dissolve', ms: 400 },
         params: {
           src: fullAsset,
+          position: { x: 'center', y: 'center' },
           move: 'dolly-in',
           grade: 'none',
           overlay: 'vignette',
@@ -94,6 +96,7 @@ export function buildStarterSpec(ledger: CaptureLedger, host: string): Spec {
         transitionOut: { type: 'dissolve', ms: 400 },
         params: {
           src: heroAsset,
+          position: { x: 'center', y: 'center' },
           hotspot: { x: 33, y: 52, w: 34, h: 16 },
           label: cta.slice(0, 40),
           zoomStrength: 8,

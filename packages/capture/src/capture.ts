@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import puppeteer from 'puppeteer-core';
+import { emitProgress, type ProgressReporter } from '../../engine/dist/index.js';
 import { findChrome } from '../../renderer/dist/index.js';
 import { paletteRoles, type CaptureLedger } from './model.js';
 
@@ -84,11 +85,15 @@ export interface CaptureResult {
   roles: { bg: string; fg: string; accent: string };
 }
 
-export async function captureSite(rawUrl: string, projectDir: string): Promise<CaptureResult> {
+export async function captureSite(rawUrl: string, projectDir: string, opts: { onProgress?: ProgressReporter } = {}): Promise<CaptureResult> {
+  const report = (phase: string, status: 'start' | 'complete', message: string) =>
+    emitProgress(opts.onProgress, { command: 'capture', phase, status, message });
+  report('setup', 'start', 'Preparing the capture workspace');
   const url = new URL(rawUrl.includes('://') ? rawUrl : `https://${rawUrl}`);
   const host = url.hostname.replace(/^www\./, '');
   const outDir = path.join(projectDir, 'assets', 'sites', host);
   mkdirSync(outDir, { recursive: true });
+  report('browser', 'start', 'Launching the browser');
 
   const browser = await puppeteer.launch({
     executablePath: findChrome(),
@@ -98,14 +103,20 @@ export async function captureSite(rawUrl: string, projectDir: string): Promise<C
   });
   try {
     const page = await browser.newPage();
+    report('browser', 'complete', 'Browser launched');
+    report('navigate', 'start', `Loading ${url.hostname}`);
     await page.goto(url.toString(), { waitUntil: 'networkidle2', timeout });
     await page.waitForFunction('document.fonts ? document.fonts.status === "loaded" : true', { timeout: 8000 }).catch(() => undefined);
+    report('navigate', 'complete', 'Page and fonts are ready');
 
     const pageHeight = await page.evaluate(() => Math.round(document.documentElement.scrollHeight));
+    report('hero', 'start', 'Capturing the centered viewport');
     const heroShot = await page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: 1280, height: Math.min(800, pageHeight) } });
     const heroPath = path.join(outDir, 'hero.png');
     writeFileSync(heroPath, heroShot);
+    report('hero', 'complete', 'Viewport screenshot captured');
 
+    report('full', 'start', 'Capturing the full page');
     const fullShot = await page.screenshot({
       type: 'png',
       fullPage: pageHeight <= 8000,
@@ -113,7 +124,9 @@ export async function captureSite(rawUrl: string, projectDir: string): Promise<C
     });
     const fullPath = path.join(outDir, 'full.png');
     writeFileSync(fullPath, fullShot);
+    report('full', 'complete', 'Full-page screenshot captured');
 
+    report('extract', 'start', 'Extracting palette, copy, fonts, and metadata');
     const palette = await page.evaluate(PALETTE_SCRIPT);
     const copy = await page.evaluate(COPY_SCRIPT);
     const fonts = await page.evaluate(FONTS_SCRIPT);
@@ -121,6 +134,7 @@ export async function captureSite(rawUrl: string, projectDir: string): Promise<C
       title: document.title.trim().slice(0, 120),
       description: (document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '').trim().slice(0, 220),
     }));
+    report('extract', 'complete', 'Site design tokens extracted');
 
     const assets: CaptureLedger['assets'] = [
       { id: `site:${host}:hero`, file: `assets/sites/${host}/hero.png`, kind: 'screenshot', meta: { viewport: '1280x800', dpr: 2 } },
@@ -128,6 +142,7 @@ export async function captureSite(rawUrl: string, projectDir: string): Promise<C
     ];
 
     const iconCandidates = await page.evaluate(ICON_SCRIPT);
+    report('assets', 'start', 'Resolving the site logo');
     for (const cand of iconCandidates) {
       try {
         const res = await fetch(cand.url, { signal: AbortSignal.timeout(10000) });
@@ -143,6 +158,7 @@ export async function captureSite(rawUrl: string, projectDir: string): Promise<C
         continue;
       }
     }
+    report('assets', 'complete', 'Site assets resolved');
 
     const ledger: CaptureLedger = {
       site: url.toString(),
@@ -155,6 +171,7 @@ export async function captureSite(rawUrl: string, projectDir: string): Promise<C
       assets,
     };
     writeFileSync(path.join(outDir, 'ledger.json'), JSON.stringify(ledger, null, 2));
+    report('complete', 'complete', 'Capture ledger and assets written');
     return { ledger, heroPath, fullPath, roles: paletteRoles(palette) };
   } finally {
     await browser.close();
