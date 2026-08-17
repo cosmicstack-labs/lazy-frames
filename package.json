@@ -36,7 +36,7 @@
     "build": "npm run build --workspace @lazy/engine && npm run build --workspace @lazy/renderer && npm run build --workspace @lazy/capture && npm run build --workspace @lazy/cli && npm run plugins:build",
     "plugins:build": "node scripts/build-plugin-marketplace.mjs",
     "verify:plugins": "npm run build && node scripts/test-plugins.mjs",
-    "verify:regressions": "npm run build && node scripts/test-alignment-progress.mjs && node scripts/test-providers.mjs",
+    "verify:regressions": "npm run build && node scripts/test-alignment-progress.mjs && node scripts/test-providers.mjs && node scripts/test-preview-audio.mjs",
     "prepack": "npm run build",
     "verify:demo": "node scripts/verify-demo.mjs",
     "verify:cinematic": "node scripts/verify-cinematic.mjs"

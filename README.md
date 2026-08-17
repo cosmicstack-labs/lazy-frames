@@ -122,7 +122,7 @@ Contributors add one self-contained `plugins/<id>/manifest.json` folder and run 
 | `lazy check <project>` | Validate spec + run snapshot & determinism gates |
 | `lazy snapshot <project> --update` | Establish/refresh the regression baseline |
 | `lazy render <project>` | Render to MP4 (byte-stable, with audio) |
-| `lazy preview <project>` | Scrubbable timeline preview at localhost:4173 |
+| `lazy preview <project>` | Scrubbable timeline preview at localhost:4173, with mixed audio when the spec has it |
 
 ## Scene types
 

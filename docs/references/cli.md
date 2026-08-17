@@ -120,4 +120,4 @@ Options:
 lazy preview <project> [-p <port>]
 ```
 
-Serves a scrubbable timeline preview at `http://localhost:<port>` (default 4173). The composition loads in an iframe with a play/pause + scrub bar. Frame-accurate seeking via postMessage.
+Serves a scrubbable timeline preview at `http://localhost:<port>` (default 4173). The composition loads in an iframe with a play/pause + scrub bar. Frame-accurate seeking via postMessage. If the spec includes music, narration, or SFX, a mixed WAV is generated and played in sync.

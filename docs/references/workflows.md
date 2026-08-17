@@ -36,7 +36,7 @@ Three workflows. Each ends with a rendered, verified MP4.
    ```bash
    node packages/cli/dist/index.js preview projects/acme
    ```
-   Hand the URL to the user. Wait for approval.
+   Hand the URL to the user. Wait for approval. Preview plays mixed music/narration/SFX when the spec has audio.
 
 6. **Render after approval:**
    ```bash
