@@ -14,7 +14,7 @@ const program = new Command();
 program
   .name('lazy')
   .description('Lazy Frames — deterministic local video rendering from a typed spec')
-  .version('0.6.1');
+  .version('0.6.2');
 
 program
   .command('doctor')

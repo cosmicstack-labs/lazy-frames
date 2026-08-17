@@ -32,6 +32,12 @@ function shell(title, description, body, depth = 0) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <meta name="theme-color" content="#0D0E12">
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://analytics.cosmicstack.org/js/pa-StP5PGpHIqwFnqPYrGJAg.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
 <link rel="stylesheet" href="${prefix}styles.css">
 <link rel="stylesheet" href="${marketplace}marketplace.css">
 <link rel="icon" type="image/svg+xml" href="${prefix}favicon.svg">
@@ -48,14 +54,14 @@ ${body}
 const cards = PLUGIN_REGISTRY.map((plugin) => {
   const search = [plugin.name, plugin.provider.name, plugin.category, ...plugin.tags, ...plugin.capabilities].join(' ').toLowerCase();
   return `<article class="market-card" data-plugin-card data-category="${plugin.category}" data-search="${esc(search)}">
-  <a class="card-link" href="${plugin.id}/">
+  <a class="card-link" href="${plugin.id}/" data-plugin-open="${plugin.id}">
     <div class="card-top"><div class="plugin-mark">${esc(plugin.name.slice(0, 2).toUpperCase())}</div><div class="badges">${badge(plugin)}</div></div>
     <div class="card-provider">${esc(plugin.provider.name)} · ${esc(plugin.category)}</div>
     <h2>${esc(plugin.name)}</h2>
     <p>${esc(plugin.description)}</p>
     <div class="tag-row">${plugin.tags.slice(0, 4).map((tag) => `<span>${esc(tag)}</span>`).join('')}</div>
   </a>
-  <div class="card-install"><code id="install-${plugin.id}">${esc(installText(plugin))}</code>${plugin.default ? '' : `<button class="copy" data-copy="install-${plugin.id}">Copy</button>`}</div>
+  <div class="card-install"><code id="install-${plugin.id}">${esc(installText(plugin))}</code>${plugin.default ? '' : `<button class="copy" data-copy="install-${plugin.id}" data-plugin="${plugin.id}">Copy</button>`}</div>
 </article>`;
 }).join('\n');
 
@@ -92,7 +98,7 @@ for (const plugin of PLUGIN_REGISTRY) {
   const detailBody = `<main class="detail-page">
     <a class="back" href="../">← Plugins</a>
     <header class="detail-hero"><div class="plugin-mark large">${esc(plugin.name.slice(0, 2).toUpperCase())}</div><div><div class="badges">${badge(plugin)}</div><div class="card-provider">${esc(plugin.provider.name)} · ${esc(plugin.category)}</div><h1>${esc(plugin.name)}</h1><p>${esc(plugin.description)}</p></div></header>
-    <section class="detail-grid"><div class="detail-main"><h2>${plugin.status === 'available' ? 'Ready for scene-linked work' : 'Installable integration scaffold'}</h2><p>${plugin.status === 'available' ? 'This adapter is implemented and available after its declared credentials are approved for the project.' : 'This manifest can be installed, locked, and evaluated today. Execution remains blocked until its reviewed adapter ships, so a scaffold never silently runs incomplete code.'}</p><h3>Capabilities</h3><div class="tag-row">${plugin.capabilities.map((item) => `<span>${esc(item)}</span>`).join('')}</div><h3>Install</h3><div class="detail-command"><code id="detail-install">${plugin.default ? 'Included by default · run to approve: ' : ''}${command}</code><button class="copy" data-copy="detail-install">Copy</button></div></div>
+    <section class="detail-grid"><div class="detail-main"><h2>${plugin.status === 'available' ? 'Ready for scene-linked work' : 'Installable integration scaffold'}</h2><p>${plugin.status === 'available' ? 'This adapter is implemented and available after its declared credentials are approved for the project.' : 'This manifest can be installed, locked, and evaluated today. Execution remains blocked until its reviewed adapter ships, so a scaffold never silently runs incomplete code.'}</p><h3>Capabilities</h3><div class="tag-row">${plugin.capabilities.map((item) => `<span>${esc(item)}</span>`).join('')}</div><h3>Install</h3><div class="detail-command"><code id="detail-install">${plugin.default ? 'Included by default · run to approve: ' : ''}${command}</code><button class="copy" data-copy="detail-install" data-plugin="${plugin.id}">Copy</button></div></div>
     <aside class="permission-panel"><h2>Declared scope</h2><dl><dt>Network</dt><dd>${esc(plugin.permissions.networkHosts.join(', ') || 'None')}</dd><dt>Environment</dt><dd>${esc(plugin.permissions.environment.join(', ') || 'None')}</dd><dt>Filesystem</dt><dd>${esc(plugin.permissions.filesystem.join(', ') || 'None')}</dd><dt>Fingerprint</dt><dd class="fingerprint">${pluginFingerprint(plugin)}</dd></dl></aside></section>
     <section class="metadata"><div><span>Version</span><strong>${plugin.version}</strong></div><div><span>Runtime</span><strong>${plugin.runtime.type}</strong></div><div><span>Publisher</span><strong>${esc(plugin.publisher.name)}</strong></div><div><span>Provider</span><strong><a href="${esc(plugin.provider.url)}">${esc(plugin.provider.name)}</a></strong></div></section>
   </main>`;

@@ -7,6 +7,12 @@
 <title>Lazy Frames Plugin Marketplace</title>
 <meta name="description" content="Browse reviewed, schema-validated Lazy Frames plugins for voice, storytelling, visuals, audio, captions, and delivery.">
 <meta name="theme-color" content="#0D0E12">
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://analytics.cosmicstack.org/js/pa-StP5PGpHIqwFnqPYrGJAg.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="marketplace.css">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
@@ -18,17 +24,17 @@
   <section class="market-tools"><label class="search"><span>Search</span><input id="plugin-search" type="search" placeholder="voices, storyboards, stock media…"></label><div class="filters"><button class="filter active" data-filter="all">all</button><button class="filter" data-filter="storytelling">storytelling</button><button class="filter" data-filter="voice">voice</button><button class="filter" data-filter="visuals">visuals</button><button class="filter" data-filter="audio">audio</button><button class="filter" data-filter="workflow">workflow</button></div></section>
   <div class="market-count"><span id="plugin-count">16</span> plugins</div>
   <section class="market-grid" id="plugin-grid"><article class="market-card" data-plugin-card data-category="storytelling" data-search="anthropic storyteller anthropic storytelling script storytelling narrative agent script storytelling">
-  <a class="card-link" href="anthropic-storyteller/">
+  <a class="card-link" href="anthropic-storyteller/" data-plugin-open="anthropic-storyteller">
     <div class="card-top"><div class="plugin-mark">AN</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">Anthropic · storytelling</div>
     <h2>Anthropic Storyteller</h2>
     <p>A storytelling scaffold for turning briefs and research into structured scene and narration beats.</p>
     <div class="tag-row"><span>script</span><span>storytelling</span><span>narrative</span><span>agent</span></div>
   </a>
-  <div class="card-install"><code id="install-anthropic-storyteller">npx lazy plugin install anthropic-storyteller</code><button class="copy" data-copy="install-anthropic-storyteller">Copy</button></div>
+  <div class="card-install"><code id="install-anthropic-storyteller">npx lazy plugin install anthropic-storyteller</code><button class="copy" data-copy="install-anthropic-storyteller" data-plugin="anthropic-storyteller">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="voice" data-search="elevenlabs tts elevenlabs voice voice tts narration multilingual tts">
-  <a class="card-link" href="elevenlabs/">
+  <a class="card-link" href="elevenlabs/" data-plugin-open="elevenlabs">
     <div class="card-top"><div class="plugin-mark">EL</div><div class="badges"><span class="badge badge-default">Default</span></div></div>
     <div class="card-provider">ElevenLabs · voice</div>
     <h2>ElevenLabs TTS</h2>
@@ -38,144 +44,144 @@
   <div class="card-install"><code id="install-elevenlabs">Included by default</code></div>
 </article>
 <article class="market-card" data-plugin-card data-category="voice" data-search="openai voices openai voice voice tts openai tts">
-  <a class="card-link" href="openai-tts/">
+  <a class="card-link" href="openai-tts/" data-plugin-open="openai-tts">
     <div class="card-top"><div class="plugin-mark">OP</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">OpenAI · voice</div>
     <h2>OpenAI Voices</h2>
     <p>A provider scaffold for scene-linked speech synthesis with OpenAI audio models.</p>
     <div class="tag-row"><span>voice</span><span>tts</span><span>openai</span></div>
   </a>
-  <div class="card-install"><code id="install-openai-tts">npx lazy plugin install openai-tts</code><button class="copy" data-copy="install-openai-tts">Copy</button></div>
+  <div class="card-install"><code id="install-openai-tts">npx lazy plugin install openai-tts</code><button class="copy" data-copy="install-openai-tts" data-plugin="openai-tts">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="visuals" data-search="pexels stock media pexels visuals stock-media image footage search stock-media image">
-  <a class="card-link" href="pexels-stock/">
+  <a class="card-link" href="pexels-stock/" data-plugin-open="pexels-stock">
     <div class="card-top"><div class="plugin-mark">PE</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">Pexels · visuals</div>
     <h2>Pexels Stock Media</h2>
     <p>A stock-media scaffold for searching and freezing licensed Pexels images and footage into a project.</p>
     <div class="tag-row"><span>stock-media</span><span>image</span><span>footage</span><span>search</span></div>
   </a>
-  <div class="card-install"><code id="install-pexels-stock">npx lazy plugin install pexels-stock</code><button class="copy" data-copy="install-pexels-stock">Copy</button></div>
+  <div class="card-install"><code id="install-pexels-stock">npx lazy plugin install pexels-stock</code><button class="copy" data-copy="install-pexels-stock" data-plugin="pexels-stock">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="visuals" data-search="stability visuals stability ai visuals image visuals generation backgrounds image">
-  <a class="card-link" href="stability-visuals/">
+  <a class="card-link" href="stability-visuals/" data-plugin-open="stability-visuals">
     <div class="card-top"><div class="plugin-mark">ST</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">Stability AI · visuals</div>
     <h2>Stability Visuals</h2>
     <p>A visual generation scaffold for producing project-frozen stills and backgrounds with Stability AI.</p>
     <div class="tag-row"><span>image</span><span>visuals</span><span>generation</span><span>backgrounds</span></div>
   </a>
-  <div class="card-install"><code id="install-stability-visuals">npx lazy plugin install stability-visuals</code><button class="copy" data-copy="install-stability-visuals">Copy</button></div>
+  <div class="card-install"><code id="install-stability-visuals">npx lazy plugin install stability-visuals</code><button class="copy" data-copy="install-stability-visuals" data-plugin="stability-visuals">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="audio" data-search="suno music suno audio music score generation audio music">
-  <a class="card-link" href="suno-music/">
+  <a class="card-link" href="suno-music/" data-plugin-open="suno-music">
     <div class="card-top"><div class="plugin-mark">SU</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">Suno · audio</div>
     <h2>Suno Music</h2>
     <p>A music-generation scaffold for creating project-frozen score options from a mood and beat brief.</p>
     <div class="tag-row"><span>music</span><span>score</span><span>generation</span><span>audio</span></div>
   </a>
-  <div class="card-install"><code id="install-suno-music">npx lazy plugin install suno-music</code><button class="copy" data-copy="install-suno-music">Copy</button></div>
+  <div class="card-install"><code id="install-suno-music">npx lazy plugin install suno-music</code><button class="copy" data-copy="install-suno-music" data-plugin="suno-music">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="workflow" data-search="assemblyai captions assemblyai workflow transcription captions timing audio transcription captions">
-  <a class="card-link" href="assemblyai-captions/">
+  <a class="card-link" href="assemblyai-captions/" data-plugin-open="assemblyai-captions">
     <div class="card-top"><div class="plugin-mark">AS</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">AssemblyAI · workflow</div>
     <h2>AssemblyAI Captions</h2>
     <p>A transcription scaffold for producing timed words, captions, and narration alignment metadata.</p>
     <div class="tag-row"><span>transcription</span><span>captions</span><span>timing</span><span>audio</span></div>
   </a>
-  <div class="card-install"><code id="install-assemblyai-captions">npx lazy plugin install assemblyai-captions</code><button class="copy" data-copy="install-assemblyai-captions">Copy</button></div>
+  <div class="card-install"><code id="install-assemblyai-captions">npx lazy plugin install assemblyai-captions</code><button class="copy" data-copy="install-assemblyai-captions" data-plugin="assemblyai-captions">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="voice" data-search="azure speech microsoft azure voice voice tts ssml enterprise tts">
-  <a class="card-link" href="azure-speech/">
+  <a class="card-link" href="azure-speech/" data-plugin-open="azure-speech">
     <div class="card-top"><div class="plugin-mark">AZ</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">Microsoft Azure · voice</div>
     <h2>Azure Speech</h2>
     <p>An Azure AI Speech scaffold for enterprise voices, SSML, and multilingual narration.</p>
     <div class="tag-row"><span>voice</span><span>tts</span><span>ssml</span><span>enterprise</span></div>
   </a>
-  <div class="card-install"><code id="install-azure-speech">npx lazy plugin install azure-speech</code><button class="copy" data-copy="install-azure-speech">Copy</button></div>
+  <div class="card-install"><code id="install-azure-speech">npx lazy plugin install azure-speech</code><button class="copy" data-copy="install-azure-speech" data-plugin="azure-speech">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="voice" data-search="cartesia voice cartesia voice voice tts low-latency tts">
-  <a class="card-link" href="cartesia-voice/">
+  <a class="card-link" href="cartesia-voice/" data-plugin-open="cartesia-voice">
     <div class="card-top"><div class="plugin-mark">CA</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">Cartesia · voice</div>
     <h2>Cartesia Voice</h2>
     <p>A low-latency voice provider scaffold for expressive narration and rapid previews.</p>
     <div class="tag-row"><span>voice</span><span>tts</span><span>low-latency</span></div>
   </a>
-  <div class="card-install"><code id="install-cartesia-voice">npx lazy plugin install cartesia-voice</code><button class="copy" data-copy="install-cartesia-voice">Copy</button></div>
+  <div class="card-install"><code id="install-cartesia-voice">npx lazy plugin install cartesia-voice</code><button class="copy" data-copy="install-cartesia-voice" data-plugin="cartesia-voice">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="workflow" data-search="cloudinary delivery cloudinary workflow export delivery cdn workflow export">
-  <a class="card-link" href="cloudinary-delivery/">
+  <a class="card-link" href="cloudinary-delivery/" data-plugin-open="cloudinary-delivery">
     <div class="card-top"><div class="plugin-mark">CL</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">Cloudinary · workflow</div>
     <h2>Cloudinary Delivery</h2>
     <p>A delivery scaffold for uploading approved renders and returning durable asset URLs and metadata.</p>
     <div class="tag-row"><span>export</span><span>delivery</span><span>cdn</span><span>workflow</span></div>
   </a>
-  <div class="card-install"><code id="install-cloudinary-delivery">npx lazy plugin install cloudinary-delivery</code><button class="copy" data-copy="install-cloudinary-delivery">Copy</button></div>
+  <div class="card-install"><code id="install-cloudinary-delivery">npx lazy plugin install cloudinary-delivery</code><button class="copy" data-copy="install-cloudinary-delivery" data-plugin="cloudinary-delivery">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="voice" data-search="deepgram aura deepgram voice voice tts conversational tts">
-  <a class="card-link" href="deepgram-aura/">
+  <a class="card-link" href="deepgram-aura/" data-plugin-open="deepgram-aura">
     <div class="card-top"><div class="plugin-mark">DE</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">Deepgram · voice</div>
     <h2>Deepgram Aura</h2>
     <p>A Deepgram Aura scaffold for conversational narration generated against scene timing.</p>
     <div class="tag-row"><span>voice</span><span>tts</span><span>conversational</span></div>
   </a>
-  <div class="card-install"><code id="install-deepgram-aura">npx lazy plugin install deepgram-aura</code><button class="copy" data-copy="install-deepgram-aura">Copy</button></div>
+  <div class="card-install"><code id="install-deepgram-aura">npx lazy plugin install deepgram-aura</code><button class="copy" data-copy="install-deepgram-aura" data-plugin="deepgram-aura">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="storytelling" data-search="gemini director google gemini storytelling script storytelling multimodal director script storytelling">
-  <a class="card-link" href="gemini-director/">
+  <a class="card-link" href="gemini-director/" data-plugin-open="gemini-director">
     <div class="card-top"><div class="plugin-mark">GE</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">Google Gemini · storytelling</div>
     <h2>Gemini Director</h2>
     <p>A multimodal directing scaffold for planning scenes from briefs, images, and captured product context.</p>
     <div class="tag-row"><span>script</span><span>storytelling</span><span>multimodal</span><span>director</span></div>
   </a>
-  <div class="card-install"><code id="install-gemini-director">npx lazy plugin install gemini-director</code><button class="copy" data-copy="install-gemini-director">Copy</button></div>
+  <div class="card-install"><code id="install-gemini-director">npx lazy plugin install gemini-director</code><button class="copy" data-copy="install-gemini-director" data-plugin="gemini-director">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="storytelling" data-search="openai storyboard openai storytelling script storyboard storytelling agent script storytelling">
-  <a class="card-link" href="openai-storyboard/">
+  <a class="card-link" href="openai-storyboard/" data-plugin-open="openai-storyboard">
     <div class="card-top"><div class="plugin-mark">OP</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">OpenAI · storytelling</div>
     <h2>OpenAI Storyboard</h2>
     <p>A storyboard scaffold for generating visual beats, shot intent, and scene-linked scripts from a brief.</p>
     <div class="tag-row"><span>script</span><span>storyboard</span><span>storytelling</span><span>agent</span></div>
   </a>
-  <div class="card-install"><code id="install-openai-storyboard">npx lazy plugin install openai-storyboard</code><button class="copy" data-copy="install-openai-storyboard">Copy</button></div>
+  <div class="card-install"><code id="install-openai-storyboard">npx lazy plugin install openai-storyboard</code><button class="copy" data-copy="install-openai-storyboard" data-plugin="openai-storyboard">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="voice" data-search="playht voice playht voice voice tts multilingual tts">
-  <a class="card-link" href="playht-voice/">
+  <a class="card-link" href="playht-voice/" data-plugin-open="playht-voice">
     <div class="card-top"><div class="plugin-mark">PL</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">PlayHT · voice</div>
     <h2>PlayHT Voice</h2>
     <p>A multilingual voice provider scaffold for long-form narration and character voices.</p>
     <div class="tag-row"><span>voice</span><span>tts</span><span>multilingual</span></div>
   </a>
-  <div class="card-install"><code id="install-playht-voice">npx lazy plugin install playht-voice</code><button class="copy" data-copy="install-playht-voice">Copy</button></div>
+  <div class="card-install"><code id="install-playht-voice">npx lazy plugin install playht-voice</code><button class="copy" data-copy="install-playht-voice" data-plugin="playht-voice">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="visuals" data-search="replicate visuals replicate visuals image visuals models generation image">
-  <a class="card-link" href="replicate-visuals/">
+  <a class="card-link" href="replicate-visuals/" data-plugin-open="replicate-visuals">
     <div class="card-top"><div class="plugin-mark">RE</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">Replicate · visuals</div>
     <h2>Replicate Visuals</h2>
     <p>A model-routing scaffold for freezing generated image outputs from Replicate into project assets.</p>
     <div class="tag-row"><span>image</span><span>visuals</span><span>models</span><span>generation</span></div>
   </a>
-  <div class="card-install"><code id="install-replicate-visuals">npx lazy plugin install replicate-visuals</code><button class="copy" data-copy="install-replicate-visuals">Copy</button></div>
+  <div class="card-install"><code id="install-replicate-visuals">npx lazy plugin install replicate-visuals</code><button class="copy" data-copy="install-replicate-visuals" data-plugin="replicate-visuals">Copy</button></div>
 </article>
 <article class="market-card" data-plugin-card data-category="visuals" data-search="unsplash images unsplash visuals stock-media image photography search stock-media image">
-  <a class="card-link" href="unsplash-stock/">
+  <a class="card-link" href="unsplash-stock/" data-plugin-open="unsplash-stock">
     <div class="card-top"><div class="plugin-mark">UN</div><div class="badges"><span class="badge badge-scaffold">Scaffold</span></div></div>
     <div class="card-provider">Unsplash · visuals</div>
     <h2>Unsplash Images</h2>
     <p>A stock-image scaffold for discovering and freezing Unsplash photography with source attribution.</p>
     <div class="tag-row"><span>stock-media</span><span>image</span><span>photography</span><span>search</span></div>
   </a>
-  <div class="card-install"><code id="install-unsplash-stock">npx lazy plugin install unsplash-stock</code><button class="copy" data-copy="install-unsplash-stock">Copy</button></div>
+  <div class="card-install"><code id="install-unsplash-stock">npx lazy plugin install unsplash-stock</code><button class="copy" data-copy="install-unsplash-stock" data-plugin="unsplash-stock">Copy</button></div>
 </article></section>
   <section class="security"><h2>Folder-owned. Permission-declared.</h2><p>Contributors work inside one <code>plugins/&lt;id&gt;/</code> folder. The shared schema rejects unknown fields and undeclared scope. Scaffold plugins are installable for evaluation but cannot execute until a reviewed adapter becomes available.</p><p><a href="index.json">Machine registry →</a> · <a href="schema.json">Manifest schema →</a> · <a href="https://github.com/cosmicstack-labs/lazy-frames/tree/main/plugins">Contribute a plugin →</a></p></section>
 </main>

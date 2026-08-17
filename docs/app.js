@@ -240,8 +240,23 @@
   if (!btn) return;
   btn.addEventListener('click', function () {
     navigator.clipboard.writeText('npm install lazy-frames');
+    if (window.plausible) window.plausible('Install Copy', { props: { location: 'nav' } });
     var orig = btn.textContent;
     btn.textContent = 'copied';
     setTimeout(function () { btn.textContent = orig; }, 1500);
+  });
+})();
+
+// Privacy-safe custom analytics. Only explicit data-track properties are sent.
+(function () {
+  document.addEventListener('click', function (event) {
+    var target = event.target.closest('[data-track]');
+    if (!target || !window.plausible) return;
+    var props = {};
+    Array.prototype.forEach.call(target.attributes, function (attr) {
+      var prefix = 'data-track-prop-';
+      if (attr.name.indexOf(prefix) === 0) props[attr.name.slice(prefix.length).replace(/-/g, '_')] = attr.value;
+    });
+    window.plausible(target.getAttribute('data-track'), { props: props });
   });
 })();

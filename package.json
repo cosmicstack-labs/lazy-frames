@@ -1,6 +1,6 @@
 {
   "name": "lazy-frames",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Agentic video generation with byte-stable local rendering, scene-linked narration, and reviewed capability plugins.",
   "license": "MIT",
   "author": "CosmicStack Labs",
