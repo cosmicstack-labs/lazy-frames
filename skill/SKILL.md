@@ -36,8 +36,8 @@ Current CLI release: `lazy-frames@0.6.3`.
 ```bash
 node --version   # >= 20
 ffmpeg -version  # required
-python3 --version  # required for audio (music, TTS, SFX)
-ls "/Applications/Google Chrome.app"  # required (headless renderer)
+python3 --version   # Python 3; on Windows `python` is fine
+ls "/Applications/Google Chrome.app"  # macOS; Windows uses Chrome in Program Files, or set CHROME_PATH
 ```
 
 Install from npm:
@@ -60,7 +60,7 @@ node packages/cli/dist/index.js doctor
 ```
 
 Doctor reports: Node platform/memory, Python version + tier, and provider availability
-(procedural imagery, depth, music, TTS). Local narration uses `tts.say`; external providers are
+(procedural imagery, depth, music, TTS). Local narration uses `tts.say` (macOS `say` or Windows SAPI); external providers are
 installed as scoped plugins. If `image.mlx-photoreal` is unavailable (expected on <16 GB machines), the
 procedural image generator is used instead — still produces cinematic stills, just not photoreal.
 

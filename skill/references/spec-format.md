@@ -106,7 +106,7 @@ Generates deterministic pulse channels at bpm-derived intervals. `property` can 
 Audio is generated at render time and cached by provider, model, voice settings, and content hash.
 
 - **Narration timing:** use absolute `startMs`, or bind a beat to a visual with `sceneId` + `offsetMs`. Scene-linked speech is measured and rejected if it overruns that scene.
-- **Local narration:** `provider: "say"`; `voice` must be installed (`say -v '?'` to list). `rate` = words/min.
+- **Local narration:** `provider: "say"`; macOS uses an installed `say` voice (`say -v '?'`), Windows uses SAPI (`Samantha` falls back to the system voice). `rate` = words/min.
 - **Plugin narration:** install the provider first. ElevenLabs uses `provider: "elevenlabs"`, a voice ID, optional `model`, and optional `voiceSettings` (`stability`, `similarityBoost`, `style`, `useSpeakerBoost`). Credentials stay in environment variables.
 - **Music:** procedural synth. `bars` controls length (each bar = 4 beats). Looped to video duration.
 - **SFX:** `kind` = `whoosh` | `hit` | `rise` | `boom`. `seed` for deterministic variation.

@@ -2,9 +2,10 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { emitProgress, type ProgressReporter } from '../../engine/dist/index.js';
-import { prepareComposition } from '../../renderer/dist/index.js';
+import { prepareComposition, preparePreviewAudio } from '../../renderer/dist/index.js';
 
-const PREVIEW_PAGE = `<!doctype html>
+function previewPage(hasAudio: boolean): string {
+  return `<!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -29,9 +30,12 @@ const PREVIEW_PAGE = `<!doctype html>
   <span id="tc">0.00 / 0.00 s</span>
 </div>
 <script>
+  var HAS_AUDIO = ${hasAudio ? 'true' : 'false'};
   var wire = null, compositionLoaded = false, frameDur = 0, frameCount = 0, frameIdx = 0, playing = false, acc = 0, lastTs = 0;
   var comp = document.getElementById('comp');
   var viewport = document.getElementById('viewport');
+  var audio = HAS_AUDIO ? new Audio('/audio') : null;
+  if (audio) audio.preload = 'auto';
   function fit() {
     if (!wire) return;
     var fw = window.innerWidth, fh = window.innerHeight - 64;
@@ -42,11 +46,20 @@ const PREVIEW_PAGE = `<!doctype html>
     comp.style.height = wire.height + 'px';
     comp.style.transform = 'scale(' + scale + ')';
   }
+  function audioTime() { return frameIdx * frameDur / 1000; }
+  function syncAudio(shouldPlay) {
+    if (!audio) return;
+    var t = audioTime();
+    if (Math.abs(audio.currentTime - t) > 0.08) audio.currentTime = t;
+    if (shouldPlay) audio.play().catch(function () {});
+    else audio.pause();
+  }
   function seekFrame(i) {
     frameIdx = Math.max(0, Math.min(frameCount - 1, i));
     comp.contentWindow.postMessage({ t: frameIdx * frameDur }, '*');
     document.getElementById('scrub').value = Math.round((frameIdx / Math.max(1, frameCount - 1)) * 1000);
     document.getElementById('tc').textContent = (frameIdx * frameDur / 1000).toFixed(2) + ' / ' + (frameCount * frameDur / 1000).toFixed(2) + ' s';
+    if (!playing) syncAudio(false);
   }
   comp.addEventListener('load', function () {
     compositionLoaded = true;
@@ -64,13 +77,14 @@ const PREVIEW_PAGE = `<!doctype html>
   });
   document.getElementById('play').addEventListener('click', function () {
     playing = !playing; document.getElementById('play').textContent = playing ? 'Pause' : 'Play';
-    if (playing) { if (frameIdx >= frameCount - 1) frameIdx = 0; lastTs = performance.now(); acc = 0; requestAnimationFrame(tick); }
+    if (playing) { if (frameIdx >= frameCount - 1) frameIdx = 0; lastTs = performance.now(); acc = 0; syncAudio(true); requestAnimationFrame(tick); }
+    else syncAudio(false);
   });
   function tick(ts) {
     if (!playing) return;
     acc += ts - lastTs; lastTs = ts;
     while (acc >= frameDur) { acc -= frameDur; frameIdx++; }
-    if (frameIdx >= frameCount) { frameIdx = frameCount - 1; playing = false; document.getElementById('play').textContent = 'Play'; seekFrame(frameIdx); return; }
+    if (frameIdx >= frameCount) { frameIdx = frameCount - 1; playing = false; document.getElementById('play').textContent = 'Play'; seekFrame(frameIdx); syncAudio(false); return; }
     seekFrame(frameIdx);
     requestAnimationFrame(tick);
   }
@@ -78,6 +92,7 @@ const PREVIEW_PAGE = `<!doctype html>
 </body>
 </html>
 `;
+}
 
 export async function runPreview(projectDir: string, port: number, onProgress?: ProgressReporter): Promise<void> {
   emitProgress(onProgress, { command: 'preview', phase: 'prepare', status: 'start', message: 'Preparing the centered preview composition' });
@@ -85,15 +100,36 @@ export async function runPreview(projectDir: string, port: number, onProgress?: 
   emitProgress(onProgress, { command: 'preview', phase: 'prepare', status: 'complete', message: 'Preview composition prepared' });
   const lazyDir = path.dirname(compositionPath);
 
+  let audioPath: string | undefined;
+  emitProgress(onProgress, { command: 'preview', phase: 'audio', status: 'start', message: 'Mixing preview audio' });
+  try {
+    audioPath = preparePreviewAudio(projectDir, wire.frameCount / wire.fps);
+    emitProgress(onProgress, {
+      command: 'preview',
+      phase: 'audio',
+      status: 'complete',
+      message: audioPath ? 'Preview audio is ready' : 'No audio in spec',
+    });
+  } catch (err) {
+    emitProgress(onProgress, { command: 'preview', phase: 'audio', status: 'complete', message: 'Preview audio skipped' });
+    console.error(`preview audio skipped: ${(err as Error).message}`);
+  }
+
+  const page = previewPage(Boolean(audioPath));
+
   const server = createServer(async (req, res) => {
     try {
       const url = new URL(req.url ?? '/', 'http://localhost');
       if (url.pathname === '/' || url.pathname === '/preview.html') {
         res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
-        res.end(PREVIEW_PAGE);
+        res.end(page);
       } else if (url.pathname === '/meta') {
         res.writeHead(200, { 'content-type': 'application/json' });
         res.end(JSON.stringify(wire));
+      } else if (url.pathname === '/audio' && audioPath) {
+        const buf = await readFile(audioPath);
+        res.writeHead(200, { 'content-type': 'audio/wav', 'content-length': buf.length, 'cache-control': 'no-store' });
+        res.end(buf);
       } else if (url.pathname === '/composition') {
         res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
         res.end(await readFile(compositionPath));
@@ -118,5 +154,6 @@ export async function runPreview(projectDir: string, port: number, onProgress?: 
   emitProgress(onProgress, { command: 'preview', phase: 'server', status: 'start', message: `Starting the preview server on port ${port}` });
   await new Promise<void>((resolve) => server.listen(port, resolve));
   emitProgress(onProgress, { command: 'preview', phase: 'server', status: 'complete', message: 'Preview server is ready' });
-  console.log(`preview: http://localhost:${port}  (${wire.width}x${wire.height}, ${(wire.durationMs / 1000).toFixed(2)}s, ${wire.frameCount} frames)`);
+  const audioNote = audioPath ? ', audio' : '';
+  console.log(`preview: http://localhost:${port}  (${wire.width}x${wire.height}, ${(wire.durationMs / 1000).toFixed(2)}s, ${wire.frameCount} frames${audioNote})`);
 }

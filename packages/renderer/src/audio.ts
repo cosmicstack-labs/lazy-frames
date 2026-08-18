@@ -4,6 +4,7 @@ import { existsSync, lstatSync, mkdirSync, realpathSync, renameSync, rmSync } fr
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { narrationStartMs, type Audio, type NarrationSegment, type Scene, type SfxEntry } from '../../engine/dist/index.js';
+import { findPython } from './python.js';
 
 function sidecarDir(): string {
   if (process.env['LAZY_SIDECAR_DIR']) return process.env['LAZY_SIDECAR_DIR']!;
@@ -19,10 +20,17 @@ export interface SidecarResult {
 }
 
 function runSidecar(args: string[]): SidecarResult {
-  const res = spawnSync('python3', ['-m', 'gen_sidecar', ...args], {
+  let python;
+  try {
+    python = findPython();
+  } catch (err) {
+    return { ok: false, error: (err as Error).message };
+  }
+  const res = spawnSync(python.bin, [...python.prefix, '-m', 'gen_sidecar', ...args], {
     cwd: sidecarDir(),
     encoding: 'utf8',
     timeout: 300000,
+    windowsHide: true,
   });
   if (res.status !== 0) {
     return { ok: false, error: res.stderr?.trim() || `sidecar exited ${res.status}` };
@@ -175,55 +183,67 @@ function wavDurationSec(wavPath: string): number {
   return parseFloat(data.format?.duration ?? '0');
 }
 
-export function assembleAudio(opts: {
-  videoPath: string;
-  outputPath: string;
+interface MixOpts {
   durationSec: number;
   narration: PreparedNarration[];
   sfx: PreparedSfx[];
   musicWav?: string;
   musicGainDb?: number;
-}): void {
-  const { durationSec: DUR } = opts;
-  const args = ['-y', '-v', 'error', '-i', opts.videoPath];
+}
+
+function audioGraph(opts: MixOpts & { startIndex: number }): { inputArgs: string[]; filter: string } {
+  const DUR = opts.durationSec;
+  const inputArgs: string[] = [];
   const filters: string[] = [];
   const labels: string[] = [];
+  let idx = opts.startIndex;
 
   if (opts.musicWav) {
     const musicDur = wavDurationSec(opts.musicWav);
     const cycle = Math.max(1, Math.round(musicDur * 44100));
-    args.push('-i', opts.musicWav);
+    inputArgs.push('-i', opts.musicWav);
     filters.push(
-      `[1:a]aloop=loop=-1:size=${cycle},atrim=0:${DUR.toFixed(3)},asetpts=N/SR/TB,volume=${(opts.musicGainDb ?? -14)}dB,afade=t=out:st=${(DUR - 0.8).toFixed(3)}:d=0.8[bed]`,
+      `[${idx}:a]aloop=loop=-1:size=${cycle},atrim=0:${DUR.toFixed(3)},asetpts=N/SR/TB,volume=${(opts.musicGainDb ?? -14)}dB,afade=t=out:st=${(DUR - 0.8).toFixed(3)}:d=0.8[bed]`,
     );
-    labels.push('[bed]');
+    idx++;
   } else {
-    args.push('-f', 'lavfi', '-t', DUR.toFixed(3), '-i', 'anullsrc=r=44100:cl=mono');
-    filters.push('[1:a]anull[bed]');
-    labels.push('[bed]');
+    inputArgs.push('-f', 'lavfi', '-t', DUR.toFixed(3), '-i', 'anullsrc=r=44100:cl=mono');
+    filters.push(`[${idx}:a]anull[bed]`);
+    idx++;
   }
+  labels.push('[bed]');
 
   opts.narration.forEach((n, i) => {
-    const inIdx = i + 2;
-    args.push('-i', n.wavPath);
-    filters.push(`[${inIdx}:a]adelay=${n.startMs}:all=1,volume=${n.gainDb}dB[n${i}]`);
+    inputArgs.push('-i', n.wavPath);
+    filters.push(`[${idx}:a]adelay=${n.startMs}:all=1,volume=${n.gainDb}dB[n${i}]`);
     labels.push(`[n${i}]`);
+    idx++;
   });
 
-  const sfxBase = 2 + opts.narration.length;
   opts.sfx.forEach((s, i) => {
-    const inIdx = sfxBase + i;
-    args.push('-i', s.wavPath);
-    filters.push(`[${inIdx}:a]adelay=${s.startMs}:all=1,volume=${s.gainDb}dB[s${i}]`);
+    inputArgs.push('-i', s.wavPath);
+    filters.push(`[${idx}:a]adelay=${s.startMs}:all=1,volume=${s.gainDb}dB[s${i}]`);
     labels.push(`[s${i}]`);
+    idx++;
   });
 
   filters.push(
     `${labels.join('')}amix=inputs=${labels.length}:duration=first:normalize=0,aresample=44100,aformat=sample_fmts=fltp:channel_layouts=stereo[aout]`,
   );
-  args.push(
+  return { inputArgs, filter: filters.join(';') };
+}
+
+export function assembleAudio(opts: MixOpts & { videoPath: string; outputPath: string }): void {
+  const graph = audioGraph({ ...opts, startIndex: 1 });
+  const args = [
+    '-y',
+    '-v',
+    'error',
+    '-i',
+    opts.videoPath,
+    ...graph.inputArgs,
     '-filter_complex',
-    filters.join(';'),
+    graph.filter,
     '-map',
     '0:v',
     '-map',
@@ -241,12 +261,37 @@ export function assembleAudio(opts: {
     '-movflags',
     '+faststart',
     '-t',
-    DUR.toFixed(3),
+    opts.durationSec.toFixed(3),
     opts.outputPath,
-  );
+  ];
   const res = spawnSync('ffmpeg', args, { stdio: ['ignore', 'pipe', 'pipe'] });
   if (res.status !== 0) {
     throw new Error(`audio assembly failed:\n${res.stderr?.toString() ?? 'unknown error'}`);
+  }
+}
+
+export function assembleAudioMix(opts: MixOpts & { outputPath: string }): void {
+  const graph = audioGraph({ ...opts, startIndex: 0 });
+  const args = [
+    '-y',
+    '-v',
+    'error',
+    ...graph.inputArgs,
+    '-filter_complex',
+    graph.filter,
+    '-map',
+    '[aout]',
+    '-c:a',
+    'pcm_s16le',
+    '-ar',
+    '44100',
+    '-t',
+    opts.durationSec.toFixed(3),
+    opts.outputPath,
+  ];
+  const res = spawnSync('ffmpeg', args, { stdio: ['ignore', 'pipe', 'pipe'] });
+  if (res.status !== 0) {
+    throw new Error(`preview audio mix failed:\n${res.stderr?.toString() ?? 'unknown error'}`);
   }
 }
 

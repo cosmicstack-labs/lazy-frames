@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { FONTS, assertPluginInstalled, collectAssetRefs, compileSpec, emitProgress, fontAssetPath, loadSpec, type ProgressReporter, type Wire } from '../../engine/dist/index.js';
 import { renderFrames } from './driver.js';
-import { assembleAudio, buildMusic, buildNarration, buildSfx, projectAudioCacheDir } from './audio.js';
+import { assembleAudio, assembleAudioMix, buildMusic, buildNarration, buildSfx, projectAudioCacheDir } from './audio.js';
 import { assertProbe, encodeFrames, probeVideo, sha256File } from './ffmpeg.js';
 
 export interface PreparedComposition {
@@ -35,6 +35,29 @@ export function prepareComposition(projectDir: string): PreparedComposition {
   }
   const lutRef = assetRefs.find((r) => r.kind === 'lut');
   return { compositionPath, wire: compiled.wire, warnings: compiled.warnings, lutPath: lutRef ? path.join(lazyDir, lutRef.dest) : undefined };
+}
+
+export function preparePreviewAudio(projectDir: string, durationSec: number): string | undefined {
+  const spec = loadSpec(path.join(projectDir, 'spec.json'));
+  const wantAudio =
+    spec.audio !== undefined &&
+    (spec.audio.narration.length > 0 || spec.audio.music !== undefined || spec.audio.sfx.length > 0);
+  if (!wantAudio || !spec.audio) return undefined;
+  const cacheDir = projectAudioCacheDir(projectDir);
+  const narration = buildNarration(cacheDir, spec.audio, spec.scenes);
+  const sfx = buildSfx(cacheDir, spec.audio);
+  const musicWav = spec.audio.music ? buildMusic(cacheDir, spec.audio.music) : undefined;
+  const mixPath = path.join(projectDir, '.lazy', 'preview-audio.wav');
+  mkdirSync(path.dirname(mixPath), { recursive: true });
+  assembleAudioMix({
+    outputPath: mixPath,
+    durationSec,
+    narration,
+    sfx,
+    musicWav,
+    musicGainDb: spec.audio.music?.gainDb,
+  });
+  return mixPath;
 }
 
 export interface RenderOptions {

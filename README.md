@@ -58,9 +58,9 @@ node packages/cli/dist/index.js doctor
 |---|---|---|
 | Node.js ≥ 20 | CLI + engine | `node --version` |
 | ffmpeg + ffprobe | encoding + audio | `ffmpeg -version` |
-| Google Chrome | headless rendering | `lazy doctor` |
-| Python 3 | audio sidecar (music, TTS, SFX) | `python3 --version` |
-| macOS `say` | TTS narration | `say -v '?'` |
+| Google Chrome | headless rendering | `lazy doctor` (Windows: Chrome/Edge in Program Files, or `CHROME_PATH`) |
+| Python 3 | audio sidecar (music, TTS, SFX) | `python3 --version` or `python --version`; override with `LAZY_PYTHON` |
+| Local TTS | narration (`say` or Windows SAPI) | `lazy doctor` |
 | `ELEVENLABS_API_KEY` | Optional ElevenLabs plugin | `lazy doctor` |
 
 Run `npx lazy doctor` to verify all providers and see your hardware tier.
@@ -114,7 +114,7 @@ Contributors add one self-contained `plugins/<id>/manifest.json` folder and run 
 | `lazy capture <url> [project]` | Capture a website → screenshots, palette, copy, starter spec |
 | `lazy gen image` | Generate procedural still + matching depth map |
 | `lazy gen music` | Generate procedural music WAV |
-| `lazy gen tts` | Generate TTS narration WAV (macOS `say`) |
+| `lazy gen tts` | Generate TTS narration WAV (macOS `say` or Windows SAPI) |
 | `lazy script <project>` | Draft editable, scene-linked narration beats |
 | `lazy plugin search` | Search reviewed plugins by name or capability |
 | `lazy plugin info <id>` | Inspect status, provider, permissions, and detail URL |
@@ -122,7 +122,7 @@ Contributors add one self-contained `plugins/<id>/manifest.json` folder and run 
 | `lazy check <project>` | Validate spec + run snapshot & determinism gates |
 | `lazy snapshot <project> --update` | Establish/refresh the regression baseline |
 | `lazy render <project>` | Render to MP4 (byte-stable, with audio) |
-| `lazy preview <project>` | Scrubbable timeline preview at localhost:4173 |
+| `lazy preview <project>` | Scrubbable timeline preview at localhost:4173, with mixed audio when the spec has it |
 
 ## Scene types
 

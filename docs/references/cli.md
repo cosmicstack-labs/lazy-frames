@@ -14,7 +14,9 @@ lazy doctor [--json]
 
 Reports: Node platform/arch/cpus/memory, Python version + hardware tier, provider availability
 (procedural imagery, depth, music, TTS, MLX photoreal). Tier: `full` (≥16GB + MLX), `lite` (≥8GB),
-`minimal`.
+`minimal`. Chrome is resolved from `CHROME_PATH`, then macOS `/Applications`, Windows Program Files
+(Chrome or Edge), then Linux binaries. The gen sidecar is launched with `python3`, `python`, `py -3`,
+or `LAZY_PYTHON`.
 
 ## capture
 
@@ -53,7 +55,7 @@ lazy gen tts -p projects/cine --text "Every frame computed locally." --voice Sam
 lazy gen tts -p projects/cine --provider elevenlabs --voice VOICE_ID --text "A better story." --name n2
 ```
 
-Generates a TTS WAV via local macOS `say` or an installed TTS plugin. Outputs `<name>.wav` in `assets/gen/`.
+Generates a TTS WAV via local macOS `say`, Windows SAPI, or an installed TTS plugin. Outputs `<name>.wav` in `assets/gen/`.
 
 ## script
 
@@ -118,4 +120,4 @@ Options:
 lazy preview <project> [-p <port>]
 ```
 
-Serves a scrubbable timeline preview at `http://localhost:<port>` (default 4173). The composition loads in an iframe with a play/pause + scrub bar. Frame-accurate seeking via postMessage.
+Serves a scrubbable timeline preview at `http://localhost:<port>` (default 4173). The composition loads in an iframe with a play/pause + scrub bar. Frame-accurate seeking via postMessage. If the spec includes music, narration, or SFX, a mixed WAV is generated and played in sync.
